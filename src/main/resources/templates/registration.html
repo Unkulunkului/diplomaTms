@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<div th:if="${usernameAlreadyExist!=null}">
+    <p th:text="${usernameAlreadyExist}"></p>
+</div>
+<div th:if="${emailAlreadyExist!=null}">
+    <p th:text="${emailAlreadyExist}"></p>
+</div>
+<form th:action="@{registration}" th:object="${userForm}" method="post">
+    <div><label> User Name : <input type="text" th:field="*{username}"/></label></div>
+    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: coral"></p>
+    <div><label> Password : <input type="password" th:field="*{password}"/></label></div>
+    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: coral"></p>
+    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral"></p>
+    <div><label> Email : <input type="text" th:field="*{email}"/></label></div>
+    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: coral"></p>
+    <button>Sign up</button>
+</form>
+<br>
+<p>Click <a th:href="@{/user/authorization}">here</a> to auth</p>
+</body>
+</html>
