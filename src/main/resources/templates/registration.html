@@ -6,11 +6,11 @@
     <title>Registration</title>
 </head>
 <body>
-<div th:if="${usernameAlreadyExist!=null}">
-    <p th:text="${usernameAlreadyExist}"></p>
+<div th:if="${usernameExistError!=null}">
+    <p th:text="${usernameExistError}"></p>
 </div>
-<div th:if="${emailAlreadyExist!=null}">
-    <p th:text="${emailAlreadyExist}"></p>
+<div th:if="${emailExistError!=null}">
+    <p th:text="${emailExistError}"></p>
 </div>
 <form th:action="@{registration}" th:object="${userForm}" method="post">
     <div><label> User Name : <input type="text" th:field="*{username}"/></label></div>
@@ -24,6 +24,6 @@
     <button>Sign up</button>
 </form>
 <br>
-<p>Click <a th:href="@{/user/authorization}">here</a> to auth</p>
+<p>Click <a th:href="@{/user/authentication}">here</a> to auth</p>
 </body>
 </html>

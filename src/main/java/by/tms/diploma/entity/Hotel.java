@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -14,10 +16,26 @@ public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String country;
     private String description;
+    @ElementCollection
+    private List<String> images;
     private String name;
     private int stars;
     private boolean pets;
-    @OneToOne(cascade = CascadeType.ALL)
-    private HotelRoom hotelRoom;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hotel hotel = (Hotel) o;
+        return stars == hotel.stars &&
+                Objects.equals(country, hotel.country) &&
+                Objects.equals(name, hotel.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(country, name, stars);
+    }
 }

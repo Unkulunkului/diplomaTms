@@ -4,27 +4,28 @@ import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.service.UserService;
 import by.tms.diploma.service.UserServiceImpl;
+import by.tms.diploma.service.exception.AlreadyExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping(path = "/user")
+@Slf4j
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/authorization")
-    public ModelAndView getAuthorizationView(ModelAndView modelAndView){
-        modelAndView.setViewName("authorization");
+    @GetMapping("/authentication")
+    public ModelAndView getAuthenticationView(ModelAndView modelAndView){
+        modelAndView.setViewName("authentication");
+        log.info("Authentication view (method Get)");
         return modelAndView;
     }
 
@@ -32,6 +33,7 @@ public class UserController {
     public ModelAndView getRegistrationView(ModelAndView modelAndView){
         modelAndView.addObject("userForm", new UserRegistrationModel());
         modelAndView.setViewName("registration");
+        log.info("Registration view (method Get)");
         return modelAndView;
     }
 
@@ -41,18 +43,19 @@ public class UserController {
         if(!bindingResult.hasErrors()){
             if(!userService.isUsernameAlreadyExists(userRegistrationModel.getUsername())){
                 if(!userService.isEmailAlreadyExists(userRegistrationModel.getEmail())){
-                    User user = new User(); //Where can I do transfer? Here or in service?
+                    User user = new User();
                     user.setUsername(userRegistrationModel.getUsername());
                     user.setPassword(userRegistrationModel.getPassword());
                     user.setName(userRegistrationModel.getName());
                     user.setEmail(userRegistrationModel.getEmail());
                     userService.save(user);
                 }else {
-                    modelAndView.addObject("emailAlreadyExist", "Email '"+
+                    modelAndView.addObject("emailExistError", "Email '"+
                             userRegistrationModel.getEmail()+"' is already exist!");
+//                    throw new AlreadyExistsException("Email already exist"); ????????????????????????????
                 }
             }else{
-                modelAndView.addObject("usernameAlreadyExist", "Username '"+
+                modelAndView.addObject("usernameExistError", "Username '"+
                         userRegistrationModel.getUsername()+"' is already exist!");
             }
         }

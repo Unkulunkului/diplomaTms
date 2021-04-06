@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add hotel page</title>
+</head>
+<body>
+<div th:if="${hotelExistError != null}">
+    <p th:text="${hotelExistError}"></p>
+</div>
+<form th:action="@{add}" th:object="${hotelAddForm}" method="post">
+    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
+    <div><label> Country : <input type="text" th:field="*{country}"/></label></div>
+    <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>
+    <div><label> Stars : <input type="number" th:field="*{stars}"/></label></div>
+    <p th:if="${#fields.hasErrors('stars')}" th:errors="*{stars}" style="color: coral"></p>
+    <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
+    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
+    <div><label> Images : <input type="text" th:field="*{images}"/></label></div>
+    <p th:if="${#fields.hasErrors('images')}" th:errors="*{images}" style="color: coral"></p>
+    <div><label> Pets : <input type="checkbox" th:field="*{pets}"/></label></div>
+    <button>Add</button>
+</form>
+</body>
+</html>

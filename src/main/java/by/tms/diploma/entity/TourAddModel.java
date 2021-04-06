@@ -8,19 +8,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Tour {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @ManyToOne
-    private Hotel hotel;
+@NoArgsConstructor
+
+public class TourAddModel {
     private String description;
     private String name;
+    private String hotelName;
     private double price;
-    @ElementCollection
     private List<String> images;
     private String country;
     private boolean withChildren;
