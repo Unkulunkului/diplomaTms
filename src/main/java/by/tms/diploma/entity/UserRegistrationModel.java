@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserRegistrationModel {
 
-//    @Pattern(regexp = "[A-Za-z_0-9-]{5,15}", message = "Login may have only upper and lower case, digit and '-', '_'. " +
+//    @Pattern(regexp = "[A-Za-z_0-9-]{5,15}", message = "Login may have only upper and lower case, digits and '-', '_'. " +
 //            "Min length - 5, max - 15!")
     private String username;
 //    @Pattern(regexp = "[A-Z][a-z]{2,10}", message = "Name must start with upper case. Min length - 2, max - 10!")

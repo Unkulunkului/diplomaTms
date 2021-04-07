@@ -37,16 +37,17 @@ public class HotelController {
         if(!bindingResult.hasErrors()){
             if(!hotelService.existsByName(hotelAddModel.getName())){
                 Hotel hotel = new Hotel();
-                hotel.setStars(hotelAddModel.getStars());
+                hotel.setStars(Integer.parseInt(hotelAddModel.getStars()));
                 hotel.setCountry(hotelAddModel.getCountry());
                 hotel.setName(hotelAddModel.getName());
                 hotel.setDescription(hotelAddModel.getDescription());
                 hotel.setImages(hotelAddModel.getImages());
                 hotel.setPets(hotelAddModel.isPets());
                 hotelService.add(hotel);
+                modelAndView.addObject("createdHotel", "Tour '"+hotelAddModel.getName()+
+                        "' was created!");
             }else {
-                modelAndView.addObject("hotelExistError","Hotel '"+hotelAddModel.getName()+
-                        "' is already exist!");
+                modelAndView.addObject("doesHotelExist",true);
             }
         }
 

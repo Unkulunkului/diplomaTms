@@ -26,6 +26,8 @@ public class TourController {
     @Autowired
     private HotelService hotelService;
 
+
+
     @GetMapping(path = "/add")
     public ModelAndView getAddView(ModelAndView modelAndView){
         modelAndView.setViewName("addTour");
@@ -47,14 +49,15 @@ public class TourController {
                     tour.setName(name);
                     tour.setDescription(tourAddModel.getDescription());
                     tour.setCountry(tourAddModel.getCountry());
-                    tourAddModel.setPrice(tourAddModel.getPrice());
-                    tourAddModel.setImages(tourAddModel.getImages());
+                    tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
+                    tour.setImages(tourAddModel.getImages());
                     tourService.add(tour);
+                    modelAndView.addObject("createdTour", "Tour '"+name+"' was created!");
                 }else {
-                    modelAndView.addObject("tourNameError", "Hotel '"+hotelName+"' not found!");
+                    modelAndView.addObject("doesTourNameExist", true);
                 }
             }else {
-                modelAndView.addObject("tourExistError", "Hotel '"+hotelName+"' not found!");
+                modelAndView.addObject("doesHotelNotExist", true);
             }
         }
         modelAndView.setViewName("addTour");

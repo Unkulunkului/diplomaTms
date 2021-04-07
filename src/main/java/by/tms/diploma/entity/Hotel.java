@@ -17,9 +17,9 @@ public class Hotel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String country;
+    @Column(length = 1500)
     private String description;
-    @ElementCollection
-    private List<String> images;
+    private String images;
     private String name;
     private int stars;
     private boolean pets;

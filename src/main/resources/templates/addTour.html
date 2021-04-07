@@ -6,17 +6,18 @@
     <title>Add tour page</title>
 </head>
 <body>
-<div th:if="${tourExistError != null}">
-    <p th:text="${tourExistError}"></p>
-</div>
 <form th:action="@{add}" th:object="${tourAddForm}" method="post">
     <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
-    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral"></p>
+    <div th:if="${doesTourNameExist}"><p>Tour with the same name already exists</p></div>
     <div><label> Country : <input type="text" th:field="*{country}"/></label></div>
     <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>
     <div><label> Hotel name : <input type="text" th:field="*{hotelName}"/></label></div>
-    <p th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}" style="color: coral">
-    <div><label> Price : <input type="number" th:field="*{price}"/></label></div>
+    <p th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}" style="color: coral"></p>
+    <div th:if="${doesHotelNotExist}">
+        <p>Hotel name wasn't found. Click <a th:href="@{/hotel/add}">here</a> to add hotel.</p>
+    </div>
+    <div><label> Price : <input type="text" th:field="*{price}"/></label></div>
     <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral"></p>
     <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
@@ -25,5 +26,9 @@
     <div><label> Children : <input type="checkbox" th:field="*{withChildren}"/></label></div>
     <button>Add</button>
 </form>
+<br>
+<div th:if="${createdTour!=null}">
+    <p th:text="${createdTour}"></p>
+</div>
 </body>
 </html>

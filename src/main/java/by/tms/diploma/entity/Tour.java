@@ -17,11 +17,11 @@ public class Tour {
     private long id;
     @ManyToOne
     private Hotel hotel;
+    @Column(length = 1500)
     private String description;
     private String name;
     private double price;
-    @ElementCollection
-    private List<String> images;
+    private String images;
     private String country;
     private boolean withChildren;
 }
