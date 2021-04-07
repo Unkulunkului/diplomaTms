@@ -5,6 +5,8 @@ import by.tms.diploma.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class HotelServiceImpl implements HotelService{
     @Autowired
@@ -23,5 +25,16 @@ public class HotelServiceImpl implements HotelService{
     @Override
     public Hotel findByName(String name) {
         return hotelRepository.findByName(name);
+    }
+
+    @Override
+    public boolean existsById(long id){
+        return hotelRepository.existsById(id);
+    }
+
+    @Override
+    public Hotel findById(long id){
+        Hotel byId = hotelRepository.getOne(id);
+        return byId;
     }
 }
