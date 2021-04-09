@@ -6,6 +6,26 @@
     <title>Tour</title>
 </head>
 <body>
+<div>
+    <div th:if="${tour!=null}">
+        <p th:text="'Name: '+${tour.name}"></p>
+        <p th:text="'Country: '+${tour.country}"></p>
+        <p>Hotel: <a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a></p>
+        <p th:text="'Description: '+${tour.description}"></p>
+        <p th:switch="${tour.withChildren}"> Children:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <img th:src="@{${tour.images}}" width="200" height="150"/>
 
+        <form th:action="@{addToBasket}" method="post">
+            <input type="hidden" name="tourId" th:value="${tour.id}">
+            <button>Want it</button>
+        </form>
+    </div>
+    <div th:if="${incorrectId!=null}">
+        <p th:text="${incorrectId}"></p>
+    </div>
+</div>
 </body>
 </html>

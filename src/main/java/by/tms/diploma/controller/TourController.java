@@ -1,23 +1,28 @@
 package by.tms.diploma.controller;
 
+import by.tms.diploma.entity.Basket;
 import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.entity.Tour;
 import by.tms.diploma.entity.TourAddModel;
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.TourService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/tour")
+@Slf4j
 public class TourController {
 
     @Autowired
@@ -26,6 +31,44 @@ public class TourController {
     @Autowired
     private HotelService hotelService;
 
+
+    @GetMapping("/{id}")
+    public ModelAndView getTourView(@PathVariable("id") long id, ModelAndView modelAndView){
+        Optional<Tour> byId = tourService.getById(id);
+        if (byId.isPresent()) {
+            Tour tour = byId.get();
+            modelAndView.addObject("tour", tour);
+        }else {
+            modelAndView.addObject("incorrectId", "Tour with id="+id+" doesn't exist!");
+        }
+        modelAndView.setViewName("tour");
+        return modelAndView;
+    }
+
+
+    @GetMapping("/all")
+    public ModelAndView getAllToursView(ModelAndView modelAndView){
+        List<Tour> allTours = tourService.getAll();
+        if (!allTours.isEmpty()) {
+            modelAndView.addObject("tours", allTours);
+        }else{
+            modelAndView.addObject("emptyList", "No tours");
+        }
+        modelAndView.setViewName("allTours");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/addToBasket")
+    public ModelAndView postAddTour(long tourId, ModelAndView modelAndView, HttpSession httpSession){
+        Tour tour = tourService.getById(tourId).get();
+
+        Basket basket = (Basket) httpSession.getAttribute("basket");
+        basket.addTour(tour);
+
+        modelAndView.setViewName("redirect:"+tourId);
+        return modelAndView;
+    }
 
 
     @GetMapping(path = "/add")

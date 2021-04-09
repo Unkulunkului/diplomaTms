@@ -52,7 +52,6 @@ public class UserController {
                 }else {
                     modelAndView.addObject("emailExistError", "Email '"+
                             userRegistrationModel.getEmail()+"' is already exist!");
-//                    throw new AlreadyExistsException("Email already exist"); ????????????????????????????
                 }
             }else{
                 modelAndView.addObject("usernameExistError", "Username '"+

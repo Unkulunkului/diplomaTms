@@ -5,6 +5,9 @@ import by.tms.diploma.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class TourServiceImpl implements TourService {
 
@@ -20,4 +23,21 @@ public class TourServiceImpl implements TourService {
     public boolean existsByName(String name) {
         return tourRepository.existsByName(name);
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return tourRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Tour> getById(long id) {
+        return tourRepository.findById(id);
+    }
+
+    @Override
+    public List<Tour> getAll() {
+        return tourRepository.findAll();
+    }
+
+
 }

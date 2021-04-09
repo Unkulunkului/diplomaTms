@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tours</title>
+</head>
+<body>
+<div th:if="${emptyList==null}" th:each="tour : ${tours}">
+    <div>
+        <img th:src="@{${tour.images}}" width="200" height="150"/>
+        <p  th:text="${tour.name}"></p>
+        <a th:href="@{'/tour/'+${tour.id}}" class="button">Check it</a>
+    </div>
+</div>
+<div th:unless="${emptyList==null}">
+    <p th:text="${emptyList}"></p>
+</div>
+</body>
+</html>

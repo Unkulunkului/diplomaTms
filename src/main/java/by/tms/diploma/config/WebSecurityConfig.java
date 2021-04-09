@@ -1,7 +1,9 @@
 package by.tms.diploma.config;
 
+import by.tms.diploma.listener.Listener;
 import by.tms.diploma.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpSessionListener;
 
 @EnableWebSecurity
 @Configuration
@@ -28,17 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/user/registration", "/user/authorization", "/hotel/**", "/tour/**").anonymous()
-                .antMatchers("/").permitAll()
+                .antMatchers("/user/registration", "/user/authentication", "/hotel/**", "/tour/**").anonymous()
+                .antMatchers("/","/hotel/**", "/tour/**", "/basket/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/user/authentication")
                     .defaultSuccessUrl("/")
-                    .permitAll()
                 .and()
                     .logout()
-                    .permitAll()
                 .and()
                 .csrf().ignoringAntMatchers("/h2-console/**")
                 .and()
@@ -53,5 +56,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/image/**");
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionListener> listenerRegistrationBean(){
+        return new ServletListenerRegistrationBean<>(new Listener());
     }
 }
