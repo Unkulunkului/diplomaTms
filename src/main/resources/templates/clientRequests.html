@@ -7,7 +7,11 @@
 </head>
 <body>
 <div th:if="${isIncorrectCurator}">
-    <p>Incorrect curator</p>
+    <p>You are not curator of this request!</p>
+</div>
+
+<div th:if="${isIncorrectStatus}">
+    <p>You must set status 'In progress' and after completion - 'Done'</p>
 </div>
 <br>
 <h1>Client requests:</h1>

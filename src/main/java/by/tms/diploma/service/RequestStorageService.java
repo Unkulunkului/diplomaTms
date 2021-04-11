@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RequestStorageService {
-    void addRequest(ClientRequest clientRequest);
+    void save(ClientRequest clientRequest);
 
     List<ClientRequest> getAllRequest();
-
-    void deleteRequest(ClientRequest clientRequest);
 
     Optional<ClientRequest> findById(long id);
 }

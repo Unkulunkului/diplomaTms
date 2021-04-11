@@ -1,8 +1,8 @@
 package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.ClientRequest;
+import by.tms.diploma.repository.RequestRepository;
 import by.tms.diploma.service.RequestStorageService;
-import by.tms.diploma.storage.RequestStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +13,16 @@ import java.util.Optional;
 public class RequestStorageServiceImpl implements RequestStorageService {
 
     @Autowired
-    private RequestStorage requestStorage;
+    private RequestRepository requestStorage;
 
     @Override
-    public void addRequest(ClientRequest clientRequest) {
-        requestStorage.addRequest(clientRequest);
+    public void save(ClientRequest clientRequest) {
+        requestStorage.save(clientRequest);
     }
 
     @Override
     public List<ClientRequest> getAllRequest() {
-        return requestStorage.getAllRequest();
-    }
-
-    @Override
-    public void deleteRequest(ClientRequest clientRequest) {
-        requestStorage.deleteRequest(clientRequest);
+        return requestStorage.findAll();
     }
 
     @Override
