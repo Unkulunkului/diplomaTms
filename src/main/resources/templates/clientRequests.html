@@ -6,23 +6,39 @@
     <title>Requests</title>
 </head>
 <body>
+<div th:if="${isIncorrectCurator}">
+    <p>Incorrect curator</p>
+</div>
+<br>
 <h1>Client requests:</h1>
 <table th:if="${!list.isEmpty()}">
     <tr>
+        <th>ID</th>
         <th>CLIENT NAME</th>
         <th>CLIENT NUMBER</th>
+        <th>TOURS NAME</th>
         <th>STATUS</th>
         <th>ACTION</th>
     </tr>
     <tr th:each="request : ${list}">
+        <td th:text="${'#'+request.id}"></td>
         <td th:text="${request.name}"></td>
         <td th:text="${request.number}"></td>
-        <td th:text="${request.progress.name()}"></td>
-<!--        <td th:text="${tour.number}"></td>-->
+        <td>
+            <ul style="position:relative; z-index:1000;">
+                <li class="hide_show">
+                    Tours
+                    <ul th:if="${request.tours != null}" th:each="tour : ${request.tours}">
+                        <li><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+        <td th:text="${request.requestStatus.name()}"></td>
         <td>
 
-            <form th:action="@{fromClients/setProgress}" method="post">
-                <select name="progress">
+            <form th:action="@{fromClients/setStatus}" method="post">
+                <select name="requestStatus">
                     <option th:value="'IN_PROGRESS'">In progress</option>
                     <option th:value="'DONE'">Done</option>
                 </select>

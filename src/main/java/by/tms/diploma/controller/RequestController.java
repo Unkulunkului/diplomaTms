@@ -33,8 +33,9 @@ public class RequestController {
 
 
     @GetMapping(path = "/fromClients")
-    public ModelAndView getClientRequestsView(ModelAndView modelAndView){
+    public ModelAndView getClientRequestsView(boolean isIncorrectCurator, ModelAndView modelAndView){
         modelAndView.addObject("list", requestStorageService.getAllRequest());
+        modelAndView.addObject("isIncorrectCurator",isIncorrectCurator);
         modelAndView.setViewName("clientRequests");
         return modelAndView;
     }
@@ -52,7 +53,7 @@ public class RequestController {
         if(!bindingResult.hasErrors()){
             List<Tour> basketWithTour = (List<Tour>) httpSession.getAttribute("basketWithTour");
             clientRequest.setTours(basketWithTour);
-            clientRequest.setProgress(ClientRequestProgressEnum.WAITING);
+            clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
             requestStorageService.addRequest(clientRequest);
             modelAndView.addObject("result", "Your request has been sent. Wait for our call :)");
         }
@@ -61,12 +62,33 @@ public class RequestController {
     }
 
 
-    @PostMapping("/fromClients/setProgress")
-    public ModelAndView postSetProcessingView(ClientRequestModel clientRequestModel, ModelAndView modelAndView){
-        Optional<ClientRequest> requestId = requestStorageService.findById(clientRequestModel.getId());
-        if (requestId.isPresent()) {
-            ClientRequest clientRequest = requestId.get();
-            clientRequest.setProgress(ClientRequestProgressEnum.valueOf(clientRequestModel.getProgress()));
+    @PostMapping("/fromClients/setStatus")
+    public ModelAndView postSetStatus(ClientRequestModel clientRequestModel, ModelAndView modelAndView,
+                                      HttpServletRequest httpServletRequest){
+        long requestId = clientRequestModel.getId();
+        Optional<ClientRequest> requestById = requestStorageService.findById(requestId);
+
+        String curatorUsername = httpServletRequest.getUserPrincipal().getName();
+        Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
+        long curatorId = curatorByUsername.get().getId();
+
+        ClientRequest clientRequest = requestById.get();
+        if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
+            switch (ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus())){
+                case IN_PROGRESS:
+                    clientRequest.setRequestStatus(ClientRequestStatusEnum.IN_PROGRESS);
+                    clientRequest.setCuratorId(curatorId);
+                    break;
+                case DONE:
+                    List<UserRole> roles = curatorByUsername.get().getRoles();
+                    long requestCuratorId = clientRequest.getCuratorId();
+                    if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
+                        clientRequest.setRequestStatus(ClientRequestStatusEnum.DONE);
+                    }else {
+                        modelAndView.addObject("isIncorrectCurator", true);
+                    }
+                    break;
+            }
         }
         modelAndView.setViewName("redirect:/request/fromClients");
         return modelAndView;

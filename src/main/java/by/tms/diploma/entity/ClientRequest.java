@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -19,6 +18,6 @@ public class ClientRequest {
     @Pattern(regexp = "(\\+)?\\d{7,15}")
     private String number;
     private List<Tour> tours;
-    private ClientRequestProgressEnum progress;
+    private ClientRequestStatusEnum requestStatus;
     private long curatorId;
 }

@@ -22,8 +22,7 @@ public class RequestStorageServiceImpl implements RequestStorageService {
 
     @Override
     public List<ClientRequest> getAllRequest() {
-        List<ClientRequest> allRequest = requestStorage.getAllRequest();
-        return allRequest;
+        return requestStorage.getAllRequest();
     }
 
     @Override
@@ -33,7 +32,6 @@ public class RequestStorageServiceImpl implements RequestStorageService {
 
     @Override
     public Optional<ClientRequest> findById(long id) {
-        Optional<ClientRequest> byId = requestStorage.findById(id);
-        return byId;
+        return requestStorage.findById(id);
     }
 }
