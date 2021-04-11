@@ -51,8 +51,7 @@ public class RequestController {
     public ModelAndView postRequestView(@Valid @ModelAttribute("clientRequest") ClientRequest clientRequest,
                                         BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession){
         if(!bindingResult.hasErrors()){
-            List<Tour> basketWithTour = (List<Tour>) httpSession.getAttribute("basketWithTour");
-            clientRequest.setTours(basketWithTour);
+            clientRequest.setTours((List<Tour>) httpSession.getAttribute("basketWithTour"));
             clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
             requestStorageService.addRequest(clientRequest);
             modelAndView.addObject("result", "Your request has been sent. Wait for our call :)");

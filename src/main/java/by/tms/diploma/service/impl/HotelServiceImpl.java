@@ -4,8 +4,10 @@ import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.repository.HotelRepository;
 import by.tms.diploma.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,4 +39,11 @@ public class HotelServiceImpl implements HotelService {
     public Optional<Hotel> findById(long id){
         return hotelRepository.findById(id);
     }
+
+    @Override
+    public List<Hotel> findAll() {
+        return hotelRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+
 }

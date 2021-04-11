@@ -69,9 +69,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public ServletListenerRegistrationBean<HttpSessionListener> listenerSessionBean(){
         return new ServletListenerRegistrationBean<>(new SessionListener());
     }
-
-    @Bean
-    public ServletListenerRegistrationBean<ServletContextListener> listenerContextBean(){
-        return new ServletListenerRegistrationBean<>(new ContextListener());
-    }
 }

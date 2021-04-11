@@ -71,8 +71,9 @@ public class TourController {
 
     @GetMapping(path = "/add")
     public ModelAndView getAddView(ModelAndView modelAndView){
-        modelAndView.setViewName("addTour");
+        modelAndView.addObject("hotels", hotelService.findAll());
         modelAndView.addObject("tourAddForm", new TourAddModel());
+        modelAndView.setViewName("addTour");
         return modelAndView;
     }
 
@@ -81,15 +82,16 @@ public class TourController {
                                     BindingResult bindingResult, ModelAndView modelAndView){
         if(!bindingResult.hasErrors()){
             String hotelName = tourAddModel.getHotelName();
-            if (hotelService.existsByName(hotelName)) {
+            if (hotelName !=null) {
+                log.info("after hotel != null");
                 String name = tourAddModel.getName();
                 if(!tourService.existsByName(name)){
-                    Hotel byName = hotelService.findByName(hotelName);
+                    Hotel hotel = hotelService.findByName(hotelName);
                     Tour tour = new Tour();
-                    tour.setHotel(byName);
+                    tour.setHotel(hotel);
                     tour.setName(name);
                     tour.setDescription(tourAddModel.getDescription());
-                    tour.setCountry(tourAddModel.getCountry());
+                    tour.setCountry(hotel.getCountry());
                     tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
                     tour.setImages(tourAddModel.getImages());
                     tourService.add(tour);
@@ -101,6 +103,7 @@ public class TourController {
                 modelAndView.addObject("doesHotelNotExist", true);
             }
         }
+        modelAndView.addObject("hotels", hotelService.findAll());
         modelAndView.setViewName("addTour");
         return modelAndView;
     }
