@@ -14,8 +14,12 @@
     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
     <div><label> Country : <input type="text" th:field="*{country}"/></label></div>
     <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>
-    <div><label> Stars : <input type="text" th:field="*{stars}"/></label></div>
-    <p th:if="${#fields.hasErrors('stars')}" th:errors="*{stars}" style="color: coral"></p>
+    <label>Stars :
+        <select th:field="*{stars}">
+            <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">
+            </option>
+    </select>
+    </label>
     <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
     <div><label> Images : <input type="text" th:field="*{images}"/></label></div>

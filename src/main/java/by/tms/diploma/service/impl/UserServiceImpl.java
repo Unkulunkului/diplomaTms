@@ -1,9 +1,10 @@
-package by.tms.diploma.service;
+package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserRole;
 import by.tms.diploma.repository.UserRepository;
-import by.tms.diploma.service.exception.AlreadyExistsException;
+
+import by.tms.diploma.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encode);
         List<UserRole> rolesRoles = new ArrayList<>();
         rolesRoles.add(UserRole.USER);
+        rolesRoles.add(UserRole.MODERATOR);
         user.setRoles(rolesRoles);
         User save = userRepository.save(user);
         log.info("User "+user.getUsername()+" was saved"); //mark as service
@@ -43,4 +46,11 @@ public class UserServiceImpl implements UserService {
     public boolean isUsernameAlreadyExists(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public Optional<User> getByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
 }

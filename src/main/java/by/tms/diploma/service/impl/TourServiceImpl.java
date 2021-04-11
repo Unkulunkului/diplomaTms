@@ -1,7 +1,8 @@
-package by.tms.diploma.service;
+package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.Tour;
 import by.tms.diploma.repository.TourRepository;
+import by.tms.diploma.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package by.tms.diploma.service;
+package by.tms.diploma.service.impl;
 
 
 import by.tms.diploma.entity.User;

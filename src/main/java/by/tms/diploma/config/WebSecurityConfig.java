@@ -1,7 +1,8 @@
 package by.tms.diploma.config;
 
-import by.tms.diploma.listener.Listener;
-import by.tms.diploma.service.CustomUserDetailsService;
+import by.tms.diploma.listener.ContextListener;
+import by.tms.diploma.listener.SessionListener;
+import by.tms.diploma.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionListener;
 
 @EnableWebSecurity
@@ -34,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/registration", "/user/authentication", "/hotel/**", "/tour/**").anonymous()
-                .antMatchers("/","/hotel/**", "/tour/**", "/basket/**").permitAll()
+                .antMatchers("/","/hotel/**", "/tour/**", "/basket/**", "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -64,7 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ServletListenerRegistrationBean<HttpSessionListener> listenerRegistrationBean(){
-        return new ServletListenerRegistrationBean<>(new Listener());
+    public ServletListenerRegistrationBean<HttpSessionListener> listenerSessionBean(){
+        return new ServletListenerRegistrationBean<>(new SessionListener());
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<ServletContextListener> listenerContextBean(){
+        return new ServletListenerRegistrationBean<>(new ContextListener());
     }
 }

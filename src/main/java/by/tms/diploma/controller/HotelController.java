@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -23,9 +24,10 @@ public class HotelController {
 
     @GetMapping("/{id}")
     public ModelAndView getHotelView(@PathVariable("id") long id, ModelAndView modelAndView){
-        if (hotelService.existsById(id)) {
-            Hotel byId = hotelService.findById(id);
-            modelAndView.addObject("hotel", byId);
+        Optional<Hotel> byId = hotelService.findById(id);
+        if (byId.isPresent()) {
+            Hotel hotel = byId.get();
+            modelAndView.addObject("hotel", hotel);
         }else {
             modelAndView.addObject("incorrectId", "Hotel with id="+id+" doesn't exist!");
         }

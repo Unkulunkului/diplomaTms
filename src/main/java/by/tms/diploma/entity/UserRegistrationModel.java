@@ -16,8 +16,6 @@ public class UserRegistrationModel {
 //    @Pattern(regexp = "[A-Za-z_0-9-]{5,15}", message = "Login may have only upper and lower case, digits and '-', '_'. " +
 //            "Min length - 5, max - 15!")
     private String username;
-//    @Pattern(regexp = "[A-Z][a-z]{2,10}", message = "Name must start with upper case. Min length - 2, max - 10!")
-    private String name;
 //    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[a-z]).{8,16}$",
 //            message = "Password must have upper and lower case, digit. Min size - 8, max - 16!")
     private String password;

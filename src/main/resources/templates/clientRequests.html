@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Requests</title>
+</head>
+<body>
+<h1>Client requests:</h1>
+<table th:if="${!list.isEmpty()}">
+    <tr>
+        <th>CLIENT NAME</th>
+        <th>CLIENT NUMBER</th>
+        <th>STATUS</th>
+        <th>ACTION</th>
+    </tr>
+    <tr th:each="request : ${list}">
+        <td th:text="${request.name}"></td>
+        <td th:text="${request.number}"></td>
+        <td th:text="${request.progress.name()}"></td>
+<!--        <td th:text="${tour.number}"></td>-->
+        <td>
+
+            <form th:action="@{fromClients/setProgress}" method="post">
+                <select name="progress">
+                    <option th:value="'IN_PROGRESS'">In progress</option>
+                    <option th:value="'DONE'">Done</option>
+                </select>
+                <input type="hidden" name="id" th:value="${request.id}">
+                <button>Submit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

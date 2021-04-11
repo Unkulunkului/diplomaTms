@@ -9,17 +9,21 @@
 <div>
     <h1>Basket:</h1>
 
-    <table th:if="${!session.basket.tours.isEmpty()}">
+    <table th:if="${session.basketWithTour != null}">
         <tr>
             <th>TOUR NAME</th>
             <th>PRICE</th>
         </tr>
-        <tr th:each="tour : ${session.basket.tours}">
+        <tr th:each="tour : ${session.basketWithTour}">
             <td th:text="${tour.name}"></td>
             <td th:text="${tour.price}"></td>
         </tr>
     </table>
-
+    <br>
+    <form action= "#" th:action="@{request}" method="post">
+        <input type="hidden" name="tours" th:value="${session.basketWithTour}">
+        <button>Call me</button>
+    </form>
 </div>
 <p>
     <a href="/" th:href="@{/}">Return to home</a>

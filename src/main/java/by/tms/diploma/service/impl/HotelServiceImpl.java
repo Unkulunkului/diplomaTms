@@ -1,14 +1,15 @@
-package by.tms.diploma.service;
+package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.repository.HotelRepository;
+import by.tms.diploma.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class HotelServiceImpl implements HotelService{
+public class HotelServiceImpl implements HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
@@ -33,8 +34,7 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
-    public Hotel findById(long id){
-        Hotel byId = hotelRepository.getOne(id);
-        return byId;
+    public Optional<Hotel> findById(long id){
+        return hotelRepository.findById(id);
     }
 }

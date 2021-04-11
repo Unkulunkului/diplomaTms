@@ -1,6 +1,6 @@
 package by.tms.diploma.controller;
 
-import by.tms.diploma.entity.Basket;
+
 import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.entity.Tour;
 import by.tms.diploma.entity.TourAddModel;
@@ -62,10 +62,8 @@ public class TourController {
     @PostMapping("/addToBasket")
     public ModelAndView postAddTour(long tourId, ModelAndView modelAndView, HttpSession httpSession){
         Tour tour = tourService.getById(tourId).get();
-
-        Basket basket = (Basket) httpSession.getAttribute("basket");
-        basket.addTour(tour);
-
+        List<Tour> basket = (List<Tour>) httpSession.getAttribute("basketWithTour");
+        basket.add(tour);
         modelAndView.setViewName("redirect:"+tourId);
         return modelAndView;
     }

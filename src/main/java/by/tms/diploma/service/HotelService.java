@@ -2,11 +2,13 @@ package by.tms.diploma.service;
 
 import by.tms.diploma.entity.Hotel;
 
+import java.util.Optional;
+
 public interface HotelService {
     boolean existsByName(String hotelName);
     boolean existsById(long id);
     void add (Hotel hotel);
     Hotel findByName(String name);
-    Hotel findById(long id);
+    Optional<Hotel> findById(long id);
 
 }

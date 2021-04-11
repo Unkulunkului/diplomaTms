@@ -3,8 +3,7 @@ package by.tms.diploma.controller;
 import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.service.UserService;
-import by.tms.diploma.service.UserServiceImpl;
-import by.tms.diploma.service.exception.AlreadyExistsException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,7 +45,6 @@ public class UserController {
                     User user = new User();
                     user.setUsername(userRegistrationModel.getUsername());
                     user.setPassword(userRegistrationModel.getPassword());
-                    user.setName(userRegistrationModel.getName());
                     user.setEmail(userRegistrationModel.getEmail());
                     userService.save(user);
                 }else {
