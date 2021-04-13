@@ -16,7 +16,7 @@
         </tr>
         <tr th:each="tour : ${session.basketWithTour}">
             <td th:text="${tour.name}"></td>
-            <td th:text="${tour.price}"></td>
+            <td th:text="${tour.pricePerDay}"></td>
         </tr>
     </table>
     <br>

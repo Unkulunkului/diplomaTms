@@ -23,6 +23,8 @@ public class Hotel {
     private String name;
     private int stars;
     private boolean pets;
+    @OneToOne(cascade = CascadeType.ALL)
+    private HotelRoom hotelRoom;
 
     @Override
     public boolean equals(Object o) {

@@ -25,7 +25,7 @@
     <div><label> Images : <input type="text" th:field="*{images}"/></label></div>
     <p th:if="${#fields.hasErrors('images')}" th:errors="*{images}" style="color: coral"></p>
     <div><label> Pets : <input type="checkbox" th:field="*{pets}"/></label></div>
-    <button>Add</button>
+    <button>Next step</button>
 </form>
 <br>
 <div th:if="${createdHotel!=null}">

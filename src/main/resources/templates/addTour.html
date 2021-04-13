@@ -19,8 +19,8 @@
     <div th:if="${doesHotelNotExist}">
         <span>List with hotel is empty. Click <a th:href="@{/hotel/add}">here</a> to add hotel.</span>
     </div>
-    <div><label> Price : <input type="text" th:field="*{price}"/></label></div>
-    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral"></p>
+    <div><label> Price per day : <input type="text" th:field="*{pricePerDay}"/></label></div>
+    <p th:if="${#fields.hasErrors('pricePerDay')}" th:errors="*{pricePerDay}" style="color: coral"></p>
     <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
     <div><label> Images : <input type="text" th:field="*{images}"/></label></div>

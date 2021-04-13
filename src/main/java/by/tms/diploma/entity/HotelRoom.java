@@ -8,20 +8,18 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Tour {
+public class HotelRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
-    private Hotel hotel;
-    @Column(length = 1500)
-    private String description;
-    private String name;
-    private double pricePerDay;
-    private String images;
-    private String country;
-    private boolean withChildren;
+    @ElementCollection
+    private List<HotelRoomTypeEnum> roomType;
+    private boolean isHasSafe;
+    private boolean isHasMinibar;
+    private boolean isHasHairdryer;
+    private boolean isHasTV;
+    private boolean isHasAirConditioning;
 }

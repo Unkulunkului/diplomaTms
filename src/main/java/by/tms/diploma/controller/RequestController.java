@@ -1,7 +1,7 @@
 package by.tms.diploma.controller;
 
 import by.tms.diploma.entity.*;
-import by.tms.diploma.service.RequestStorageService;
+import by.tms.diploma.service.RequestService;
 import by.tms.diploma.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,18 +27,15 @@ import java.util.Optional;
 public class RequestController {
 
     @Autowired
-    private RequestStorageService requestStorageService;
+    private RequestService requestService;
 
     @Autowired
     private UserServiceImpl userService;
 
 
     @GetMapping(path = "/fromClients")
-    public ModelAndView getClientRequestsView(boolean isIncorrectCurator, boolean isIncorrectStatus,
-                                              ModelAndView modelAndView){
-        modelAndView.addObject("list", requestStorageService.getAllRequest());
-        modelAndView.addObject("isIncorrectCurator",isIncorrectCurator);
-        modelAndView.addObject("isIncorrectStatus",isIncorrectStatus);
+    public ModelAndView getClientRequestsView(ModelAndView modelAndView){
+        modelAndView.addObject("list", requestService.getAllRequest());
         modelAndView.setViewName("clientRequests");
         return modelAndView;
     }
@@ -55,7 +53,7 @@ public class RequestController {
         if(!bindingResult.hasErrors()){
             clientRequest.setTours((List<Tour>) httpSession.getAttribute("basketWithTour"));
             clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
-            requestStorageService.save(clientRequest);
+            requestService.save(clientRequest);
             modelAndView.addObject("result", "Your request has been sent. Wait for our call :)");
         }
         modelAndView.setViewName("request");
@@ -65,9 +63,9 @@ public class RequestController {
 
     @PostMapping("/fromClients/setStatus")
     public ModelAndView postSetStatus(ClientRequestModel clientRequestModel, ModelAndView modelAndView,
-                                      HttpServletRequest httpServletRequest){
+                                      HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
         long requestId = clientRequestModel.getId();
-        Optional<ClientRequest> requestById = requestStorageService.findById(requestId);
+        Optional<ClientRequest> requestById = requestService.findById(requestId);
 
         String curatorUsername = httpServletRequest.getUserPrincipal().getName();
         Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
@@ -88,15 +86,15 @@ public class RequestController {
                         if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
                             clientRequest.setRequestStatus(ClientRequestStatusEnum.DONE);
                         }else {
-                            modelAndView.addObject("isIncorrectCurator", true);
+                            redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
                         }
                     }else{
-                        modelAndView.addObject("isIncorrectStatus", true);
+                        redirectAttributes.addFlashAttribute("isIncorrectStatus", true);
                     }
                     break;
             }
         }
-        requestStorageService.save(clientRequest);
+        requestService.save(clientRequest);
         modelAndView.setViewName("redirect:/request/fromClients");
         return modelAndView;
     }

@@ -1,8 +1,11 @@
 package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.ClientRequest;
+import by.tms.diploma.entity.ClientRequestStatusEnum;
+
+import by.tms.diploma.entity.UserRole;
 import by.tms.diploma.repository.RequestRepository;
-import by.tms.diploma.service.RequestStorageService;
+import by.tms.diploma.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RequestStorageServiceImpl implements RequestStorageService {
+public class RequestServiceImpl implements RequestService {
 
     @Autowired
     private RequestRepository requestStorage;
@@ -28,5 +31,14 @@ public class RequestStorageServiceImpl implements RequestStorageService {
     @Override
     public Optional<ClientRequest> findById(long id) {
         return requestStorage.findById(id);
+    }
+
+    @Override
+    public void updateStatusById(long id, ClientRequestStatusEnum status) {
+    }
+
+    @Override
+    public void setCuratorIdById(long id, long curatorId) {
+
     }
 }

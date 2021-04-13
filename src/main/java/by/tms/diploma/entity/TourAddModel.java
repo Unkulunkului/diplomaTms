@@ -22,7 +22,7 @@ public class TourAddModel {
     private String name;
     private String hotelName;
     @Pattern(regexp = "\\d{1,5}(\\.\\d{1,2})?", message = "Wrong price")
-    private String price;
+    private String pricePerDay;
     private String images;
     private boolean withChildren;
 }

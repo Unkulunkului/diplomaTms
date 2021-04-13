@@ -58,6 +58,30 @@
             <span th:case="true"> yes</span>
             <span th:case="false"> no</span>
         </p>
+        <p>Room: </p>
+        <p th:each="type : ${hotel.hotelRoom.roomType}">
+            <span th:text="${type.name()}"></span>
+        </p>
+        <p th:switch="${hotel.hotelRoom.hasHairdryer}"> Hairdryer:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <p th:switch="${hotel.hotelRoom.hasAirConditioning}"> Air conditioning:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <p th:switch="${hotel.hotelRoom.hasMinibar}"> Minibar:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <p th:switch="${hotel.hotelRoom.hasSafe}"> Safe:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <p th:switch="${hotel.hotelRoom.hasTV}"> TV:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
         <img th:src="@{${hotel.images}}" width="200" height="150"/>
     </div>
     <div th:if="${incorrectId!=null}">
