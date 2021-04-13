@@ -35,10 +35,21 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void updateStatusById(long id, ClientRequestStatusEnum status) {
+        Optional<ClientRequest> clientRequestById = requestStorage.findById(id);
+        if (clientRequestById.isPresent()) {
+            ClientRequest clientRequest = clientRequestById.get();
+            clientRequest.setRequestStatus(status);
+            requestStorage.save(clientRequest);
+        }
     }
 
     @Override
     public void setCuratorIdById(long id, long curatorId) {
-
+        Optional<ClientRequest> clientRequestById = requestStorage.findById(id);
+        if (clientRequestById.isPresent()) {
+            ClientRequest clientRequest = clientRequestById.get();
+            clientRequest.setCuratorId(curatorId);
+            requestStorage.save(clientRequest);
+        }
     }
 }

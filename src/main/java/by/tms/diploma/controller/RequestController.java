@@ -76,15 +76,15 @@ public class RequestController {
             ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
             switch (status){
                 case IN_PROGRESS:
-                    clientRequest.setRequestStatus(ClientRequestStatusEnum.IN_PROGRESS);
-                    clientRequest.setCuratorId(curatorId);
+                    requestService.updateStatusById(requestId, status);
+                    requestService.setCuratorIdById(requestId, curatorId);
                     break;
                 case DONE:
                     if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.WAITING)){
                         List<UserRole> roles = curatorByUsername.get().getRoles();
                         long requestCuratorId = clientRequest.getCuratorId();
                         if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
-                            clientRequest.setRequestStatus(ClientRequestStatusEnum.DONE);
+                            requestService.updateStatusById(requestId, status);
                         }else {
                             redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
                         }
@@ -94,7 +94,6 @@ public class RequestController {
                     break;
             }
         }
-        requestService.save(clientRequest);
         modelAndView.setViewName("redirect:/request/fromClients");
         return modelAndView;
     }
