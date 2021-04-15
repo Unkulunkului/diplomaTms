@@ -6,6 +6,9 @@
     <title>Tours</title>
 </head>
 <body>
+<div th:if="${wasDeleted}">
+    <span>Tour was deleted!</span>
+</div>
 <div th:if="${emptyList==null}" th:each="tour : ${tours}">
     <div>
         <img th:src="@{${tour.images}}" width="200" height="150"/>
@@ -16,9 +19,5 @@
 <div th:unless="${emptyList==null}">
     <p th:text="${emptyList}"></p>
 </div>
-<!--<div>-->
-<!--    <p>Find by hotel:</p>-->
-<!--    <form th:action="@{}"></form>-->
-<!--</div>-->
 </body>
 </html>

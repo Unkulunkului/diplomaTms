@@ -14,6 +14,9 @@
 <p th:if="${userNotFound}">
     <span>User not found</span>
 </p>
+<p th:if="${alreadyModerator}">
+    <span>Already moderator</span>
+</p>
 <table th:if="${userByUsername!=null}">
     <tr>
         <th>ID</th>
@@ -26,7 +29,7 @@
     <td th:text="${userByUsername.email}"></td>
 
     <td>
-        <form th:action="@{moderators/updateRole}" method="post">
+        <form th:if="${!alreadyModerator}" th:action="@{moderators/updateRole}" method="post">
             <input type="hidden" name="id" th:value="${userByUsername.id}">
             <button>Make a moderator</button>
         </form>

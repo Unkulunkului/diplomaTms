@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -50,7 +51,6 @@ public class TourController {
         }else{
             modelAndView.addObject("emptyList", "No tours");
         }
-//        modelAndView.addObject("hotelFilterForm", new HotelAddModel());
         modelAndView.setViewName("allTours");
         return modelAndView;
     }
@@ -91,7 +91,7 @@ public class TourController {
                     tour.setCountry(hotel.getCountry());
                     tour.setPricePerDay(Double.parseDouble(tourAddModel.getPricePerDay()));
                     tour.setImages(tourAddModel.getImages());
-                    tourService.add(tour);
+                    tourService.save(tour);
                     modelAndView.addObject("createdTour", "Tour '"+name+"' was created!");
                 }else {
                     modelAndView.addObject("doesTourNameExist", true);
@@ -102,6 +102,31 @@ public class TourController {
         }
         modelAndView.addObject("hotels", hotelService.findAll());
         modelAndView.setViewName("addTour");
+        return modelAndView;
+    }
+
+    @PostMapping(path = "/delete")
+    public ModelAndView deleteTour(long id, ModelAndView modelAndView, RedirectAttributes redirectAttributes){
+        tourService.deleteById(id);
+        redirectAttributes.addFlashAttribute("wasDeleted", true);
+        modelAndView.setViewName("redirect:/tour/all");
+        return modelAndView;
+    }
+
+    @PostMapping(path = "/setUpdatePage")
+    public ModelAndView setUpdateTour(long id, ModelAndView modelAndView, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("isSetUpdate", true);
+        redirectAttributes.addFlashAttribute("hotels", hotelService.findAll());
+        redirectAttributes.addFlashAttribute("hotelUpdateForm", new TourUpdateModel());
+        modelAndView.setViewName("redirect:/tour/"+id);
+        return modelAndView;
+    }
+
+    @PostMapping(path = "/update")
+    public ModelAndView updateTour(@ModelAttribute("HotelUpdateModel") TourUpdateModel tourModel,
+                                   ModelAndView modelAndView, RedirectAttributes redirectAttributes){
+        tourService.updateTour(tourModel);
+        modelAndView.setViewName("redirect:/tour/"+tourModel.getId());
         return modelAndView;
     }
 }

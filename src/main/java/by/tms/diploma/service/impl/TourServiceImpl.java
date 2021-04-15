@@ -1,7 +1,10 @@
 package by.tms.diploma.service.impl;
 
+import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.entity.Tour;
+import by.tms.diploma.entity.TourUpdateModel;
 import by.tms.diploma.repository.TourRepository;
+import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -16,8 +19,11 @@ public class TourServiceImpl implements TourService {
     @Autowired
     private TourRepository tourRepository;
 
+    @Autowired
+    private HotelService hotelService;
+
     @Override
-    public void add(Tour tour) {
+    public void save(Tour tour) {
         tourRepository.save(tour);
     }
 
@@ -41,9 +47,22 @@ public class TourServiceImpl implements TourService {
         return tourRepository.findAll();
     }
 
-
-    public List<Tour>getAllFilter(Tour example){
-        return tourRepository.findAll(Example.of(example));
+    @Override
+    public void deleteById(long id) {
+        tourRepository.deleteById(id);
     }
+
+    @Override
+    public void updateTour(TourUpdateModel tourModel) {
+        Tour tour = tourRepository.findById(tourModel.getId()).get();
+        tour.setName(tourModel.getName());
+        tour.setPricePerDay(Double.parseDouble(tourModel.getPricePerDay()));
+        Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
+        tour.setCountry(hotelByName.getCountry());
+        tour.setHotel(hotelByName);
+        tour.setDescription(tourModel.getDescription());
+        tourRepository.save(tour);
+    }
+
 
 }

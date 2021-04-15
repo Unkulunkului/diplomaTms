@@ -31,7 +31,12 @@ public class AdminController {
     public ModelAndView postSetModerator(String username, ModelAndView modelAndView){
         Optional<User> byUsername = userService.getByUsername(username);
         if(byUsername.isPresent()){
-            modelAndView.addObject("userByUsername", byUsername.get());
+            User user = byUsername.get();
+            if(!user.getRoles().contains(UserRole.MODERATOR)){
+                modelAndView.addObject("userByUsername", user);
+            }else {
+                modelAndView.addObject("alreadyModerator", true);
+            }
         }else {
             modelAndView.addObject("userNotFound", true);
         }
