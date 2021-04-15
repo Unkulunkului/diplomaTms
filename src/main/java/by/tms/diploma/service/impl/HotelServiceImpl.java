@@ -44,6 +44,9 @@ public class HotelServiceImpl implements HotelService {
     public List<Hotel> findAll() {
         return hotelRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
-
-
+    @Override
+    public List<Hotel> findAllByParams(String name, String country, int startStar, int finishStar){
+        return hotelRepository.findAllByNameEqualsOrCountryEqualsAndStarsGreaterThanEqualAndStarsLessThanEqual(
+                name, country, startStar, finishStar);
+    }
 }

@@ -4,6 +4,7 @@ import by.tms.diploma.entity.Tour;
 import by.tms.diploma.repository.TourRepository;
 import by.tms.diploma.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +41,9 @@ public class TourServiceImpl implements TourService {
         return tourRepository.findAll();
     }
 
+
+    public List<Tour>getAllFilter(Tour example){
+        return tourRepository.findAll(Example.of(example));
+    }
 
 }

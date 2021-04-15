@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Filter hotel</title>
+</head>
+<body>
+<div>
+    <form th:action="@{filter}" method="post">
+        <div><label> Name : <input type="text" name = "name"/></label></div>
+        <div><label> Country : <input type="text" name = "country"/></label></div>
+        <label>From stars :
+            <select name="startStar">
+                <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">
+                </option>
+            </select>
+        </label>
+        <label>To stars :
+            <select name="finishStar">
+                <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}" selected="5">
+                </option>
+            </select>
+        </label>
+        <br>
+        <button>Filter</button>
+    </form>
+</div>
+<div th:if="${hotels != null}" th:each="hotel : ${hotels}">
+    <p th:text="'Name: '+${hotel.name}+' '+${hotel.stars}+'*'"></p>
+    <p th:text="'Country: '+${hotel.country}"></p>
+    <img th:src="@{${hotel.images}}" width="200" height="150"/>
+    <a th:href="@{'/hotel/'+${hotel.id}}" class="button">Check it</a>
+</div>
+<div th:if="${emptyListHotels!=null}">
+    <p th:text="${emptyListHotels}"></p>
+</div>
+<div th:if="${emptyInput!=null}">
+    <p th:text="${emptyInput}"></p>
+</div>
+</body>
+</html>

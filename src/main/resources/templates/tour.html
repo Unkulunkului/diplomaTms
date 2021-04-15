@@ -10,6 +10,7 @@
     <div th:if="${tour!=null}">
         <p th:text="'Name: '+${tour.name}"></p>
         <p th:text="'Country: '+${tour.country}"></p>
+        <p th:text="'Price per day: '+${tour.pricePerDay}"></p>
         <p>Hotel: <a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a></p>
         <p th:text="'Description: '+${tour.description}"></p>
         <p th:switch="${tour.withChildren}"> Children:

@@ -9,4 +9,6 @@ import java.util.List;
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
     boolean existsByName(String name);
     Hotel findByName(String name);
+    List<Hotel> findAllByNameEqualsOrCountryEqualsAndStarsGreaterThanEqualAndStarsLessThanEqual(
+            String name, String country, int startStar, int finishStar);
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Moderators</title>
+</head>
+<body>
+<h1>Moderators: </h1>
+<form th:action="@{/admin/findUserByUsername}" method="post">
+    <input type="text" name="username">
+    <button>Find</button>
+</form>
+<p th:if="${userNotFound}">
+    <span>User not found</span>
+</p>
+<table th:if="${userByUsername!=null}">
+    <tr>
+        <th>ID</th>
+        <th>USERNAME</th>
+        <th>EMAIL</th>
+        <th>ACTION</th>
+    </tr>
+    <td th:text="${'#'+userByUsername.id}"></td>
+    <td th:text="${userByUsername.username}"></td>
+    <td th:text="${userByUsername.email}"></td>
+
+    <td>
+        <form th:action="@{moderators/updateRole}" method="post">
+            <input type="hidden" name="id" th:value="${userByUsername.id}">
+            <button>Make a moderator</button>
+        </form>
+    </td>
+</table>
+<table th:if="${!listWithModerators.isEmpty()}">
+    <tr>
+        <th>ID</th>
+        <th>USERNAME</th>
+        <th>EMAIL</th>
+        <th>ACTION</th>
+    </tr>
+    <tr th:each="moderator: ${listWithModerators}">
+        <td th:text="${'#'+moderator.id}"></td>
+        <td th:text="${moderator.username}"></td>
+        <td th:text="${moderator.email}"></td>
+
+        <td>
+            <form th:action="@{moderators/updateRole}" method="post">
+                <input type="hidden" name="id" th:value="${moderator.id}">
+                <button>Remove</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

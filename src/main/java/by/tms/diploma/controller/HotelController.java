@@ -1,10 +1,7 @@
 package by.tms.diploma.controller;
 
-import by.tms.diploma.entity.Hotel;
-import by.tms.diploma.entity.HotelAddModel;
+import by.tms.diploma.entity.*;
 
-import by.tms.diploma.entity.HotelRoom;
-import by.tms.diploma.entity.HotelRoomTypeEnum;
 import by.tms.diploma.service.HotelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -83,6 +81,28 @@ public class HotelController {
         return modelAndView;
     }
 
+    @GetMapping(path = "filter")
+    public ModelAndView getHotels(ModelAndView modelAndView){
+        modelAndView.setViewName("hotelFilter");
+        return modelAndView;
+    }
 
+    @PostMapping(path = "filter")
+    public ModelAndView postHotels(String country, String name, int startStar, int finishStar,
+                                   ModelAndView modelAndView){
+        if(name.trim().isEmpty() && country.trim().isEmpty()){
+            modelAndView.addObject("emptyInput", "Enter country or hotel name");
+        }else{
+            List<Hotel> allByParams = hotelService.findAllByParams(name, country, startStar, finishStar);
+            if(!allByParams.isEmpty()){
+                modelAndView.addObject("hotels", allByParams);
+            }else {
+                modelAndView.addObject("emptyListHotels", "There are no hotels that match your " +
+                        "request");
+            }
 
+        }
+        modelAndView.setViewName("hotelFilter");
+        return modelAndView;
+    }
 }

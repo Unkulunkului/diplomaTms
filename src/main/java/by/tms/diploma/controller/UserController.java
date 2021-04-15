@@ -2,6 +2,7 @@ package by.tms.diploma.controller;
 
 import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserRegistrationModel;
+import by.tms.diploma.entity.UserRole;
 import by.tms.diploma.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/user")

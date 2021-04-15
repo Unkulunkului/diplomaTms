@@ -52,5 +52,32 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public Optional<User> getById(long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public List<User> getUsersByRole(UserRole role) {
+        return userRepository.findAllByRolesContains(role);
+    }
+
+    @Override
+    public void updateRoleById(long id, UserRole role) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            List<UserRole> roles = user.getRoles();
+            if (!roles.contains(UserRole.ADMIN)) {
+                if(roles.contains(role)){
+                    roles.remove(role);
+                }else {
+                    roles.add(role);
+                }
+                userRepository.save(user);
+            }
+        }
+    }
+
 
 }

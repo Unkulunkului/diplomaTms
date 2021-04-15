@@ -12,5 +12,6 @@ public interface HotelService {
     Hotel findByName(String name);
     Optional<Hotel> findById(long id);
     List<Hotel> findAll();
+    List<Hotel> findAllByParams(String name, String country, int startStar, int finishStar);
 
 }

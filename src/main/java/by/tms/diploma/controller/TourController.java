@@ -1,9 +1,7 @@
 package by.tms.diploma.controller;
 
 
-import by.tms.diploma.entity.Hotel;
-import by.tms.diploma.entity.Tour;
-import by.tms.diploma.entity.TourAddModel;
+import by.tms.diploma.entity.*;
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.TourService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +50,7 @@ public class TourController {
         }else{
             modelAndView.addObject("emptyList", "No tours");
         }
+//        modelAndView.addObject("hotelFilterForm", new HotelAddModel());
         modelAndView.setViewName("allTours");
         return modelAndView;
     }
