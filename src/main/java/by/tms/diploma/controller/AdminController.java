@@ -35,10 +35,10 @@ public class AdminController {
             if(!user.getRoles().contains(UserRole.MODERATOR)){
                 modelAndView.addObject("userByUsername", user);
             }else {
-                modelAndView.addObject("alreadyModerator", true);
+                modelAndView.addObject("alreadyModerator", "Already moderator!");
             }
         }else {
-            modelAndView.addObject("userNotFound", true);
+            modelAndView.addObject("userNotFound", "User not found");
         }
         modelAndView.addObject("listWithModerators", userService.getUsersByRole(UserRole.MODERATOR));
         modelAndView.setViewName("moderators");

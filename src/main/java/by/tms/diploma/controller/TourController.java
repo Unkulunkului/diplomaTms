@@ -124,7 +124,7 @@ public class TourController {
 
     @PostMapping(path = "/update")
     public ModelAndView updateTour(@ModelAttribute("HotelUpdateModel") TourUpdateModel tourModel,
-                                   ModelAndView modelAndView, RedirectAttributes redirectAttributes){
+                                   ModelAndView modelAndView){
         tourService.updateTour(tourModel);
         modelAndView.setViewName("redirect:/tour/"+tourModel.getId());
         return modelAndView;

@@ -12,32 +12,36 @@
             <input type="hidden" name="id" th:value="${tour.id}">
             <button>Delete</button>
         </form>
+
         <form th:action="@{setUpdatePage}" method="post">
             <input type="hidden" name="id" th:value="${tour.id}">
             <button>Edit</button>
         </form>
-        <form th:action="@{update}" method="post">
+
+        <form th:id="update" th:action="@{update}" method="post">
             <input type="hidden" name="id" th:value="${tour.id}">
-            <p th:text="'Name: '+${tour.name}"></p>
-            <input th:if="${isSetUpdate}" type="text" name="name">
-            <p th:text="'Country: '+${tour.country}"></p>
-            <p th:text="'Price per day: '+${tour.pricePerDay}"></p>
-            <input th:if="${isSetUpdate}" type="text" name="pricePerDay">
-            <p>Hotel: <a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a></p>
-            <select th:if="${isSetUpdate}" name="hotelName">
-                <option th:if="${hotels != null}" th:each="hotel: ${hotels}" th:value="${hotel.name}" th:text="${hotel.name}">
-                </option>
-            </select>
-            <p th:text="'Description: '+${tour.description}"></p>
-            <input th:if="${isSetUpdate}" type="text" name="description">
-            <p th:switch="${tour.withChildren}"> Children:
-                <span th:case="true"> yes</span>
-                <span th:case="false"> no</span>
-            </p>
-            <img th:src="@{${tour.images}}" width="200" height="150"/>
-            <br>
             <button th:if="${isSetUpdate}">Update</button>
         </form>
+
+        <br>
+        <p th:text="'Name: '+${tour.name}"></p>
+        <input th:form="update" th:if="${isSetUpdate}" type="text" name="name">
+        <p th:text="'Country: '+${tour.country}"></p>
+        <p th:text="'Price per day: '+${tour.pricePerDay}"></p>
+        <input th:form="update" th:if="${isSetUpdate}" type="text" name="pricePerDay">
+        <p th:form="update"> Hotel: <a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a></p>
+        <select th:form="update" th:if="${isSetUpdate}" name="hotelName">
+            <option th:if="${hotels != null}" th:each="hotel: ${hotels}" th:value="${hotel.name}" th:text="${hotel.name}">
+            </option>
+        </select>
+        <p th:text="'Description: '+${tour.description}"></p>
+        <input th:form="update" th:if="${isSetUpdate}" type="text" name="description">
+        <p th:switch="${tour.withChildren}"> Children:
+            <span th:case="true"> yes</span>
+            <span th:case="false"> no</span>
+        </p>
+        <img th:src="@{${tour.images}}" width="200" height="150"/>
+        <br>
         <br>
         <form th:action="@{addToBasket}" method="post">
             <input type="hidden" name="tourId" th:value="${tour.id}">

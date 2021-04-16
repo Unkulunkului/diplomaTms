@@ -11,11 +11,11 @@
     <input type="text" name="username">
     <button>Find</button>
 </form>
-<p th:if="${userNotFound}">
-    <span>User not found</span>
+<p th:if="${userNotFound!=null}">
+    <span th:text="${userNotFound}"></span>
 </p>
-<p th:if="${alreadyModerator}">
-    <span>Already moderator</span>
+<p th:if="${alreadyModerator!=null}">
+    <span th:text="${alreadyModerator}"></span>
 </p>
 <table th:if="${userByUsername!=null}">
     <tr>
@@ -29,7 +29,7 @@
     <td th:text="${userByUsername.email}"></td>
 
     <td>
-        <form th:if="${!alreadyModerator}" th:action="@{moderators/updateRole}" method="post">
+        <form th:if="${alreadyModerator==null}" th:action="@{moderators/updateRole}" method="post">
             <input type="hidden" name="id" th:value="${userByUsername.id}">
             <button>Make a moderator</button>
         </form>
