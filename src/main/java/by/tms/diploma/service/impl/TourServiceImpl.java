@@ -1,15 +1,16 @@
 package by.tms.diploma.service.impl;
 
-import by.tms.diploma.entity.Hotel;
-import by.tms.diploma.entity.Tour;
-import by.tms.diploma.entity.TourUpdateModel;
+import by.tms.diploma.entity.*;
+
 import by.tms.diploma.repository.TourRepository;
 import by.tms.diploma.service.HotelService;
+import by.tms.diploma.service.ImageService;
 import by.tms.diploma.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,9 @@ public class TourServiceImpl implements TourService {
 
     @Autowired
     private HotelService hotelService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public void save(Tour tour) {
@@ -38,7 +42,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public Optional<Tour> getById(long id) {
+    public Optional<Tour> findById(long id) {
         return tourRepository.findById(id);
     }
 
@@ -53,16 +57,32 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void updateTour(TourUpdateModel tourModel) {
-        Tour tour = tourRepository.findById(tourModel.getId()).get();
+    public void update(long id, TourAddModel tourModel) throws IOException {
+        Tour tour = tourRepository.getById(id);
         tour.setName(tourModel.getName());
-        tour.setPricePerDay(Double.parseDouble(tourModel.getPricePerDay()));
         Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
-        tour.setCountry(hotelByName.getCountry());
         tour.setHotel(hotelByName);
         tour.setDescription(tourModel.getDescription());
+        tour.setDayAtSea(Integer.parseInt(tourModel.getDayAtSea()));
+        tour.setTourDuration(Integer.parseInt(tourModel.getTourDuration()));
+        tour.setVisitedCountries(tourModel.getVisitedCountries());
+        tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
+        tour.setPrice(Double.parseDouble(tourModel.getPrice()));
+
+        if(tourModel.getImages()!= null){
+            Image hotelImages = tour.getImages();
+            List<String> urls = hotelImages.getUrls();
+            String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
+            urls.remove(defaultImage);
+            Image image = imageService.upload(tourModel.getImages(), "hotel", tour.getId());
+            urls.addAll(image.getUrls());
+            tour.setImages(image);
+        }
         tourRepository.save(tour);
     }
 
-
+    @Override
+    public Tour getById(long id) {
+        return tourRepository.getById(id);
+    }
 }

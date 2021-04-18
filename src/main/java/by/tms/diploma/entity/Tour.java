@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Data
@@ -15,13 +16,17 @@ public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String name;
     @ManyToOne
     private Hotel hotel;
+    private TypeOfRest typeOfRest;
     @Column(length = 1500)
     private String description;
-    private String name;
-    private double pricePerDay;
-    private String images;
-    private String country;
-    private boolean withChildren;
+    private double price;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image images;
+    @ElementCollection
+    private List<String> visitedCountries;
+    private int tourDuration;
+    private int dayAtSea;
 }

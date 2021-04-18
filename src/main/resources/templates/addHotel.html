@@ -22,10 +22,12 @@
     </label>
     <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
-    <div><label> Images : <input type="text" th:field="*{images}"/></label></div>
-    <p th:if="${#fields.hasErrors('images')}" th:errors="*{images}" style="color: coral"></p>
-    <div><label> Pets : <input type="checkbox" th:field="*{pets}"/></label></div>
-    <button>Next step</button>
+    <label>Line from the sea :
+        <select th:field="*{lineFromTheSea}">
+            <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" th:text="${i}">
+            </option>
+        </select></label>
+    <button>Add</button>
 </form>
 <br>
 <div th:if="${createdHotel!=null}">

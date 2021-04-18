@@ -3,6 +3,7 @@ package by.tms.diploma.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,9 +21,16 @@ public class TourAddModel {
     @Pattern(regexp = "[A-Za-z0-9\\s]{5,20}", message = "Name may have only upper and lower case and digits. " +
             "Min length - 5, max - 20!")
     private String name;
+    @Pattern(regexp = "[A-Za-z0-9\\s]{5,20}", message = "Name may have only upper and lower case and digits. " +
+            "Min length - 5, max - 15!")
     private String hotelName;
     @Pattern(regexp = "\\d{1,5}(\\.\\d{1,2})?", message = "Wrong price")
-    private String pricePerDay;
-    private String images;
-    private boolean withChildren;
+    private String price;
+    private List<MultipartFile> images;
+    private String typeOfRest;
+    private List<String> visitedCountries;
+    @Pattern(regexp = "\\d+", message = "Only numbers")
+    private String tourDuration;
+    @Pattern(regexp = "\\d+", message = "Only numbers")
+    private String dayAtSea;
 }

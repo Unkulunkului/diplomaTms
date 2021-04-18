@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface TourRepository extends JpaRepository<Tour, Long> {
     boolean existsByName(String name);
+    Tour getById(long id);
 }

@@ -3,11 +3,15 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add tour page</title>
+    <title>Edit tour</title>
 </head>
 <body>
-<form th:action="@{add}" th:object="${tourAddForm}" method="post">
-    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
+<div th:if="${doesTourByIdExist}">
+    <span>Tour with this doesn't exist</span>
+</div>
+<form th:action="@{edit}" enctype="multipart/form-data" th:object="${tourForm}" method="post">
+    <input type="hidden" name="tourId" th:value="${tour.id}"/>
+    <div><label> Name : <input type="text" th:field="*{name}" th:value="WDDW"/></label></div>
     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral"></p>
     <div th:if="${doesTourNameExist}"><span>Tour with the same name already exists</span></div>
     <label>Type of rest :
@@ -31,9 +35,9 @@
             </option>
         </select>
     </label>
-<!--    <div th:if="${hotels.isEmpty()}">-->
-<!--        <span>List with hotel is empty. Click <a th:href="@{/hotel/add}">here</a> to add hotel.</span>-->
-<!--    </div>-->
+    <!--    <div th:if="${hotels.isEmpty()}">-->
+    <!--        <span>List with hotel is empty. Click <a th:href="@{/hotel/add}">here</a> to add hotel.</span>-->
+    <!--    </div>-->
     <div><label> Price: <input type="text" th:field="*{price}"/></label></div>
     <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral"></p>
     <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
@@ -42,12 +46,17 @@
     <p th:if="${#fields.hasErrors('tourDuration')}" th:errors="*{tourDuration}" style="color: coral"></p>
     <div><label> Day at sea : <input type="text" th:field="*{dayAtSea}"/></label></div>
     <p th:if="${#fields.hasErrors('dayAtSea')}" th:errors="*{dayAtSea}" style="color: coral"></p>
-
-    <button>Add</button>
+    <input type="file" multiple th:field="*{images}"/>
+    <button>Update</button>
 </form>
+
+
+
+
+<!--<div th:each="url: ${tour.images.urls}">-->
+<!--    <img th:src="@{${url}}" width="300" height="300"/>-->
+<!--</div>-->
+
 <br>
-<div th:if="${createdTour!=null}">
-    <p th:text="${createdTour}"></p>
-</div>
 </body>
 </html>

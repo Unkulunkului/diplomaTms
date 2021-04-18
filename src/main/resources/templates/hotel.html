@@ -54,35 +54,18 @@
         <p th:text="'Name: '+${hotel.name}+' '+${hotel.stars}+'*'"></p>
         <p th:text="'Country: '+${hotel.country}"></p>
         <p th:text="'Description: '+${hotel.description}"></p>
-        <p th:switch="${hotel.pets}"> Pet:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <p>Room: </p>
-        <p th:each="type : ${hotel.hotelRoom.roomType}">
-            <span th:text="${type.name()}"></span>
-        </p>
-        <p th:switch="${hotel.hotelRoom.hasHairdryer}"> Hairdryer:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <p th:switch="${hotel.hotelRoom.hasAirConditioning}"> Air conditioning:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <p th:switch="${hotel.hotelRoom.hasMinibar}"> Minibar:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <p th:switch="${hotel.hotelRoom.hasSafe}"> Safe:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <p th:switch="${hotel.hotelRoom.hasTV}"> TV:
-            <span th:case="true"> yes</span>
-            <span th:case="false"> no</span>
-        </p>
-        <img th:src="@{${hotel.images}}" width="200" height="150"/>
+        <p th:text="'Line from the sea: '+${hotel.lineFromTheSea}"></p>
+        <p th:text="'Description: '+${hotel.description}"></p>
+        <div th:each="url: ${hotel.images.urls}">
+            <img th:src="@{${url}}" width="300" height="300"/>
+        </div>
+        <br>
+        <form th:action="@{addImages}" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="id" th:value="${hotel.id}">
+            <label>Add photo: <input type="file" multiple name="images"></label>
+            <button>Add</button>
+        </form>
+        <br>
     </div>
     <div th:if="${incorrectId!=null}">
         <p th:text="${incorrectId}"></p>

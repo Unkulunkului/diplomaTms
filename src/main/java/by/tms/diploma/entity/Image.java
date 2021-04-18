@@ -5,21 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class HotelRoom {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ElementCollection
-    private List<HotelRoomTypeEnum> roomType;
-    private boolean isHasSafe;
-    private boolean isHasMinibar;
-    private boolean isHasHairdryer;
-    private boolean isHasTV;
-    private boolean isHasAirConditioning;
+    private List<String> urls = new ArrayList<>();
+
 }

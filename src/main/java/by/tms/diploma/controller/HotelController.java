@@ -3,17 +3,23 @@ package by.tms.diploma.controller;
 import by.tms.diploma.entity.*;
 
 import by.tms.diploma.service.HotelService;
+import by.tms.diploma.service.ImageService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpSession;
+
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -22,6 +28,8 @@ public class HotelController {
 
     @Autowired
     private HotelService hotelService;
+
+
 
     @GetMapping("/{id}")
     public ModelAndView getHotelView(@PathVariable("id") long id, ModelAndView modelAndView){
@@ -45,7 +53,8 @@ public class HotelController {
 
     @PostMapping("/add")
     public ModelAndView postHotelAddView(@Valid @ModelAttribute("hotelAddForm") HotelAddModel hotelAddModel,
-                                         BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession){
+                                         BindingResult bindingResult, ModelAndView modelAndView,
+                                         RedirectAttributes redirectAttributes) {
         if(!bindingResult.hasErrors()){
             if(!hotelService.existsByName(hotelAddModel.getName())){
                 Hotel hotel = new Hotel();
@@ -53,11 +62,14 @@ public class HotelController {
                 hotel.setCountry(hotelAddModel.getCountry());
                 hotel.setName(hotelAddModel.getName());
                 hotel.setDescription(hotelAddModel.getDescription());
-                hotel.setImages(hotelAddModel.getImages());
-                hotel.setPets(hotelAddModel.isPets());
-                httpSession.setAttribute("hotelForm", hotel);
-                modelAndView.setViewName("addHotelRoom");
-                modelAndView.addObject("hotelRoomForm", new HotelRoom());
+                hotel.setLineFromTheSea(Integer.parseInt(hotelAddModel.getLineFromTheSea()));
+                Image image = new Image();
+                image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+                hotel.setImages(image);
+                redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
+                        "' was created!");
+                hotelService.add(hotel);
+                modelAndView.setViewName("redirect:/hotel/add");
             }else {
                 modelAndView.addObject("doesHotelExist",true);
                 modelAndView.setViewName("addHotel");
@@ -68,18 +80,22 @@ public class HotelController {
         return modelAndView;
     }
 
-    @PostMapping("add/addRoom")
-    public ModelAndView postAddRoomView(@ModelAttribute("hotelRoomForm") HotelRoom room, ModelAndView modelAndView,
-                                        HttpSession httpSession, RedirectAttributes redirectAttributes){
-        Hotel hotel = (Hotel) httpSession.getAttribute("hotelForm");
-        hotel.setHotelRoom(room);
-        hotelService.add(hotel);
-        log.info(hotel.toString());
-        redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
-                "' was created!");
-        modelAndView.setViewName("redirect:/hotel/add");
+    @PostMapping(path = "/addImages")
+    public ModelAndView postAddImages(long id, List<MultipartFile> images, ModelAndView modelAndView) throws IOException {
+        log.info(id+" "+images);
+        if(images!=null){
+            Optional<Hotel> byId = hotelService.findById(id);
+            if(byId.isPresent()){
+                hotelService.updateImages(id, images);
+                modelAndView.setViewName("redirect:/hotel/"+id);
+            }
+        }else {
+            modelAndView.addObject("emptyInput", "Upload at least one image");
+            modelAndView.setViewName("hotel");
+        }
         return modelAndView;
     }
+
 
     @GetMapping(path = "filter")
     public ModelAndView getHotels(ModelAndView modelAndView){

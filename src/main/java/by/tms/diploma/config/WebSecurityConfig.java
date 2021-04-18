@@ -3,6 +3,8 @@ package by.tms.diploma.config;
 import by.tms.diploma.listener.ContextListener;
 import by.tms.diploma.listener.SessionListener;
 import by.tms.diploma.service.impl.CustomUserDetailsService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionListener;
@@ -68,5 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ServletListenerRegistrationBean<HttpSessionListener> listenerSessionBean(){
         return new ServletListenerRegistrationBean<>(new SessionListener());
+    }
+
+    @Bean
+    public Cloudinary cloudinary(){
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "unkulunkului",
+                "api_key", "186826351968634",
+                "api_secret", "rsF8_0V8T2vcFHuCYZnrOlkwlIY"));
     }
 }

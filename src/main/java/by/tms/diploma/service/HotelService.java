@@ -1,7 +1,10 @@
 package by.tms.diploma.service;
 
 import by.tms.diploma.entity.Hotel;
+import by.tms.diploma.entity.Tour;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +16,5 @@ public interface HotelService {
     Optional<Hotel> findById(long id);
     List<Hotel> findAll();
     List<Hotel> findAllByParams(String name, String country, int startStar, int finishStar);
-
+    void updateImages(long id, List<MultipartFile> images) throws IOException;
 }

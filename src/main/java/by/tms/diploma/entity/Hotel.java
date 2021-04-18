@@ -3,6 +3,7 @@ package by.tms.diploma.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,12 +20,11 @@ public class Hotel {
     private String country;
     @Column(length = 1500)
     private String description;
-    private String images;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image images;
     private String name;
     private int stars;
-    private boolean pets;
-    @OneToOne(cascade = CascadeType.ALL)
-    private HotelRoom hotelRoom;
+    private int lineFromTheSea;
 
     @Override
     public boolean equals(Object o) {
