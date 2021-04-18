@@ -6,27 +6,32 @@
     <title>Edit hotel</title>
 </head>
 <body>
-<div>
-    <div th:if="${hotel!=null}">
-        <p th:text="'Name: '+${hotel.name}+' '+${hotel.stars}+'*'"></p>
-        <p th:text="'Country: '+${hotel.country}"></p>
-        <p th:text="'Description: '+${hotel.description}"></p>
-        <p th:text="'Line from the sea: '+${hotel.lineFromTheSea}"></p>
-        <p th:text="'Description: '+${hotel.description}"></p>
-        <div th:each="url: ${hotel.images.urls}">
-            <img th:src="@{${url}}" width="300" height="300"/>
-        </div>
-        <br>
-        <form th:action="@{addImages}" enctype="multipart/form-data" method="post">
-            <input type="hidden" name="id" th:value="${hotel.id}">
-            <label>Add photo: <input type="file" multiple name="images"></label>
-            <button>Add</button>
-        </form>
-        <br>
-    </div>
-    <div th:if="${incorrectId!=null}">
-        <p th:text="${incorrectId}"></p>
-    </div>
+<div th:if="${doesHotelByIdExist}">
+    <span>Hotel with the same id doesn't exist</span>
 </div>
+<form th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="hotelId" th:value="${hotel.id}"/>
+    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
+    <div th:if="${doesHotelNameExist}"><span>Hotel with the same name already exists</span></div>
+    <div><label> Country : <input type="text" th:field="*{country}"/></label></div>
+    <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>
+    <label>Stars :
+        <select th:field="*{stars}">
+            <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">
+            </option>
+        </select>
+    </label>
+    <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
+    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
+    <label>Line from the sea :
+        <select th:field="*{lineFromTheSea}">
+            <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" th:text="${i}">
+            </option>
+        </select></label>
+    <input type="file" multiple th:field="*{images}"/>
+    <br>
+    <button>Add</button>
+</form>
 </body>
 </html>

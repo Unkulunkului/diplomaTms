@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,32 +67,33 @@ public class RequestController {
                                       HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
         long requestId = clientRequestModel.getId();
         Optional<ClientRequest> requestById = requestService.findById(requestId);
-
-        String curatorUsername = httpServletRequest.getUserPrincipal().getName();
-        Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
-        long curatorId = curatorByUsername.get().getId();
-
-        ClientRequest clientRequest = requestById.get();
-        if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
-            ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
-            switch (status){
-                case IN_PROGRESS:
-                    requestService.updateStatusById(requestId, status);
-                    requestService.setCuratorIdById(requestId, curatorId);
-                    break;
-                case DONE:
-                    if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.WAITING)){
-                        List<UserRole> roles = curatorByUsername.get().getRoles();
-                        long requestCuratorId = clientRequest.getCuratorId();
-                        if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
-                            requestService.updateStatusById(requestId, status);
-                        }else {
-                            redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
+        Principal userPrincipal = httpServletRequest.getUserPrincipal();
+        if (userPrincipal != null) {
+            String curatorUsername = userPrincipal.getName();
+            Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
+            long curatorId = curatorByUsername.get().getId();
+            ClientRequest clientRequest = requestById.get();
+            if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
+                ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
+                switch (status){
+                    case IN_PROGRESS:
+                        requestService.updateStatusById(requestId, status);
+                        requestService.setCuratorIdById(requestId, curatorId);
+                        break;
+                    case DONE:
+                        if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.WAITING)){
+                            List<UserRole> roles = curatorByUsername.get().getRoles();
+                            long requestCuratorId = clientRequest.getCuratorId();
+                            if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
+                                requestService.updateStatusById(requestId, status);
+                            }else {
+                                redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
+                            }
+                        }else{
+                            redirectAttributes.addFlashAttribute("isIncorrectStatus", true);
                         }
-                    }else{
-                        redirectAttributes.addFlashAttribute("isIncorrectStatus", true);
-                    }
-                    break;
+                        break;
+                }
             }
         }
         modelAndView.setViewName("redirect:/request/fromClients");

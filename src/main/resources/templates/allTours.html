@@ -11,7 +11,7 @@
 </div>
 <div th:if="${emptyList==null}" th:each="tour : ${tours}">
     <div>
-        <img th:src="@{${tour.images}}" width="200" height="150"/>
+        <img th:src="@{${tour.images.urls.get(0)}}" width="200" height="150"/>
         <p  th:text="${tour.name}"></p>
         <a th:href="@{'/tour/'+${tour.id}}" class="button">Check it</a>
     </div>

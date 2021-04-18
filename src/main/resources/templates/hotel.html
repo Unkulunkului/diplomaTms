@@ -49,13 +49,16 @@
 <!--    <p>Тщательно перемешайте готовый плов, переложите в большое блюдо,-->
 <!--        сверху разложите мясо.</p>-->
 <!--</div>-->
+<form th:action="@{edit}" method="get">
+    <input type="hidden" name="id" th:value="${hotel.id}">
+    <button>Edit</button>
+</form>
 <div>
     <div th:if="${hotel!=null}">
         <p th:text="'Name: '+${hotel.name}+' '+${hotel.stars}+'*'"></p>
         <p th:text="'Country: '+${hotel.country}"></p>
         <p th:text="'Description: '+${hotel.description}"></p>
         <p th:text="'Line from the sea: '+${hotel.lineFromTheSea}"></p>
-        <p th:text="'Description: '+${hotel.description}"></p>
         <div th:each="url: ${hotel.images.urls}">
             <img th:src="@{${url}}" width="300" height="300"/>
         </div>

@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:if="${doesTourByIdExist}">
-    <span>Tour with this doesn't exist</span>
+    <span>Tour with this id doesn't exist</span>
 </div>
 <form th:action="@{edit}" enctype="multipart/form-data" th:object="${tourForm}" method="post">
     <input type="hidden" name="tourId" th:value="${tour.id}"/>

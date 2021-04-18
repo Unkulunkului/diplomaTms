@@ -1,7 +1,6 @@
 package by.tms.diploma.service.impl;
 
-import by.tms.diploma.entity.Hotel;
-import by.tms.diploma.entity.Image;
+import by.tms.diploma.entity.*;
 import by.tms.diploma.repository.HotelRepository;
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
@@ -41,6 +40,11 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public Hotel getById(long id) {
+        return hotelRepository.getById(id);
+    }
+
+    @Override
     public boolean existsById(long id){
         return hotelRepository.existsById(id);
     }
@@ -61,14 +65,16 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void updateImages(long id, List<MultipartFile> images) throws IOException {
-        Hotel hotel = hotelRepository.findById(id).get();
-        Image hotelImages = hotel.getImages();
-        List<String> urls = hotelImages.getUrls();
+    public void update(Hotel hotel){
+        long id = hotel.getId();
+        Hotel hotelFromBD = hotelRepository.getById(id);
+        Image hotelFromBDImages = hotelFromBD.getImages();
+        List<String> imageBDHotelUrls = hotelFromBDImages.getUrls();
         String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-        urls.remove(defaultImage);
-        Image image = imageService.upload(images, "hotel", id);
-        urls.addAll(image.getUrls());
+        imageBDHotelUrls.remove(defaultImage);
+        List<String> formImageUrls = hotel.getImages().getUrls();
+        imageBDHotelUrls.addAll(formImageUrls);
         hotelRepository.save(hotel);
+        log.info(hotelFromBD.toString());
     }
 }

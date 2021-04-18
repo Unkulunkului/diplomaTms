@@ -29,6 +29,9 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
+    @Autowired
+    private ImageService imageService;
+
 
 
     @GetMapping("/{id}")
@@ -80,21 +83,21 @@ public class HotelController {
         return modelAndView;
     }
 
-    @PostMapping(path = "/addImages")
-    public ModelAndView postAddImages(long id, List<MultipartFile> images, ModelAndView modelAndView) throws IOException {
-        log.info(id+" "+images);
-        if(images!=null){
-            Optional<Hotel> byId = hotelService.findById(id);
-            if(byId.isPresent()){
-                hotelService.updateImages(id, images);
-                modelAndView.setViewName("redirect:/hotel/"+id);
-            }
-        }else {
-            modelAndView.addObject("emptyInput", "Upload at least one image");
-            modelAndView.setViewName("hotel");
-        }
-        return modelAndView;
-    }
+//    @PostMapping(path = "/addImages")
+//    public ModelAndView postAddImages(long id, List<MultipartFile> images, ModelAndView modelAndView) throws IOException {
+//        log.info(id+" "+images);
+//        if(images!=null){
+//            Optional<Hotel> byId = hotelService.findById(id);
+//            if(byId.isPresent()){
+//                hotelService.updateImages(id, images);
+//                modelAndView.setViewName("redirect:/hotel/"+id);
+//            }
+//        }else {
+//            modelAndView.addObject("emptyInput", "Upload at least one image");
+//            modelAndView.setViewName("hotel");
+//        }
+//        return modelAndView;
+//    }
 
 
     @GetMapping(path = "filter")
@@ -119,6 +122,51 @@ public class HotelController {
 
         }
         modelAndView.setViewName("hotelFilter");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/edit")
+    public ModelAndView editView(long id, ModelAndView modelAndView){
+        Optional<Hotel> optionalHotel = hotelService.findById(id);
+        optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
+        modelAndView.addObject("hotelForm", new HotelAddModel());
+        modelAndView.setViewName("editHotel");
+        return modelAndView;
+    }
+
+
+    @PostMapping(path = "/edit")
+    public ModelAndView editTour (long hotelId, @Valid @ModelAttribute("hotelForm") HotelAddModel hotelModel,
+                                  BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+        if(!bindingResult.hasErrors()){
+            if(hotelService.existsById(hotelId)){
+                if(!hotelService.existsByName(hotelModel.getName())){
+                    Hotel hotel = new Hotel();
+                    hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
+                    hotel.setDescription(hotelModel.getDescription());
+                    hotel.setCountry(hotelModel.getCountry());
+                    hotel.setStars(Integer.parseInt(hotelModel.getStars()));
+                    hotel.setName(hotelModel.getName());
+                    hotel.setId(hotelId);
+                    Image hotelImage = imageService.upload(hotelModel.getImages(), "hotel", hotelId);
+                    hotel.setImages(hotelImage);
+                    hotelService.update(hotel);
+                    modelAndView.setViewName("redirect:/hotel/"+hotelId);
+                }else {
+                    modelAndView.addObject("doesHotelNameExist", true);
+                    modelAndView.setViewName("editHotel");
+                }
+            }else{
+                modelAndView.addObject("doesHotelByIdExist", true);
+                modelAndView.setViewName("editHotel");
+            }
+        }else{
+            modelAndView.setViewName("editHotel");
+        }
+        if(modelAndView.getViewName().equals("editHotel")){
+            Optional<Hotel> optionalHotel = hotelService.findById(hotelId);
+            optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
+        }
         return modelAndView;
     }
 }

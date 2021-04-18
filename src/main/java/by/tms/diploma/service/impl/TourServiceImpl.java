@@ -70,11 +70,11 @@ public class TourServiceImpl implements TourService {
         tour.setPrice(Double.parseDouble(tourModel.getPrice()));
 
         if(tourModel.getImages()!= null){
-            Image hotelImages = tour.getImages();
-            List<String> urls = hotelImages.getUrls();
+            Image tourImages = tour.getImages();
+            List<String> urls = tourImages.getUrls();
             String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
             urls.remove(defaultImage);
-            Image image = imageService.upload(tourModel.getImages(), "hotel", tour.getId());
+            Image image = imageService.upload(tourModel.getImages(), "tour", tour.getId());
             urls.addAll(image.getUrls());
             tour.setImages(image);
         }
