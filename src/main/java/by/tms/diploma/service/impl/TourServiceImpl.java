@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,26 +56,16 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void update(long id, TourAddModel tourModel) throws IOException {
-        Tour tour = tourRepository.getById(id);
-        tour.setName(tourModel.getName());
-        Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
-        tour.setHotel(hotelByName);
-        tour.setDescription(tourModel.getDescription());
-        tour.setDayAtSea(Integer.parseInt(tourModel.getDayAtSea()));
-        tour.setTourDuration(Integer.parseInt(tourModel.getTourDuration()));
-        tour.setVisitedCountries(tourModel.getVisitedCountries());
-        tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
-        tour.setPrice(Double.parseDouble(tourModel.getPrice()));
-
-        if(tourModel.getImages()!= null){
-            Image tourImages = tour.getImages();
-            List<String> urls = tourImages.getUrls();
+    public void update(Tour tour) {
+        if(tour.getImages()!= null){
+            long id = tour.getId();
+            Tour tourFromBD = tourRepository.getById(id);
+            Image tourFromBDImages = tourFromBD.getImages();
+            List<String> tourFromBDImageUrls = tourFromBDImages.getUrls();
             String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-            urls.remove(defaultImage);
-            Image image = imageService.upload(tourModel.getImages(), "tour", tour.getId());
-            urls.addAll(image.getUrls());
-            tour.setImages(image);
+            tourFromBDImageUrls.remove(defaultImage);
+            List<String> formImageUrls = tour.getImages().getUrls();
+            tourFromBDImageUrls.addAll(formImageUrls);
         }
         tourRepository.save(tour);
     }
@@ -84,5 +73,13 @@ public class TourServiceImpl implements TourService {
     @Override
     public Tour getById(long id) {
         return tourRepository.getById(id);
+    }
+
+    @Override
+    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice,
+                                                                  int startTourDuration, int startDayAtSea,
+                                                                  TypeOfRest typeOfRest) {
+        return tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEquals(
+                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest);
     }
 }

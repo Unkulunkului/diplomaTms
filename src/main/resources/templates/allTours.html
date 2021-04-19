@@ -9,10 +9,25 @@
 <div th:if="${wasDeleted}">
     <span>Tour was deleted!</span>
 </div>
+<form th:action="@{filter}" th:object="${tourFilterModel}" method="post">
+    <div><label> Price: <input type="text" name = "startPrice"/> - <input type="text" name = "finishPrice"/></label></div>
+    <div><label> Tour duration starting from : <input type="text" name = "tourDuration"/></label></div>
+    <div><label> Day at sea starting from : <input type="text" name = "dayAtSea"/></label></div>
+    <label>Type of rest :
+        <select name="typeOfRest">
+            <option>Excursion tour</option>
+            <option>Rest at sea</option>
+            <option>Extreme tour</option>
+        </select>
+    </label>
+    <br>
+    <button>Filter</button>
+</form>
 <div th:if="${emptyList==null}" th:each="tour : ${tours}">
     <div>
-        <img th:src="@{${tour.images.urls.get(0)}}" width="200" height="150"/>
+        <img th:src="@{${tour.images.urls.get(0)}}" width="400" height="350"/>
         <p  th:text="${tour.name}"></p>
+        <label>Price: </label><p th:text="${tour.price}+'$'"></p>
         <a th:href="@{'/tour/'+${tour.id}}" class="button">Check it</a>
     </div>
 </div>

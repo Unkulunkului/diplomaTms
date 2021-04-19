@@ -148,8 +148,11 @@ public class HotelController {
                     hotel.setStars(Integer.parseInt(hotelModel.getStars()));
                     hotel.setName(hotelModel.getName());
                     hotel.setId(hotelId);
-                    Image hotelImage = imageService.upload(hotelModel.getImages(), "hotel", hotelId);
-                    hotel.setImages(hotelImage);
+                    List<MultipartFile> images = hotelModel.getImages();
+                    if(!images.get(0).isEmpty()){
+                        Image hotelImage = imageService.upload(images, "hotel", hotelId);
+                        hotel.setImages(hotelImage);
+                    }
                     hotelService.update(hotel);
                     modelAndView.setViewName("redirect:/hotel/"+hotelId);
                 }else {

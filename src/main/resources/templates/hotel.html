@@ -62,13 +62,6 @@
         <div th:each="url: ${hotel.images.urls}">
             <img th:src="@{${url}}" width="300" height="300"/>
         </div>
-        <br>
-        <form th:action="@{addImages}" enctype="multipart/form-data" method="post">
-            <input type="hidden" name="id" th:value="${hotel.id}">
-            <label>Add photo: <input type="file" multiple name="images"></label>
-            <button>Add</button>
-        </form>
-        <br>
     </div>
     <div th:if="${incorrectId!=null}">
         <p th:text="${incorrectId}"></p>

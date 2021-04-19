@@ -3,6 +3,7 @@ package by.tms.diploma.service;
 import by.tms.diploma.entity.Tour;
 
 import by.tms.diploma.entity.TourAddModel;
+import by.tms.diploma.entity.TypeOfRest;
 
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ public interface TourService {
     Optional<Tour> findById(long id);
     List<Tour> getAll();
     void deleteById(long id);
-    void update(long id, TourAddModel tour) throws IOException;
+    void update(Tour tour);
     Tour getById(long id);
+    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice, int startTourDuration,
+                                                           int startDayAtSea, TypeOfRest typeOfRest);
 }
