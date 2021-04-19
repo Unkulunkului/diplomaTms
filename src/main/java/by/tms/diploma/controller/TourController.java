@@ -6,7 +6,6 @@ import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
 import by.tms.diploma.service.InMemoryCountryService;
 import by.tms.diploma.service.TourService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -94,30 +93,38 @@ public class TourController {
             String hotelName = tourAddModel.getHotelName();
             String name = tourAddModel.getName();
             if(!tourService.existsByName(name)){
-                Hotel hotel = hotelService.findByName(hotelName);
-                Tour tour = new Tour();
-                tour.setHotel(hotel);
-                tour.setName(name);
-                tour.setDescription(tourAddModel.getDescription());
-                tour.setDayAtSea(Integer.parseInt(tourAddModel.getDayAtSea()));
-                tour.setTourDuration(Integer.parseInt(tourAddModel.getTourDuration()));
-                tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
-                tour.setVisitedCountries(tourAddModel.getVisitedCountries());
-                tour.setTypeOfRest(TypeOfRest.getName(tourAddModel.getTypeOfRest()));
-                Image image = new Image();
-                image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
-                tour.setImages(image);
-                tourService.save(tour);
-                redirectAttributes.addFlashAttribute("createdTour", "Tour '"+name+"' was created!");
-                modelAndView.setViewName("redirect:/tour/add");
+                int tourDuration = Integer.parseInt(tourAddModel.getTourDuration());
+                int dayAtSea = Integer.parseInt(tourAddModel.getDayAtSea());
+                String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
+                if(result.equals("Ok")){
+                    Hotel hotel = hotelService.findByName(hotelName);
+                    Tour tour = new Tour();
+                    tour.setHotel(hotel);
+                    tour.setName(name);
+                    tour.setDescription(tourAddModel.getDescription());
+                    tour.setDayAtSea(dayAtSea);
+                    tour.setTourDuration(tourDuration);
+                    tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
+                    tour.setVisitedCountries(tourAddModel.getVisitedCountries());
+                    tour.setTypeOfRest(TypeOfRest.getName(tourAddModel.getTypeOfRest()));
+                    Image image = new Image();
+                    image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+                    tour.setImages(image);
+                    tourService.save(tour);
+                    redirectAttributes.addFlashAttribute("createdTour", "Tour '"+name+"' was created!");
+                    modelAndView.setViewName("redirect:/tour/add");
+                }else {
+                    modelAndView.addObject("tourDurationAndDayAtSeaError", result);
+                    modelAndView.setViewName("addTour");
+                }
             }else {
-                modelAndView.addObject("countries", countryService.getCountries());
-                modelAndView.addObject("hotels", hotelService.findAll());
                 modelAndView.addObject("doesTourNameExist", true);
                 modelAndView.setViewName("addTour");
             }
         }else {
             modelAndView.setViewName("addTour");
+        }
+        if(modelAndView.getViewName().equals("addTour")){
             modelAndView.addObject("countries", countryService.getCountries());
             modelAndView.addObject("hotels", hotelService.findAll());
         }
@@ -136,7 +143,7 @@ public class TourController {
     public ModelAndView editView(long id, ModelAndView modelAndView){
         Optional<Tour> optionalTour = tourService.findById(id);
         optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
-        modelAndView.addObject("tourForm", new TourAddModel());
+        modelAndView.addObject("tourForm", new TourEditModel());
         modelAndView.addObject("hotels", hotelService.findAll());
         modelAndView.addObject("countries", countryService.getCountries());
         modelAndView.setViewName("editTour");
@@ -145,29 +152,38 @@ public class TourController {
 
 
     @PostMapping(path = "/edit")
-    public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourAddModel tourModel,
+    public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourEditModel tourModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
         if(!bindingResult.hasErrors()){
             if(tourService.existsById(tourId)){
                 if(!tourService.existsByName(tourModel.getName())){
-                    Tour tour = new Tour();
-                    tour.setId(tourId);
-                    tour.setName(tourModel.getName());
-                    Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
-                    tour.setHotel(hotelByName);
-                    tour.setDescription(tourModel.getDescription());
-                    tour.setDayAtSea(Integer.parseInt(tourModel.getDayAtSea()));
-                    tour.setTourDuration(Integer.parseInt(tourModel.getTourDuration()));
-                    tour.setVisitedCountries(tourModel.getVisitedCountries());
-                    tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
-                    tour.setPrice(Double.parseDouble(tourModel.getPrice()));
-                    List<MultipartFile> images = tourModel.getImages();
-                    if(!images.get(0).isEmpty()){
-                        Image image = imageService.upload(images, "tour", tour.getId());
-                        tour.setImages(image);
+                    int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+                    int tourDuration = Integer.parseInt(tourModel.getTourDuration());
+                    String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
+                    if(result.equals("Ok")){
+                        Tour tour = new Tour();
+                        tour.setId(tourId);
+                        tour.setName(tourModel.getName());
+                        Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
+                        tour.setHotel(hotelByName);
+                        tour.setDescription(tourModel.getDescription());
+                        tour.setDayAtSea(dayAtSea);
+                        tour.setTourDuration(tourDuration);
+                        tour.setVisitedCountries(tourModel.getVisitedCountries());
+                        tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
+                        tour.setPrice(Double.parseDouble(tourModel.getPrice()));
+                        List<MultipartFile> images = tourModel.getImages();
+                        if(!images.get(0).isEmpty()){
+                            log.info("empty image");
+                            Image image = imageService.upload(images, "tour", tour.getId());
+                            tour.setImages(image);
+                        }
+                        tourService.update(tour);
+                        modelAndView.setViewName("redirect:/tour/"+tourId);
+                    }else {
+                        modelAndView.addObject("tourDurationAndDayAtSeaError", result);
+                        modelAndView.setViewName("editTour");
                     }
-                    tourService.update(tour);
-                    modelAndView.setViewName("redirect:/tour/"+tourId);
                 }else {
                     modelAndView.addObject("doesTourNameExist", true);
                     modelAndView.setViewName("editTour");
@@ -189,16 +205,30 @@ public class TourController {
     }
 
     @PostMapping(path = "/filter")
-    public ModelAndView filterTour(TourFilterModel tourModel, ModelAndView modelAndView){
-        double startPrice = Double.parseDouble(tourModel.getStartPrice());
-        double finishPrice = Double.parseDouble(tourModel.getFinishPrice());
-        int dayAtSea = tourModel.getDayAtSea();
-        int tourDuration = tourModel.getTourDuration();
-        TypeOfRest type = TypeOfRest.getName(tourModel.getTypeOfRest());
-        List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRest(startPrice, finishPrice,
-                tourDuration, dayAtSea, type);
-        modelAndView.addObject("tours", tours);
-        modelAndView.addObject("filter", true);
+    public ModelAndView filterTour(@Valid @ModelAttribute("tourFilterModel") TourFilterModel tourModel,
+                                   BindingResult bindingResult, ModelAndView modelAndView){
+        if(!bindingResult.hasErrors()){
+            double startPrice = 0;
+            double finishPrice = 999999.99d;
+            int startTourDuration = 0;
+            int startDayAtSea = 0;
+            if(!tourModel.getStartPrice().isEmpty()){
+                startPrice = Double.parseDouble(tourModel.getStartPrice());
+            }
+            if(!tourModel.getFinishPrice().isEmpty()){
+                finishPrice = Double.parseDouble(tourModel.getFinishPrice());
+            }
+            if(!tourModel.getTourDuration().isEmpty()){
+                startTourDuration = Integer.parseInt(tourModel.getTourDuration());
+            }
+            if(!tourModel.getDayAtSea().isEmpty()){
+                startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+            }
+            TypeOfRest type = TypeOfRest.getName(tourModel.getTypeOfRest());
+            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRest(startPrice, finishPrice,
+                    startTourDuration, startDayAtSea, type);
+            modelAndView.addObject("tours", tours);
+        }
         modelAndView.setViewName("allTours");
         return modelAndView;
     }

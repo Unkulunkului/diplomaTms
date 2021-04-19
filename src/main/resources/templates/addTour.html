@@ -36,12 +36,14 @@
 <!--    </div>-->
     <div><label> Price: <input type="text" th:field="*{price}"/></label></div>
     <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral"></p>
-    <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
+    <label>Description: <textarea name="description" cols="60" rows="11"></textarea></label>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
-    <div><label> Tour duration : <input type="text" th:field="*{tourDuration}"/></label></div>
+    <div><label> Tour duration : <input type="text" th:field="*{tourDuration}" size="1"/></label> (
+        <label> day at sea : <input type="text" th:field="*{dayAtSea}" size="1"/></label>)
+    </div>
     <p th:if="${#fields.hasErrors('tourDuration')}" th:errors="*{tourDuration}" style="color: coral"></p>
-    <div><label> Day at sea : <input type="text" th:field="*{dayAtSea}"/></label></div>
     <p th:if="${#fields.hasErrors('dayAtSea')}" th:errors="*{dayAtSea}" style="color: coral"></p>
+    <div th:if="${tourDurationAndDayAtSeaError!=null}"><span th:text="${tourDurationAndDayAtSeaError}"></span></div>
 
     <button>Add</button>
 </form>

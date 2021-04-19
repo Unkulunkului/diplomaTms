@@ -6,7 +6,9 @@ import by.tms.diploma.repository.TourRepository;
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
 import by.tms.diploma.service.TourService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TourServiceImpl implements TourService {
 
     @Autowired
@@ -57,15 +60,18 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public void update(Tour tour) {
+        long id = tour.getId();
+        Tour tourFromBD = tourRepository.getById(id);
+        log.info(tour.toString());
         if(tour.getImages()!= null){
-            long id = tour.getId();
-            Tour tourFromBD = tourRepository.getById(id);
             Image tourFromBDImages = tourFromBD.getImages();
             List<String> tourFromBDImageUrls = tourFromBDImages.getUrls();
             String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
             tourFromBDImageUrls.remove(defaultImage);
             List<String> formImageUrls = tour.getImages().getUrls();
             tourFromBDImageUrls.addAll(formImageUrls);
+        }else{
+            tour.setImages(tourFromBD.getImages());
         }
         tourRepository.save(tour);
     }
@@ -81,5 +87,18 @@ public class TourServiceImpl implements TourService {
                                                                   TypeOfRest typeOfRest) {
         return tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEquals(
                 startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest);
+    }
+
+    @Override
+    public String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea){
+        if(tourDuration < dayAtSea){
+            return "Tour duration can't be less than day at sea!";
+        }else if(dayAtSea > 39){
+            return "Incorrect 'day at sea'. Please enter a number less than 39 and great than 2";
+        }else if(tourDuration > 40 || tourDuration < 4){
+            return "Incorrect 'tour duration'. Please enter a number less than 40 and great than 4";
+        }else{
+            return "Ok";
+        }
     }
 }

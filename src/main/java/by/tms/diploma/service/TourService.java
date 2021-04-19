@@ -23,4 +23,5 @@ public interface TourService {
     Tour getById(long id);
     List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice, int startTourDuration,
                                                            int startDayAtSea, TypeOfRest typeOfRest);
+    String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea);
 }

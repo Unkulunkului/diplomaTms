@@ -20,7 +20,7 @@
             </option>
     </select>
     </label>
-    <div><label> Description : <input type="text" th:field="*{description}"/></label></div>
+    <label>Description: <textarea name="description" cols="60" rows="11"></textarea></label>
     <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
     <label>Line from the sea :
         <select th:field="*{lineFromTheSea}">
