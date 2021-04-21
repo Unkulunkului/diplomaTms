@@ -6,18 +6,33 @@
     <title>Authentication</title>
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
+<html th:include="_header"/>
+
+<div class="uk-position-medium uk-position-center-left uk-overlay uk-overlay-default">
+    <h1 class="uk-text-uppercase uk-text-light" style="color: cadetblue">Sign in</h1>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
+<div class="uk-position-medium uk-position-center uk-overlay uk-overlay-default">
+    <form th:action="@{/user/authentication}" method="post">
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                <input class="uk-input" type="text" name="username">
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                <input class="uk-input" type="password" name="password">
+            </div>
+        </div>
+        <button class="uk-button uk-button-default">Confirm</button>
+    </form>
 </div>
-<form th:action="@{/user/authentication}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <button>Sign in</button>
-</form>
-<br>
-<p>Click <a th:href="@{/user/registration}">here</a> to registration</p>
+
+<div th:if="${param.error}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p>Invalid username and password </p>
+</div>
 </body>
 </html>

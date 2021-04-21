@@ -6,22 +6,51 @@
     <title>Registration</title>
 </head>
 <body>
-<div th:if="${usernameExistError!=null}">
-    <p th:text="${usernameExistError}"></p>
+<html th:include="_header"/>
+<div class="uk-position-medium uk-position-center-left uk-overlay uk-overlay-default">
+    <h1 class="uk-text-uppercase uk-text-light" style="color: cadetblue">Sign up</h1>
 </div>
-<div th:if="${emailExistError!=null}">
-    <p th:text="${emailExistError}"></p>
+<div class="uk-position-medium uk-position-center uk-overlay uk-overlay-default">
+    <form th:action="@{registration}" th:object="${userForm}" method="post">
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                <input class="uk-input" type="text" th:field="*{username}">
+            </div>
+<!--            <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: coral"></p>-->
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                <input class="uk-input" type="password" th:field="*{password}">
+            </div>
+<!--            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: coral"></p>-->
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                <input class="uk-input" type="text" th:field="*{email}">
+            </div>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: coral"></p>
+        </div >
+        <button class="uk-button uk-button-default">Confirm</button>
+    </form>
 </div>
-<form th:action="@{registration}" th:object="${userForm}" method="post">
-    <div><label> User Name : <input type="text" th:field="*{username}"/></label></div>
-    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: coral"></p>
-    <div><label> Password : <input type="password" th:field="*{password}"/></label></div>
-    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: coral"></p>
-    <div><label> Email : <input type="text" th:field="*{email}"/></label></div>
-    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: coral"></p>
-    <button>Sign up</button>
-</form>
-<br>
-<p>Click <a th:href="@{/user/authentication}">here</a> to auth</p>
+
+
+<div th:if="${usernameExistError!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${usernameExistError}+' '"></p>
+</div>
+<div th:if="${emailExistError!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${emailExistError}+' '"></p>
+</div>
+<div th:if="${success}" class="uk-alert-success uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p>Success! You can sign in! </p>
+</div>
 </body>
 </html>

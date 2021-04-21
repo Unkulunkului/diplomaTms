@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Header</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.16/dist/css/uikit.min.css"/>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.16/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.16/dist/js/uikit-icons.min.js"></script>
+<nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-center">
+        <div sec:authorize="isAnonymous()" class="uk-navbar-center-left">
+            <ul class="uk-navbar-nav">
+                <li><a href="/user/authentication">Sing in</a></li>
+                <li><a href="/user/registration">Sing up</a></li>
+            </ul>
+        </div>
+        <a class="uk-navbar-item uk-logo" href="/">
+            <span style="color: teal" class="uk-icon-link" uk-icon="icon: home; ratio: 1.2"></span>
+        </a>
+        <div class="uk-navbar-center-right">
+            <ul class="uk-navbar-nav">
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/">Account</a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-active">
+                                <span style="color: coral" class="uk-icon-link" uk-icon="icon: user"></span>
+                                <span sec:authentication="name"></span>
+                            </li>
+                            <br>
+                            <li>
+                                <a href="#">Admin panel</a>
+                                <div uk-dropdown="pos: right-center">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        <li><a href="/admin/moderators">Moderator list</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#">Moderator panel</a>
+                                <div uk-dropdown="pos: right-center">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        <li><a href="/tour/add">Add tour</a></li>
+                                        <li><a href="/hotel/add">Add hotel</a></li>
+                                        <li class="uk-nav-divider"></li>
+                                        <li><a href="/request/fromClients">Requests from clients</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <hr class="uk-divider-icon">
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="uk-button uk-button-text">Logout</button>
+                                </form>
+                                </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="/tour/all">Tours</a>
+                </li>
+                <li>
+                    <a class="uk-navbar-item uk-margin-left uk-logo" href="/basket">
+                        <span style="color: teal" class="uk-icon-link" uk-icon="icon: cart; ratio:1.2"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+</body>
+</html>

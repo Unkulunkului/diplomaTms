@@ -46,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/")
                 .and()
                     .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/user/authentication")
                 .and()
                 .csrf().ignoringAntMatchers("/h2-console/**")
                 .and()
