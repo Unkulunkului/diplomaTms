@@ -59,7 +59,7 @@ public class TourController {
             modelAndView.addObject("tours", allTours);
             modelAndView.addObject("tourFilterModel", new TourFilterModel());
         }else{
-            modelAndView.addObject("emptyList", "No tours");
+            modelAndView.addObject("emptyList", "Tour list is empty");
         }
         modelAndView.setViewName("allTours");
         return modelAndView;
@@ -227,7 +227,11 @@ public class TourController {
             TypeOfRest type = TypeOfRest.getName(tourModel.getTypeOfRest());
             List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRest(startPrice, finishPrice,
                     startTourDuration, startDayAtSea, type);
-            modelAndView.addObject("tours", tours);
+            if(!tours.isEmpty()){
+                modelAndView.addObject("tours", tours);
+            }else {
+                modelAndView.addObject("emptyList", "Tour list is empty");
+            }
         }
         modelAndView.setViewName("allTours");
         return modelAndView;

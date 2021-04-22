@@ -15,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourAddModel {
-    @Size(max = 1500, message = "Max size - 1500")
+    @Size(max = 3000, message = "Max size - 3000")
     private String description;
     @NotBlank(message = "Enter something...")
-    @Pattern(regexp = "[A-Za-z0-9\\s]{5,20}", message = "Name may have only upper and lower case and digits. " +
-            "Min length - 5, max - 20!")
+    @Pattern(regexp = "[A-Za-z0-9\\s]{5,50}", message = "Name may have only upper and lower case and digits. " +
+            "Min length - 5, max - 50!")
     private String name;
     @Pattern(regexp = "[A-Za-z0-9\\s]{5,20}", message = "Name may have only upper and lower case and digits. " +
             "Min length - 5, max - 15!")

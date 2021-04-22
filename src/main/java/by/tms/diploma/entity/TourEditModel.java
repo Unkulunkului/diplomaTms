@@ -14,8 +14,8 @@ import java.util.List;
 public class TourEditModel {
     @Size(max = 1500, message = "Max size - 1500")
     private String description;
-    @Pattern(regexp = "([A-Za-z0-9\\s]{5,20})|(^$)", message = "Name may have only upper and lower case and digits. " +
-            "Min length - 5, max - 20!")
+    @Pattern(regexp = "([A-Za-z0-9\\s]{5,50})|(^$)", message = "Name may have only upper and lower case and digits. " +
+            "Min length - 5, max - 50!")
     private String name;
     @Pattern(regexp = "([A-Za-z0-9\\s]{5,20})|(^$)", message = "Name may have only upper and lower case and digits. " +
             "Min length - 5, max - 15!")

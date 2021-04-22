@@ -20,7 +20,7 @@ public class Tour {
     @ManyToOne
     private Hotel hotel;
     private TypeOfRest typeOfRest;
-    @Column(length = 1500)
+    @Column(length = 3000)
     private String description;
     private double price;
     @OneToOne(cascade = CascadeType.ALL)

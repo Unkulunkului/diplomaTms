@@ -49,7 +49,7 @@
                 <br>
                 <label for="typeOfRest" class="uk-text-large uk-text-italic" style="color: teal">
                     Type of rest: </label>
-                <span class="uk-text-italic uk-text-uppercase" id="typeOfRest" th:text="${tour.typeOfRest.name()}"></span>
+                <span class="uk-text-italic uk-text-uppercase" id="typeOfRest" th:text="${tour.typeOfRest.getStringName(tour.typeOfRest)}"></span>
                 <br>
                 <label for="tourDuration" class="uk-text-large uk-text-italic" style="color: teal">
                     Tour duration: </label>
@@ -64,7 +64,7 @@
                 </span>
                 <br>
                 <label class="uk-text-large uk-text-italic" style="color: teal">Price: </label>
-                <span class="uk-text-large uk-text-italic uk-text-uppercase" style="color: coral" th:text="${tour.price}"></span>
+                <span class="uk-text-large uk-text-italic uk-text-uppercase" style="color: coral" th:text="${tour.price}+' $'"></span>
                 <hr>
                 <div sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
                     <form th:action="@{edit}" method="get">
