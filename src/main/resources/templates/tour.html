@@ -13,6 +13,11 @@
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${incorrectId}"></p>
 </div>
+<div th:if="${alreadyAdded!=null}" class="uk-alert-primary uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${alreadyAdded}"></p>
+</div>
 <div th:if="${tour!=null}">
     <div class="uk-child-width-expand@s uk-margin-left uk-margin-top uk-margin-right" uk-grid>
             <div class="uk-grid-item-match">

@@ -67,10 +67,15 @@ public class TourController {
 
 
     @PostMapping("/addToBasket")
-    public ModelAndView postAddTour(long tourId, ModelAndView modelAndView, HttpSession httpSession){
+    public ModelAndView postAddTour(long tourId, ModelAndView modelAndView, HttpSession httpSession,
+                                    RedirectAttributes redirectAttributes){
         Tour tour = tourService.getById(tourId);
         List<Tour> basket = (List<Tour>) httpSession.getAttribute("basketWithTour");
-        basket.add(tour);
+        if(!basket.contains(tour)){
+            basket.add(tour);
+        }else {
+            redirectAttributes.addFlashAttribute("alreadyAdded", "This tour has already been added");
+        }
         modelAndView.setViewName("redirect:"+tourId);
         return modelAndView;
     }

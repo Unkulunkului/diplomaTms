@@ -6,73 +6,104 @@
     <title>Requests</title>
 </head>
 <body>
-<div th:if="${isIncorrectCurator}">
+<html th:include="_header"/>
+<!--<div th:if="${isIncorrectCurator}">-->
+<!--    <p>You are not curator of this request!</p>-->
+<!--</div>-->
+<div th:if="${isIncorrectCurator}" class="uk-alert-warning uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
     <p>You are not curator of this request!</p>
 </div>
-
-<div th:if="${isIncorrectStatus}">
+<div th:if="${isIncorrectStatus}" class="uk-alert-warning uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
     <p>You must set status 'In progress' and after completion - 'Done'</p>
 </div>
-<br>
-<h1>Client requests:</h1>
-<table th:if="${!list.isEmpty()}">
-    <tr>
-        <th>ID</th>
-        <th>CLIENT NAME</th>
-        <th>CLIENT NUMBER</th>
-        <th>TOURS NAME</th>
-        <th>STATUS</th>
-        <th>ACTION</th>
-    </tr>
-    <tr th:each="request : ${list}">
-        <td th:text="${'#'+request.id}"></td>
-        <td th:text="${request.name}"></td>
-        <td th:text="${request.number}"></td>
-        <td>
-            <ul style="position:relative; z-index:1000;">
-                <li class="hide_show">
-                    Tours
-                    <ul th:if="${request.tours != null}" th:each="tour : ${request.tours}">
-                        <li><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>
-                    </ul>
-                </li>
-            </ul>
-        </td>
-        <td th:text="${request.requestStatus.name()}"></td>
-        <td>
 
-            <form th:action="@{fromClients/setStatus}" method="post">
-                <select name="requestStatus">
-                    <option th:value="'IN_PROGRESS'">In progress</option>
-                    <option th:value="'DONE'">Done</option>
-                </select>
-                <input type="hidden" name="id" th:value="${request.id}">
-                <button>Submit</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<!--<div th:if="${isIncorrectStatus}">-->
+<!--    <p>You must set status 'In progress' and after completion - 'Done'</p>-->
+<!--</div>-->
+<!--<br>-->
+<h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue">Client requests:</h1>
+<!--<table th:if="${!list.isEmpty()}">-->
+<!--    <tr>-->
+<!--        <th>ID</th>-->
+<!--        <th>CLIENT NAME</th>-->
+<!--        <th>CLIENT NUMBER</th>-->
+<!--        <th>TOURS NAME</th>-->
+<!--        <th>STATUS</th>-->
+<!--        <th>ACTION</th>-->
+<!--    </tr>-->
+<!--    <tr th:each="request : ${list}">-->
+<!--        <td th:text="${'#'+request.id}"></td>-->
+<!--        <td th:text="${request.name}"></td>-->
+<!--        <td th:text="${request.number}"></td>-->
+<!--        <td>-->
+<!--            <ul style="position:relative; z-index:1000;">-->
+<!--                <li class="hide_show">-->
+<!--                    Tours-->
+<!--                    <ul th:if="${request.tours != null}" th:each="tour : ${request.tours}">-->
+<!--                        <li><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </td>-->
+<!--        <td th:text="${request.requestStatus.name()}"></td>-->
+<!--        <td>-->
+
+<!--            <form th:action="@{fromClients/setStatus}" method="post">-->
+<!--                <select name="requestStatus">-->
+<!--                    <option th:value="'IN_PROGRESS'">In progress</option>-->
+<!--                    <option th:value="'DONE'">Done</option>-->
+<!--                </select>-->
+<!--                <input type="hidden" name="id" th:value="${request.id}">-->
+<!--                <button>Submit</button>-->
+<!--            </form>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--</table>-->
 
 
-<div class="uk-text-center uk-grid uk-margin-top uk-margin-right uk-margin-left">
+<div class="uk-grid uk-margin-top uk-margin-right uk-margin-left">
     <table class="uk-table uk-table-middle uk-table-divider">
         <thead>
         <tr>
-            <th class="uk-width-small">Table Heading</th>
-            <th>Table Heading</th>
-            <th>Table Heading</th>
+            <th>ID</th>
+            <th>CLIENT NAME</th>
+            <th>CLIENT MOBILE NUMBER</th>
+            <th>TOURS</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Table Data</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-            <td><button class="uk-button uk-button-default" type="button">Button</button></td>
-        </tr>
-        <tr>
-            <td>Table Data</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-            <td><button class="uk-button uk-button-default" type="button">Button</button></td>
+        <tr th:each="request : ${list}">
+            <td th:text="${'#'+request.id}"></td>
+            <td th:text="${request.name}"></td>
+            <td th:text="${request.number}"></td>
+            <td>
+                <button class="uk-button uk-button-text">Tours</button>
+                <div uk-dropdown th:if="${!request.tours.isEmpty()}">
+                    <ul class="uk-nav uk-dropdown-nav" th:each="tour : ${request.tours}" style="position:relative; z-index:1000;">
+                        <li class="uk-active"><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>
+                    </ul>
+                </div>
+                <div uk-dropdown th:unless="${!request.tours.isEmpty()}">
+                    <p>No tours</p>
+                </div>
+            </td>
+            <td th:text="${request.requestStatus.name()}"></td>
+            <td>
+                <form th:action="@{fromClients/setStatus}" method="post">
+                    <select class="uk-select uk-form-width-medium" name="requestStatus">
+                        <option th:value="'IN_PROGRESS'">In progress</option>
+                        <option th:value="'DONE'">Done</option>
+                    </select>
+                    <input type="hidden" name="id" th:value="${request.id}">
+                    <button class="uk-button uk-button-default">Submit</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
