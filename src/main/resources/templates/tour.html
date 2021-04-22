@@ -1,47 +1,88 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org">
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title>Tour</title>
 </head>
 <body>
-<div>
-    <div th:if="${tour!=null}">
-        <form th:action="@{delete}" method="post">
-            <input type="hidden" name="id" th:value="${tour.id}">
-            <button>Delete</button>
-        </form>
-
-        <form th:action="@{edit}" method="get">
-            <input type="hidden" name="id" th:value="${tour.id}">
-            <button>Edit</button>
-        </form>
-
-        <br>
-        <p th:text="'Name: '+${tour.name}"></p>
-        <p th:text="'Type of rest: '+${tour.typeOfRest}"></p>
-        <p th:text="'Tour duration: '+${tour.tourDuration}+'('+${tour.dayAtSea}+' day at sea)'"></p>
-        <p>Hotel where you will relax by the sea:
-            <a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a>
-        </p>
-        <p>You will visit:
-            <p th:each="country: ${tour.visitedCountries}"><span th:text="${country}"></span></p></p>
-        <p th:text="'Description: '+${tour.description}"></p>
-        <p th:text="'Price: '+${tour.price}"></p>
-        <div th:each="url: ${tour.images.urls}">
-            <img th:src="@{${url}}" width="300" height="300"/>
-        </div>
-        <br>
-        <form th:action="@{addToBasket}" method="post">
-            <input type="hidden" name="tourId" th:value="${tour.id}">
-            <button>Want it</button>
-        </form>
-    </div>
-    <div th:if="${incorrectId!=null}">
-        <p th:text="${incorrectId}"></p>
-    </div>
-    <a href="/" th:href="@{/basket/tour}"></a>
+<html th:include="_header"/>
+<div th:if="${incorrectId!=null}" class="uk-alert-warning uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${incorrectId}"></p>
 </div>
+<div th:if="${tour!=null}">
+    <div class="uk-child-width-expand@s uk-margin-left uk-margin-top uk-margin-right" uk-grid>
+            <div class="uk-grid-item-match">
+            <div class="uk-card uk-card-default uk-card-body">
+            <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue" th:text="${tour.name}"></h1>
+                <div class="uk-visible-toggle uk-light" tabindex="-1" uk-slider="center: true">
+                    <ul class="uk-slider-items uk-grid">
+                        <li class="uk-width-auto" th:each="url: ${tour.images.urls}">
+                            <div class="uk-panel">
+                                <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
+                                    <img th:src="@{${url}}" width="300" height="200" alt=""></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
+                    <h3 class="uk-text-center uk-text-large uk-text-italic uk-text-uppercase" style="color: coral">Description</h3>
+                        <p class="uk-text-left">
+                            <span th:text="${tour.description}"></span>
+                        </p>
+                </div>
+            </div>
+    </div>
+            <div class="uk-position-relative-center">
+                <br>
+                <label for="countries" class="uk-text-large uk-text-itali" style="color: teal">
+                    Countries you will visit: </label>
+                <br>
+                <div id="countries">
+                    <ul class="uk-list uk-list-circle uk-text-italic uk-text-uppercase" th:each="country: ${tour.visitedCountries}">
+                        <li th:text="${country}"></li>
+                    </ul>
+                </div>
+                <br>
+                <label for="typeOfRest" class="uk-text-large uk-text-italic" style="color: teal">
+                    Type of rest: </label>
+                <span class="uk-text-italic uk-text-uppercase" id="typeOfRest" th:text="${tour.typeOfRest.name()}"></span>
+                <br>
+                <label for="tourDuration" class="uk-text-large uk-text-italic" style="color: teal">
+                    Tour duration: </label>
+                <span class="uk-text-italic uk-text-uppercase" id="tourDuration" th:text="${tour.tourDuration}+'('+${tour.dayAtSea}+
+                ' day at sea)'"></span>
+                <br>
+                <label for="restHotel" class="uk-text-large uk-text-italic" style="color: teal">
+                    Hotel where you will relax by the sea: </label>
+                <span id="restHotel">
+                    <a class="uk-text-italic uk-text-uppercase" style="color: darkolivegreen"
+                       th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a>
+                </span>
+                <br>
+                <label class="uk-text-large uk-text-italic" style="color: teal">Price: </label>
+                <span class="uk-text-large uk-text-italic uk-text-uppercase" style="color: coral" th:text="${tour.price}"></span>
+                <hr>
+                <div sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
+                    <form th:action="@{edit}" method="get">
+                        <input type="hidden" name="id" th:value="${tour.id}">
+                        <button class="uk-button uk-button-default">Edit</button>
+                    </form>
+                    <form th:action="@{delete}" method="post">
+                        <input type="hidden" name="id" th:value="${tour.id}">
+                        <button class="uk-button uk-button-default">Delete</button>
+                    </form>
+                    <hr>
+                </div>
+                <form th:action="@{addToBasket}" method="post">
+                    <input type="hidden" name="tourId" th:value="${tour.id}">
+                    <button class="uk-button uk-button-default">Add to basket</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

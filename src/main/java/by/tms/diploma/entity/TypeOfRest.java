@@ -15,4 +15,17 @@ public enum TypeOfRest {
                 throw new EnumConstantNotPresentException(TypeOfRest.class, name);
         }
     }
+
+    public static String getStringName(TypeOfRest typeOfRest){
+        switch (typeOfRest){
+            case EXCURSION_TOUR:
+                return "Excursion tour";
+            case REST_AT_SEA:
+                return "Rest at sea";
+            case EXTREME_TOUR:
+                return "extreme tour";
+            default:
+                throw new EnumConstantNotPresentException(TypeOfRest.class, typeOfRest.name());
+        }
+    }
 }
