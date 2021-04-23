@@ -44,6 +44,7 @@ public class RequestController {
 
     @GetMapping
     public ModelAndView getRequestView(ModelAndView modelAndView){
+        log.info("get");
         modelAndView.addObject("clientRequest", new ClientRequest());
         modelAndView.setViewName("request");
         return modelAndView;
@@ -53,6 +54,7 @@ public class RequestController {
     public ModelAndView postRequestView(@Valid @ModelAttribute("clientRequest") ClientRequest clientRequest,
                                         BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession,
                                         RedirectAttributes redirectAttributes){
+        log.info(clientRequest.toString());
         if(!bindingResult.hasErrors()){
             List<Tour> wishes = (List<Tour>) httpSession.getAttribute("wishes");
             clientRequest.setTours(wishes);

@@ -73,7 +73,7 @@
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="uk-margin-left">
-                    <form action= "#" th:action="@{request}" method="get">
+                    <form action= "#" th:action="@{/request}" method="get">
                         <button class="uk-button uk-button-text">Call me</button>
                         <span style="color: darkseagreen" uk-icon="receiver"></span>
                     </form>
