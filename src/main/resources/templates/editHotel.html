@@ -6,10 +6,10 @@
     <title>Edit hotel</title>
 </head>
 <body>
-<div th:if="${doesHotelByIdExist}">
-    <span>Hotel with the same id doesn't exist</span>
+<div th:if="${incorrectId!=null}">
+    <span th:text="${incorrectId}"></span>
 </div>
-<form th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">
+<form th:if="${incorrectId == null}" th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">
     <input type="hidden" name="hotelId" th:value="${hotel.id}"/>
     <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">

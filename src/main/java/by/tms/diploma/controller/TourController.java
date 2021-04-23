@@ -143,12 +143,17 @@ public class TourController {
     }
 
     @GetMapping(path = "/edit")
-    public ModelAndView editView(long id, ModelAndView modelAndView){
-        Optional<Tour> optionalTour = tourService.findById(id);
-        optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
-        modelAndView.addObject("tourForm", new TourEditModel());
-        modelAndView.addObject("hotels", hotelService.findAll());
-        modelAndView.addObject("countries", countryService.getCountries());
+    public ModelAndView editView(Long id, ModelAndView modelAndView){
+        log.info(id+"");
+        if(id != null && tourService.existsById(id)){
+            Optional<Tour> optionalTour = tourService.findById(id);
+            optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
+            modelAndView.addObject("tourForm", new TourEditModel());
+            modelAndView.addObject("hotels", hotelService.findAll());
+            modelAndView.addObject("countries", countryService.getCountries());
+        }else {
+            modelAndView.addObject("incorrectId", "Input id is incorrect!");
+        }
         modelAndView.setViewName("editTour");
         return modelAndView;
     }
@@ -158,41 +163,36 @@ public class TourController {
     public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourEditModel tourModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
         if(!bindingResult.hasErrors()){
-            if(tourService.existsById(tourId)){
-                if(!tourService.existsByName(tourModel.getName())){
-                    int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
-                    int tourDuration = Integer.parseInt(tourModel.getTourDuration());
-                    String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
-                    if(result.equals("Ok")){
-                        Tour tour = new Tour();
-                        tour.setId(tourId);
-                        tour.setName(tourModel.getName());
-                        Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
-                        tour.setHotel(hotelByName);
-                        tour.setDescription(tourModel.getDescription());
-                        tour.setDayAtSea(dayAtSea);
-                        tour.setTourDuration(tourDuration);
-                        tour.setVisitedCountries(tourModel.getVisitedCountries());
-                        tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
-                        tour.setPrice(Double.parseDouble(tourModel.getPrice()));
-                        List<MultipartFile> images = tourModel.getImages();
-                        if(!images.get(0).isEmpty()){
-                            log.info("empty image");
-                            Image image = imageService.upload(images, "tour", tour.getId());
-                            tour.setImages(image);
-                        }
-                        tourService.update(tour);
-                        modelAndView.setViewName("redirect:/tour/"+tourId);
-                    }else {
-                        modelAndView.addObject("tourDurationAndDayAtSeaError", result);
-                        modelAndView.setViewName("editTour");
+            if(!tourService.existsByName(tourModel.getName())){
+                int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+                int tourDuration = Integer.parseInt(tourModel.getTourDuration());
+                String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
+                if(result.equals("Ok")){
+                    Tour tour = new Tour();
+                    tour.setId(tourId);
+                    tour.setName(tourModel.getName());
+                    Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
+                    tour.setHotel(hotelByName);
+                    tour.setDescription(tourModel.getDescription());
+                    tour.setDayAtSea(dayAtSea);
+                    tour.setTourDuration(tourDuration);
+                    tour.setVisitedCountries(tourModel.getVisitedCountries());
+                    tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
+                    tour.setPrice(Double.parseDouble(tourModel.getPrice()));
+                    List<MultipartFile> images = tourModel.getImages();
+                    if(!images.get(0).isEmpty()){
+                        log.info("empty image");
+                        Image image = imageService.upload(images, "tour", tour.getId());
+                        tour.setImages(image);
                     }
+                    tourService.update(tour);
+                    modelAndView.setViewName("redirect:/tour/"+tourId);
                 }else {
-                    modelAndView.addObject("doesTourNameExist", true);
+                    modelAndView.addObject("tourDurationAndDayAtSeaError", result);
                     modelAndView.setViewName("editTour");
                 }
-            }else{
-                modelAndView.addObject("doesTourByIdExist", true);
+            }else {
+                modelAndView.addObject("doesTourNameExist", true);
                 modelAndView.setViewName("editTour");
             }
         }else{

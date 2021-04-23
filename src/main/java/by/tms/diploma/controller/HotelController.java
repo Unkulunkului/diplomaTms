@@ -83,37 +83,17 @@ public class HotelController {
         return modelAndView;
     }
 
-
-    @GetMapping(path = "filter")
-    public ModelAndView getHotels(ModelAndView modelAndView){
-        modelAndView.setViewName("hotelFilter");
-        return modelAndView;
-    }
-
-    @PostMapping(path = "filter")
-    public ModelAndView postHotels(String country, String name, int startStar, int finishStar,
-                                   ModelAndView modelAndView){
-        if(name.trim().isEmpty() && country.trim().isEmpty()){
-            modelAndView.addObject("emptyInput", "Enter country or hotel name");
-        }else{
-            List<Hotel> allByParams = hotelService.findAllByParams(name, country, startStar, finishStar);
-            if(!allByParams.isEmpty()){
-                modelAndView.addObject("hotels", allByParams);
-            }else {
-                modelAndView.addObject("emptyListHotels", "There are no hotels that match your " +
-                        "request");
-            }
-
-        }
-        modelAndView.setViewName("hotelFilter");
-        return modelAndView;
-    }
-
     @GetMapping(path = "/edit")
-    public ModelAndView editView(long id, ModelAndView modelAndView){
-        Optional<Hotel> optionalHotel = hotelService.findById(id);
-        optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
-        modelAndView.addObject("hotelForm", new HotelAddModel());
+    public ModelAndView editView(Long id, ModelAndView modelAndView){
+
+        if(id != null && hotelService.existsById(id)){
+            Optional<Hotel> optionalHotel = hotelService.findById(id);
+            optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
+            modelAndView.addObject("hotelForm", new HotelAddModel());
+        }else {
+            modelAndView.addObject("incorrectId", "Input id is incorrect!");
+        }
+
         modelAndView.setViewName("editHotel");
         return modelAndView;
     }
@@ -123,28 +103,23 @@ public class HotelController {
     public ModelAndView editTour (long hotelId, @Valid @ModelAttribute("hotelForm") HotelAddModel hotelModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
         if(!bindingResult.hasErrors()){
-            if(hotelService.existsById(hotelId)){
-                if(!hotelService.existsByName(hotelModel.getName())){
-                    Hotel hotel = new Hotel();
-                    hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
-                    hotel.setDescription(hotelModel.getDescription());
-                    hotel.setCountry(hotelModel.getCountry());
-                    hotel.setStars(Integer.parseInt(hotelModel.getStars()));
-                    hotel.setName(hotelModel.getName());
-                    hotel.setId(hotelId);
-                    List<MultipartFile> images = hotelModel.getImages();
-                    if(!images.get(0).isEmpty()){
-                        Image hotelImage = imageService.upload(images, "hotel", hotelId);
-                        hotel.setImages(hotelImage);
-                    }
-                    hotelService.update(hotel);
-                    modelAndView.setViewName("redirect:/hotel/"+hotelId);
-                }else {
-                    modelAndView.addObject("doesHotelNameExist", true);
-                    modelAndView.setViewName("editHotel");
+            if(!hotelService.existsByName(hotelModel.getName())){
+                Hotel hotel = new Hotel();
+                hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
+                hotel.setDescription(hotelModel.getDescription());
+                hotel.setCountry(hotelModel.getCountry());
+                hotel.setStars(Integer.parseInt(hotelModel.getStars()));
+                hotel.setName(hotelModel.getName());
+                hotel.setId(hotelId);
+                List<MultipartFile> images = hotelModel.getImages();
+                if(!images.get(0).isEmpty()){
+                    Image hotelImage = imageService.upload(images, "hotel", hotelId);
+                    hotel.setImages(hotelImage);
                 }
-            }else{
-                modelAndView.addObject("doesHotelByIdExist", true);
+                hotelService.update(hotel);
+                modelAndView.setViewName("redirect:/hotel/"+hotelId);
+            }else {
+                modelAndView.addObject("doesHotelNameExist", true);
                 modelAndView.setViewName("editHotel");
             }
         }else{
