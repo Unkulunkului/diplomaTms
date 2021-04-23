@@ -7,32 +7,39 @@
 </head>
 <body>
 <html th:include="_header"/>
+<div class="uk-child-width-expand@s" uk-grid>
+    <div class="uk-position-center-left uk-margin-left">
+        <h1 class="uk-text-uppercase uk-text-light" style="color: cadetblue">Sign in</h1>
+    </div>
+    <div class="uk-grid-item-match uk-width-1-3 uk-position-center uk-margin-right">
+        <div class="uk-card uk-card-default uk-card-body">
+            <form th:action="@{/user/authentication}" method="post">
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon" uk-icon="icon: user"></span>
+                        <input class="uk-input" type="text" name="username">
+                    </div>
+                </div>
 
-<div class="uk-position-medium uk-position-center-left uk-overlay uk-overlay-default">
-    <h1 class="uk-text-uppercase uk-text-light" style="color: cadetblue">Sign in</h1>
-</div>
-<div class="uk-position-medium uk-position-center uk-overlay uk-overlay-default">
-    <form th:action="@{/user/authentication}" method="post">
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon" uk-icon="icon: user"></span>
-                <input class="uk-input" type="text" name="username">
-            </div>
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                        <input class="uk-input" type="password" name="password">
+                    </div>
+                </div>
+                <button class="uk-button uk-button-default">Confirm</button>
+            </form>
         </div>
-
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                <input class="uk-input" type="password" name="password">
-            </div>
-        </div>
-        <button class="uk-button uk-button-default">Confirm</button>
-    </form>
+    </div>
 </div>
 
 <div th:if="${param.error}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p>Invalid username and password </p>
+</div>
+<div th:if="${success}" class="uk-alert-success uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p>Success! You can sign in! </p>
 </div>
 </body>
 </html>

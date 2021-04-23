@@ -66,11 +66,11 @@ public class TourController {
     }
 
 
-    @PostMapping("/addToBasket")
+    @PostMapping("/addToWishes")
     public ModelAndView postAddTour(long tourId, ModelAndView modelAndView, HttpSession httpSession,
                                     RedirectAttributes redirectAttributes){
         Tour tour = tourService.getById(tourId);
-        List<Tour> basket = (List<Tour>) httpSession.getAttribute("basketWithTour");
+        List<Tour> basket = (List<Tour>) httpSession.getAttribute("wishes");
         if(!basket.contains(tour)){
             basket.add(tour);
         }else {
@@ -92,8 +92,7 @@ public class TourController {
 
     @PostMapping(path = "/add")
     public ModelAndView postAddView(@Valid @ModelAttribute("tourAddForm") TourAddModel tourAddModel,
-                                    BindingResult bindingResult, ModelAndView modelAndView,
-                                    RedirectAttributes redirectAttributes) {
+                                    BindingResult bindingResult, ModelAndView modelAndView) {
         if(!bindingResult.hasErrors()){
             String hotelName = tourAddModel.getHotelName();
             String name = tourAddModel.getName();
@@ -115,9 +114,8 @@ public class TourController {
                     Image image = new Image();
                     image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
                     tour.setImages(image);
-                    tourService.save(tour);
-                    redirectAttributes.addFlashAttribute("createdTour", "Tour '"+name+"' was created!");
-                    modelAndView.setViewName("redirect:/tour/add");
+                    Tour savedTour = tourService.save(tour);
+                    modelAndView.setViewName("redirect:/tour/"+savedTour.getId());
                 }else {
                     modelAndView.addObject("tourDurationAndDayAtSeaError", result);
                     modelAndView.setViewName("addTour");

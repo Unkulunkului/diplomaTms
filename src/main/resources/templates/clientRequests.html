@@ -7,64 +7,7 @@
 </head>
 <body>
 <html th:include="_header"/>
-<!--<div th:if="${isIncorrectCurator}">-->
-<!--    <p>You are not curator of this request!</p>-->
-<!--</div>-->
-<div th:if="${isIncorrectCurator}" class="uk-alert-warning uk-container-xsmall uk-position-large
-    uk-position-bottom-center" uk-alert>
-    <a class="uk-alert-close" uk-close></a>
-    <p>You are not curator of this request!</p>
-</div>
-<div th:if="${isIncorrectStatus}" class="uk-alert-warning uk-container-xsmall uk-position-large
-    uk-position-bottom-center" uk-alert>
-    <a class="uk-alert-close" uk-close></a>
-    <p>You must set status 'In progress' and after completion - 'Done'</p>
-</div>
-
-<!--<div th:if="${isIncorrectStatus}">-->
-<!--    <p>You must set status 'In progress' and after completion - 'Done'</p>-->
-<!--</div>-->
-<!--<br>-->
 <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue">Client requests:</h1>
-<!--<table th:if="${!list.isEmpty()}">-->
-<!--    <tr>-->
-<!--        <th>ID</th>-->
-<!--        <th>CLIENT NAME</th>-->
-<!--        <th>CLIENT NUMBER</th>-->
-<!--        <th>TOURS NAME</th>-->
-<!--        <th>STATUS</th>-->
-<!--        <th>ACTION</th>-->
-<!--    </tr>-->
-<!--    <tr th:each="request : ${list}">-->
-<!--        <td th:text="${'#'+request.id}"></td>-->
-<!--        <td th:text="${request.name}"></td>-->
-<!--        <td th:text="${request.number}"></td>-->
-<!--        <td>-->
-<!--            <ul style="position:relative; z-index:1000;">-->
-<!--                <li class="hide_show">-->
-<!--                    Tours-->
-<!--                    <ul th:if="${request.tours != null}" th:each="tour : ${request.tours}">-->
-<!--                        <li><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </td>-->
-<!--        <td th:text="${request.requestStatus.name()}"></td>-->
-<!--        <td>-->
-
-<!--            <form th:action="@{fromClients/setStatus}" method="post">-->
-<!--                <select name="requestStatus">-->
-<!--                    <option th:value="'IN_PROGRESS'">In progress</option>-->
-<!--                    <option th:value="'DONE'">Done</option>-->
-<!--                </select>-->
-<!--                <input type="hidden" name="id" th:value="${request.id}">-->
-<!--                <button>Submit</button>-->
-<!--            </form>-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--</table>-->
-
-
 <div class="uk-grid uk-margin-top uk-margin-right uk-margin-left">
     <table class="uk-table uk-table-middle uk-table-divider">
         <thead>
@@ -108,6 +51,15 @@
         </tbody>
     </table>
 </div>
-
+<div th:if="${isIncorrectCurator}" class="uk-alert-warning uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p>You are not curator of this request!</p>
+</div>
+<div th:if="${isIncorrectStatus}" class="uk-alert-warning uk-container-xsmall uk-position-large
+    uk-position-bottom-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p>You must set status 'In progress' and after completion - 'Done'</p>
+</div>
 </body>
 </html>

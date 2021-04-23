@@ -29,8 +29,8 @@ public class TourServiceImpl implements TourService {
     private ImageService imageService;
 
     @Override
-    public void save(Tour tour) {
-        tourRepository.save(tour);
+    public Tour save(Tour tour) {
+        return tourRepository.save(tour);
     }
 
     @Override

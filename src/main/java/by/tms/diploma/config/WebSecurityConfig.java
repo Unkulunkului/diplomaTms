@@ -1,6 +1,5 @@
 package by.tms.diploma.config;
 
-import by.tms.diploma.listener.ContextListener;
 import by.tms.diploma.listener.SessionListener;
 import by.tms.diploma.service.impl.CustomUserDetailsService;
 import com.cloudinary.Cloudinary;

@@ -63,9 +63,12 @@
                 <br>
                 <label for="restHotel" class="uk-text-large uk-text-italic" style="color: teal">
                     Hotel where you will relax by the sea: </label>
-                <span id="restHotel">
+                <span th:if="${tour.hotel != null}" id="restHotel">
                     <a class="uk-text-italic uk-text-uppercase" style="color: darkolivegreen"
                        th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a>
+                </span>
+                <span th:unless="${tour.hotel != null}" class="uk-text-italic uk-text-uppercase" style="color: darkolivegreen">
+                    No hotel
                 </span>
                 <br>
                 <label class="uk-text-large uk-text-italic" style="color: teal">Price: </label>
@@ -82,9 +85,9 @@
                     </form>
                     <hr>
                 </div>
-                <form th:action="@{addToBasket}" method="post">
+                <form th:action="@{addToWishes}" method="post">
                     <input type="hidden" name="tourId" th:value="${tour.id}">
-                    <button class="uk-button uk-button-default">Add to basket</button>
+                    <button class="uk-button uk-button-default">Add to wishes</button>
                 </form>
             </div>
         </div>

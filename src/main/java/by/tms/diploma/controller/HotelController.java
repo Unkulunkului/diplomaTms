@@ -83,22 +83,6 @@ public class HotelController {
         return modelAndView;
     }
 
-//    @PostMapping(path = "/addImages")
-//    public ModelAndView postAddImages(long id, List<MultipartFile> images, ModelAndView modelAndView) throws IOException {
-//        log.info(id+" "+images);
-//        if(images!=null){
-//            Optional<Hotel> byId = hotelService.findById(id);
-//            if(byId.isPresent()){
-//                hotelService.updateImages(id, images);
-//                modelAndView.setViewName("redirect:/hotel/"+id);
-//            }
-//        }else {
-//            modelAndView.addObject("emptyInput", "Upload at least one image");
-//            modelAndView.setViewName("hotel");
-//        }
-//        return modelAndView;
-//    }
-
 
     @GetMapping(path = "filter")
     public ModelAndView getHotels(ModelAndView modelAndView){

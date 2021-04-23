@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface TourService {
 
-    void save(Tour tour);
+    Tour save(Tour tour);
     boolean existsByName(String name);
     boolean existsById(long id);
     Optional<Tour> findById(long id);

@@ -20,7 +20,6 @@ public class SessionListener implements HttpSessionListener{
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         HttpSession session = se.getSession();
-        session.setAttribute("basketWithTour", new ArrayList<Tour>());
-        log.info(session.getAttribute("basketWithTour").toString());
+        session.setAttribute("wishes", new ArrayList<Tour>());
     }
 }

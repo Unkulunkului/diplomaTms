@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wishes</title>
+</head>
+<body>
+<html th:include="_header"/>
+<h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue">Wishes:</h1>
+<div class="uk-grid uk-margin-top uk-margin-right uk-margin-left">
+    <table class="uk-table uk-table-middle uk-table-divider" th:if="${session.wishes != null}">
+        <thead>
+        <tr>
+            <th>TOUR NAME</th>
+            <th>Type of rest</th>
+            <th>PRICE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tour : ${session.wishes}">
+            <td th:text="${tour.name}"></td>
+            <td th:text="${tour.typeOfRest.getStringName(tour.typeOfRest)}"></td>
+            <td th:text="${tour.price}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

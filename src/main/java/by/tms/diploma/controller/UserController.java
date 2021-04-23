@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -42,7 +43,8 @@ public class UserController {
 
     @PostMapping("/registration")
     public ModelAndView postRegistrationView(@Valid @ModelAttribute("userForm")UserRegistrationModel userRegistrationModel,
-                                             BindingResult bindingResult, ModelAndView modelAndView){
+                                             BindingResult bindingResult, ModelAndView modelAndView,
+                                             RedirectAttributes redirectAttributes){
         if(!bindingResult.hasErrors()){
             if(!userService.isUsernameAlreadyExists(userRegistrationModel.getUsername())){
                 if(!userService.isEmailAlreadyExists(userRegistrationModel.getEmail())){
@@ -51,17 +53,19 @@ public class UserController {
                     user.setPassword(userRegistrationModel.getPassword());
                     user.setEmail(userRegistrationModel.getEmail());
                     userService.save(user);
-                    modelAndView.addObject("success", true);
+                    redirectAttributes.addFlashAttribute("success", true);
+                    modelAndView.setViewName("redirect:/user/authentication");
                 }else {
                     modelAndView.addObject("emailExistError", "Email '"+
                             userRegistrationModel.getEmail()+"' is already exist!");
+                    modelAndView.setViewName("registration");
                 }
             }else{
                 modelAndView.addObject("usernameExistError", "Username '"+
                         userRegistrationModel.getUsername()+"' is already exist!");
+                modelAndView.setViewName("registration");
             }
         }
-        modelAndView.setViewName("registration");
         return modelAndView;
     }
 }

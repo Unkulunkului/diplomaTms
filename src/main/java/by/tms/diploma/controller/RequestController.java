@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,14 +51,20 @@ public class RequestController {
 
     @PostMapping
     public ModelAndView postRequestView(@Valid @ModelAttribute("clientRequest") ClientRequest clientRequest,
-                                        BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession){
+                                        BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes){
         if(!bindingResult.hasErrors()){
-            clientRequest.setTours((List<Tour>) httpSession.getAttribute("basketWithTour"));
+            List<Tour> wishes = (List<Tour>) httpSession.getAttribute("wishes");
+            clientRequest.setTours(wishes);
             clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
             requestService.save(clientRequest);
-            modelAndView.addObject("result", "Your request has been sent. Wait for our call :)");
+            wishes.clear();
+            httpSession.setAttribute("wishes", wishes);
+            redirectAttributes.addFlashAttribute("result", "Your request has been sent. Wait for our call :)");
+            modelAndView.setViewName("redirect:/tour/all");
+        }else {
+            modelAndView.setViewName("request");
         }
-        modelAndView.setViewName("request");
         return modelAndView;
     }
 
