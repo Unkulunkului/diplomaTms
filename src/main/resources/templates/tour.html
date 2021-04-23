@@ -27,17 +27,18 @@
                     <ul class="uk-slider-items uk-grid">
                         <li class="uk-width-auto" th:each="url: ${tour.images.urls}">
                             <div class="uk-panel">
-                                <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
-                                    <img th:src="@{${url}}" width="300" height="200" alt=""></a>
+                                <div class="uk-card-media-left uk-cover-container">
+                                    <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
+                                        <img th:src="@{${url}}" width="500" height="400" alt="" uk-cover>
+                                        <canvas width="500" height="400"></canvas>
+                                        </a>
+                                </div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
-                    <h3 class="uk-text-center uk-text-large uk-text-italic uk-text-uppercase" style="color: coral">Description</h3>
-                        <p class="uk-text-left">
-                            <span th:text="${tour.description}"></span>
-                        </p>
+<!--                    -->
                 </div>
             </div>
     </div>
@@ -47,30 +48,34 @@
                     Countries you will visit: </label>
                 <br>
                 <div id="countries">
-                    <ul class="uk-list uk-list-circle uk-text-italic uk-text-uppercase" th:each="country: ${tour.visitedCountries}">
-                        <li th:text="${country}"></li>
-                    </ul>
+                    <span class="uk-text-italic" th:each="country, state: ${tour.visitedCountries}">
+                        <span th:text="${country}"></span>
+                        <span th:if="${!state.last}">,</span>
+                    </span>
                 </div>
-                <br>
+                <hr>
                 <label for="typeOfRest" class="uk-text-large uk-text-italic" style="color: teal">
                     Type of rest: </label>
-                <span class="uk-text-italic uk-text-uppercase" id="typeOfRest" th:text="${tour.typeOfRest.getStringName(tour.typeOfRest)}"></span>
                 <br>
+                <span id="typeOfRest" th:text="${tour.typeOfRest.getStringName(tour.typeOfRest)}"></span>
+                <hr>
                 <label for="tourDuration" class="uk-text-large uk-text-italic" style="color: teal">
                     Tour duration: </label>
-                <span class="uk-text-italic uk-text-uppercase" id="tourDuration" th:text="${tour.tourDuration}+'('+${tour.dayAtSea}+
-                ' day at sea)'"></span>
                 <br>
+                <span id="tourDuration" th:text="${tour.tourDuration}+'('+${tour.dayAtSea}+
+                ' day at sea)'"></span>
+                <hr>
                 <label for="restHotel" class="uk-text-large uk-text-italic" style="color: teal">
                     Hotel where you will relax by the sea: </label>
+                <br>
                 <span th:if="${tour.hotel != null}" id="restHotel">
-                    <a class="uk-text-italic uk-text-uppercase" style="color: darkolivegreen"
+                    <a class="uk-text-italic" style="color: darkolivegreen"
                        th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}"></a>
                 </span>
-                <span th:unless="${tour.hotel != null}" class="uk-text-italic uk-text-uppercase" style="color: darkolivegreen">
+                <span th:unless="${tour.hotel != null}" style="color: darkolivegreen">
                     No hotel
                 </span>
-                <br>
+                <hr>
                 <label class="uk-text-large uk-text-italic" style="color: teal">Price: </label>
                 <span class="uk-text-large uk-text-italic uk-text-uppercase" style="color: coral" th:text="${tour.price}+' $'"></span>
                 <hr>
@@ -92,5 +97,18 @@
             </div>
         </div>
     </div>
+<div style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
+    <uk uk-accordion>
+        <li>
+            <a class="uk-accordion-title uk-text-large uk-text-italic uk-text-uppercase"
+               style="color: teal" href="#">Description</a>
+            <div class="uk-accordion-content">
+                <p class="uk-text-left">
+                    <span th:text="${tour.description}"></span>
+                </p>
+            </div>
+        </li>
+    </uk>
+</div>
 </body>
 </html>

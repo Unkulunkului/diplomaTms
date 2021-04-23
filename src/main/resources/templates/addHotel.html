@@ -6,33 +6,67 @@
     <title>Add hotel page</title>
 </head>
 <body>
-<div th:if="${doesHotelExist}">
-    <p>This hotel already exists</p>
+<html th:include="_header"/>
+<h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Add hotel</h1>
+<div style="margin-left: 50%; margin-top: 3%; margin-right: 3%; margin-bottom: 3%">
+    <form th:action="@{add}" th:object="${hotelAddForm}" method="post">
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> Name : <input class="uk-input" type="text" th:field="*{name}"/></label>
+            </div>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> Country:
+                    <select th:field="*{country}" class="uk-select">
+                        <option th:each="country: ${countries}" th:value="${country}" th:text="${country}">
+                        </option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> Stars:
+                    <select th:field="*{stars}" class="uk-select">
+                        <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">
+                        </option>
+                    </select>
+                </label>
+            </div>
+        </div >
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> Line from the sea:
+                    <select th:field="*{lineFromTheSea}" class="uk-select">
+                        <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" th:text="${i}">
+                        </option>
+                    </select>
+                </label>
+            </div>
+        </div >
+        <div class="uk-margin">
+            <p>Description: </p>
+            <textarea class="uk-textarea" rows="5" th:field="*{description}"></textarea>
+        </div >
+        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
+        <button class="uk-button uk-button-default">Add hotel</button>
+    </form>
 </div>
-<form th:action="@{add}" th:object="${hotelAddForm}" method="post">
-    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>
-    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
-    <div><label> Country : <input type="text" th:field="*{country}"/></label></div>
-    <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>
-    <label>Stars :
-        <select th:field="*{stars}">
-            <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">
-            </option>
-    </select>
-    </label>
-    <label>Description: <textarea name="description" cols="60" rows="11"></textarea></label>
-    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
-    <label>Line from the sea :
-        <select th:field="*{lineFromTheSea}">
-            <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" th:text="${i}">
-            </option>
-        </select></label>
-    <button>Add</button>
-</form>
-<br>
-<div th:if="${createdHotel!=null}">
+
+<div th:if="${createdHotel!=null}" class="uk-alert-success uk-container-xsmall uk-position-large uk-position-bottom-left"
+     uk-alert>
+    <a class="uk-alert-close" uk-close></a>
     <span th:text="${createdHotel}"></span>
     <span>Click <a th:href="@{/tour/add}">here</a> to add tour</span>
+</div>
+<div th:if="${doesHotelExist}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-left"
+     uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <span>This hotel already exists</span>
 </div>
 </body>
 </html>

@@ -23,36 +23,48 @@
                         <li class="uk-width-auto" th:each="url: ${hotel.images.urls}">
                             <div class="uk-panel">
                                 <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
-                                    <img th:src="@{${url}}" width="300" height="200" alt="">
+                                    <img th:src="@{${url}}" width="500" height="400" alt="" uk-cover>
+                                    <canvas width="500" height="400"></canvas>
                                 </a>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
-                    <h3 class="uk-text-center" style="color: coral">Description</h3>
-                    <p class="uk-text-left">
-                        <span th:text="${hotel.description}"></span>
-                    </p>
+<!--                    -->
                 </div>
             </div>
         </div>
         <div class="uk-position-relative-center">
             <br>
             <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
-            <span class="uk-text-italic uk-text-uppercase" style="color: darkgray" id="country" th:text="${hotel.country}"></span>
             <br>
+            <span style="color: darkgray" id="country" th:text="${hotel.country}"></span>
+            <hr>
             <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
                 Line from the sea: </label>
-            <span class="uk-text-italic uk-text-uppercase" id="lineFromTheSea" th:text="${hotel.lineFromTheSea}"></span>
             <br>
+            <span id="lineFromTheSea" th:text="${hotel.lineFromTheSea}"></span>
+            <hr>
             <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
-                <hr>
                 <input type="hidden" name="id" th:value="${hotel.id}">
                 <button class="uk-button uk-button-default">Edit</button>
             </form>
         </div>
     </div>
+</div>
+<div style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
+    <uk uk-accordion>
+        <li>
+            <a class="uk-accordion-title uk-text-large uk-text-italic uk-text-uppercase"
+               style="color: coral" href="#">Description</a>
+            <div class="uk-accordion-content">
+                <p class="uk-text-left">
+                    <span th:text="${hotel.description}"></span>
+                </p>
+            </div>
+        </li>
+    </uk>
 </div>
 </body>
 </html>

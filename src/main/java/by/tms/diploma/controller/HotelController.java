@@ -4,6 +4,7 @@ import by.tms.diploma.entity.*;
 
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
+import by.tms.diploma.service.InMemoryCountryService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class HotelController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private InMemoryCountryService countryService;
+
 
 
     @GetMapping("/{id}")
@@ -50,6 +54,7 @@ public class HotelController {
     @GetMapping("/add")
     public ModelAndView getHotelAddView(ModelAndView modelAndView){
         modelAndView.addObject("hotelAddForm", new HotelAddModel());
+        modelAndView.addObject("countries", countryService.getCountries());
         modelAndView.setViewName("addHotel");
         return modelAndView;
     }
@@ -75,10 +80,12 @@ public class HotelController {
                 modelAndView.setViewName("redirect:/hotel/add");
             }else {
                 modelAndView.addObject("doesHotelExist",true);
+                modelAndView.addObject("countries", countryService.getCountries());
                 modelAndView.setViewName("addHotel");
             }
         }else{
             modelAndView.setViewName("addHotel");
+            modelAndView.addObject("countries", countryService.getCountries());
         }
         return modelAndView;
     }
@@ -90,6 +97,7 @@ public class HotelController {
             Optional<Hotel> optionalHotel = hotelService.findById(id);
             optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
             modelAndView.addObject("hotelForm", new HotelAddModel());
+            modelAndView.addObject("countries", countryService.getCountries());
         }else {
             modelAndView.addObject("incorrectId", "Input id is incorrect!");
         }
