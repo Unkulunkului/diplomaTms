@@ -92,7 +92,6 @@ public class HotelController {
 
     @GetMapping(path = "/edit")
     public ModelAndView editView(Long id, ModelAndView modelAndView){
-
         if(id != null && hotelService.existsById(id)){
             Optional<Hotel> optionalHotel = hotelService.findById(id);
             optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
@@ -101,7 +100,6 @@ public class HotelController {
         }else {
             modelAndView.addObject("incorrectId", "Input id is incorrect!");
         }
-
         modelAndView.setViewName("editHotel");
         return modelAndView;
     }
@@ -120,7 +118,7 @@ public class HotelController {
                 hotel.setName(hotelModel.getName());
                 hotel.setId(hotelId);
                 List<MultipartFile> images = hotelModel.getImages();
-                if(!images.get(0).isEmpty()){
+                if(images !=null){
                     Image hotelImage = imageService.upload(images, "hotel", hotelId);
                     hotel.setImages(hotelImage);
                 }

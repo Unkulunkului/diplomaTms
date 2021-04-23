@@ -8,17 +8,12 @@
 </head>
 <body>
 <html th:include="_header"/>
-<div th:if="${incorrectId!=null}" class="uk-alert-warning uk-container-xsmall uk-position-large
-    uk-position-bottom-center" uk-alert>
-    <a class="uk-alert-close" uk-close></a>
-    <p th:text="${incorrectId}"></p>
-</div>
 <div th:if="${alreadyAdded!=null}" class="uk-alert-primary uk-container-xsmall uk-position-large
     uk-position-bottom-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${alreadyAdded}"></p>
 </div>
-<div th:if="${tour!=null}">
+<div  th:if="${incorrectId==null}">
     <div class="uk-child-width-expand@s uk-margin-left uk-margin-top uk-margin-right" uk-grid>
             <div class="uk-grid-item-match">
             <div class="uk-card uk-card-default uk-card-body">
@@ -41,7 +36,7 @@
 <!--                    -->
                 </div>
             </div>
-    </div>
+        </div>
             <div class="uk-position-relative-center">
                 <br>
                 <label for="countries" class="uk-text-large uk-text-itali" style="color: teal">
@@ -96,8 +91,8 @@
                 </form>
             </div>
         </div>
-    </div>
-<div style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
+</div>
+<div  th:if="${incorrectId==null}" style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
     <uk uk-accordion>
         <li>
             <a class="uk-accordion-title uk-text-large uk-text-italic uk-text-uppercase"
@@ -109,6 +104,11 @@
             </div>
         </li>
     </uk>
+</div>
+<div th:if="${incorrectId!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center"
+     uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <span th:text="${incorrectId}"></span>
 </div>
 </body>
 </html>

@@ -180,8 +180,7 @@ public class TourController {
                     tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
                     tour.setPrice(Double.parseDouble(tourModel.getPrice()));
                     List<MultipartFile> images = tourModel.getImages();
-                    if(!images.get(0).isEmpty()){
-                        log.info("empty image");
+                    if(images != null){
                         Image image = imageService.upload(images, "tour", tour.getId());
                         tour.setImages(image);
                     }

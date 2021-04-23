@@ -6,9 +6,13 @@
     <title>Edit hotel</title>
 </head>
 <body>
-<div th:if="${incorrectId!=null}">
+<html th:include="_header"/>
+<div th:if="${incorrectId!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center"
+     uk-alert>
+    <a class="uk-alert-close" uk-close></a>
     <span th:text="${incorrectId}"></span>
 </div>
+<h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit hotel</h1>
 <form th:if="${incorrectId == null}" th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">
     <input type="hidden" name="hotelId" th:value="${hotel.id}"/>
     <div><label> Name : <input type="text" th:field="*{name}"/></label></div>

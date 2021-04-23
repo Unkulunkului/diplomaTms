@@ -91,12 +91,6 @@
             </div>
         </div >
 
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <label> Day at sea: <input class="uk-input" type="text" th:field="*{dayAtSea}"/></label>
-            </div>
-            <p th:if="${#fields.hasErrors('dayAtSea')}" th:errors="*{dayAtSea}" style="color: coral">
-        </div>
 
         <div class="uk-margin">
             <div class="uk-inline">
@@ -106,6 +100,14 @@
         </div>
         <div th:if="${tourDurationAndDayAtSeaError!=null}"><span style="color: coral" th:text=
                 "${tourDurationAndDayAtSeaError}"></span></div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> Day at sea: <input class="uk-input" type="text" th:field="*{dayAtSea}"/></label>
+            </div>
+            <p th:if="${#fields.hasErrors('dayAtSea')}" th:errors="*{dayAtSea}" style="color: coral">
+        </div>
+
         <div class="uk-margin">
             <div class="uk-inline">
                 <label> Price: <input class="uk-input" type="text" th:field="*{price}"/></label>
