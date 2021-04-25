@@ -17,4 +17,5 @@ public interface HotelService {
     List<Hotel> findAll();
     List<Hotel> findAllByParams(String name, String country, int startStar, int finishStar);
     void update(Hotel hotel);
+    boolean theSameHotel(long id, String name);
 }

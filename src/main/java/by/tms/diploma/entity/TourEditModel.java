@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -14,9 +16,11 @@ import java.util.List;
 public class TourEditModel {
     @Size(max = 1500, message = "Max size - 1500")
     private String description;
+    @NotBlank
     @Pattern(regexp = "([A-Za-z0-9\\s]{5,50})|(^$)", message = "Name may have only upper and lower case and digits. " +
             "Min length - 5, max - 50!")
     private String name;
+    @NotBlank
     @Pattern(regexp = "([A-Za-z0-9\\s]{5,20})|(^$)", message = "Name may have only upper and lower case and digits. " +
             "Min length - 5, max - 15!")
     private String hotelName;

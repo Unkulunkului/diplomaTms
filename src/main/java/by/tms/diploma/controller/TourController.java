@@ -113,10 +113,6 @@ public class TourController {
                     image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
                     tour.setImages(image);
                     Tour savedTour = tourService.save(tour);
-                    Set<Tour> tours = hotel.getTours();
-                    tours.add(savedTour);
-                    hotel.setTours(tours);
-//                    hotelService.update(hotel);
                     modelAndView.setViewName("redirect:/tour/"+savedTour.getId());
                 }else {
                     modelAndView.addObject("tourDurationAndDayAtSeaError", result);

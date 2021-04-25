@@ -85,4 +85,14 @@ public class HotelServiceImpl implements HotelService {
         Hotel save = hotelRepository.save(hotel);
         log.info(save.toString());
     }
+
+    @Override
+    public boolean theSameHotel(long id, String name){
+        Optional<Hotel> byId = hotelRepository.findById(id);
+        Optional<Hotel> byName = hotelRepository.getByName(name);
+        if (byId.isPresent() && byName.isPresent()){
+            return byId.equals(byName);
+        }
+        return false;
+    }
 }

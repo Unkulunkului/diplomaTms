@@ -117,7 +117,7 @@ public class HotelController {
     public ModelAndView editTour (long hotelId, @Valid @ModelAttribute("hotelForm") HotelAddModel hotelModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
         if(!bindingResult.hasErrors()){
-            if(!hotelService.existsByName(hotelModel.getName())){
+            if(hotelService.theSameHotel(hotelId, hotelModel.getName()) || !hotelService.existsByName(hotelModel.getName())){
                 Hotel hotel = new Hotel();
                 hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
                 hotel.setDescription(hotelModel.getDescription());
