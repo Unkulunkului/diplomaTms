@@ -53,9 +53,9 @@
             <div uk-grid th:if="${weatherCityError==null}">
                 <div class="uk-width-auto@m" th:each="day: ${weather.data}">
                     <img th:src="@{'/image/weather/icon/'+${day.weather.icon}+'.png'}" width="60" height="60"/>
+                    <span th:text="${day.temp}+' °C'"></span>
                     <span>
                     <p th:text="'Date: '+${day.valid_date}"></p>
-                    <p th:text="'Temperature: '+${day.temp}+' °C'"></p>
                 </span>
                 </div>
             </div>
