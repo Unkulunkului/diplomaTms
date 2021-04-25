@@ -14,7 +14,6 @@ import java.time.LocalDate;
 
 public class DayWeather {
     private LocalDate valid_date;
-    private double wind_spd;
     private double temp;
     private WeatherIcon weather;
 }

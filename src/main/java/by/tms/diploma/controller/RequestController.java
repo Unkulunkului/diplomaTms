@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,28 +79,32 @@ public class RequestController {
         if (userPrincipal != null) {
             String curatorUsername = userPrincipal.getName();
             Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
-            long curatorId = curatorByUsername.get().getId();
-            ClientRequest clientRequest = requestById.get();
-            if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
-                ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
-                switch (status){
-                    case IN_PROGRESS:
-                        requestService.updateStatusById(requestId, status);
-                        requestService.setCuratorIdById(requestId, curatorId);
-                        break;
-                    case DONE:
-                        if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.WAITING)){
-                            List<UserRole> roles = curatorByUsername.get().getRoles();
-                            long requestCuratorId = clientRequest.getCuratorId();
-                            if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
+            if(curatorByUsername.isPresent()){
+                long curatorId = curatorByUsername.get().getId();
+                if(requestById.isPresent()){
+                    ClientRequest clientRequest = requestById.get();
+                    if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
+                        ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
+                        switch (status){
+                            case IN_PROGRESS:
                                 requestService.updateStatusById(requestId, status);
-                            }else {
-                                redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
-                            }
-                        }else{
-                            redirectAttributes.addFlashAttribute("isIncorrectStatus", true);
+                                requestService.setCuratorIdById(requestId, curatorId);
+                                break;
+                            case DONE:
+                                if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.WAITING)){
+                                    List<UserRole> roles = curatorByUsername.get().getRoles();
+                                    long requestCuratorId = clientRequest.getCuratorId();
+                                    if(roles.contains(UserRole.ADMIN) || requestCuratorId == curatorId){
+                                        requestService.updateStatusById(requestId, status);
+                                    }else {
+                                        redirectAttributes.addFlashAttribute("isIncorrectCurator", true);
+                                    }
+                                }else{
+                                    redirectAttributes.addFlashAttribute("isIncorrectStatus", true);
+                                }
+                                break;
                         }
-                        break;
+                    }
                 }
             }
         }

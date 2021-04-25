@@ -7,7 +7,7 @@
 </head>
 <body>
 <html th:include="_header"/>
-<div class="uk-grid uk-margin-top uk-margin-right uk-margin-left">
+<div class="uk-margin-top uk-margin-right uk-margin-left uk-child-width-expand@s uk-text-center" uk-grid>
     <div th:if="${emptyList==null}">
         <div class="uk-card uk-card-default uk-card-body">
             <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
@@ -25,9 +25,9 @@
             </div>
         </div>
     </div>
-    <div th:unless="${emptyList==null}" class="uk-position-large uk-position-center-left">
-        <p class="uk-text-large uk-text-italic" style="color: teal" th:text="${emptyList}"></p>
-    </div>
+</div>
+<div th:unless="${emptyList==null}" class="uk-position-large uk-position-center-left">
+    <p class="uk-text-large uk-text-italic" style="color: teal" th:text="${emptyList}"></p>
 </div>
 </body>
 </html>
