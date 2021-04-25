@@ -20,7 +20,8 @@ public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String country;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Country country;
     @Column(length = 1500)
     private String description;
     @OneToOne(cascade = CascadeType.ALL)

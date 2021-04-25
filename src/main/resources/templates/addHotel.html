@@ -19,13 +19,17 @@
 
         <div class="uk-margin">
             <div class="uk-inline">
-                <label> Country:
-                    <select th:field="*{country}" class="uk-select">
-                        <option th:each="country: ${countries}" th:value="${country}" th:text="${country}">
-                        </option>
-                    </select>
-                </label>
+                <label> Country : <input class="uk-input" type="text" th:field="*{country}"/></label>
             </div>
+            <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral">
+        </div>
+
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> City : <input class="uk-input" type="text" th:field="*{city}"/></label>
+            </div>
+            <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: coral">
         </div>
 
         <div class="uk-margin">

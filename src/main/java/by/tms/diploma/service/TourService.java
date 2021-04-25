@@ -20,6 +20,7 @@ public interface TourService {
     List<Tour> getAll();
     void deleteById(long id);
     void update(Tour tour);
+    boolean theSameTour(long id, String name);
     Tour getById(long id);
     List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice, int startTourDuration,
                                                            int startDayAtSea, TypeOfRest typeOfRest);

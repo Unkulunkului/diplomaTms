@@ -24,6 +24,9 @@ public class HotelAddModel {
     @Pattern(regexp = "[A-Z][a-z-]{3,20}", message = "First letter is upper case. You may use only letter and '-'. " +
             "Min length - 3, max - 20")
     private String country;
+    @Pattern(regexp = "[A-Z][a-z-]{3,20}", message = "First letter is upper case. You may use only letter and '-'. " +
+            "Min length - 3, max - 20")
+    private String city;
     @Pattern(regexp = "[1-5]", message = "Min - 1, max -5")
     private String stars;
     @Size(max = 1500, message = "Max size - 1500")

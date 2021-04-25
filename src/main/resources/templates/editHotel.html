@@ -55,15 +55,17 @@
 
         <div class="uk-margin">
             <div class="uk-inline">
-                <label> Country:
-                    <select th:field="*{country}" class="uk-select">
-                        <option th:each="country: ${countries}" th:value="${country}">
-                            <span th:if="${hotel.country.equals(country)}">+ </span>
-                            <span th:text="${country}"></span>
-                        </option>
-                    </select>
-                </label>
+                <label> Country : <input class="uk-input" type="text" th:field="*{country}" th:placeholder="${hotel.country.name}"/></label>
             </div>
+            <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral">
+        </div>
+
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <label> City : <input class="uk-input" type="text" th:field="*{city}" th:placeholder="${hotel.country.city}"/></label>
+            </div>
+            <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: coral">
         </div>
 
         <div class="uk-margin">

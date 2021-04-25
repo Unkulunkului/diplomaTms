@@ -70,22 +70,9 @@
         <input type="hidden" name="tourId" th:value="${tour.id}"/>
         <div class="uk-margin">
             <div class="uk-inline">
-                <label> Name : <input class="uk-input" type="text" th:field="*{name}" th:placeholder="${tour.name}"/></label>
+                <label> Name : <input class="uk-input" type="text" th:field="*{name}" th:value="${tour.name}" th:placeholder="${tour.name}"/></label>
             </div>
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
-        </div>
-
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <label> Country:
-                    <select th:field="*{visitedCountries}" multiple class="uk-select">
-                        <option th:each="country: ${countries}" th:value="${country}">
-                            <span th:if="${tour.visitedCountries.contains(country)}" th:text="'* '+${country}"></span>
-                            <span th:unless="${tour.visitedCountries.contains(country)}" th:text="${country}"></span>
-                        </option>
-                    </select>
-                </label>
-            </div>
         </div>
 
         <div class="uk-margin">
@@ -135,6 +122,12 @@
             </div>
             <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral">
         </div>
+
+        <div class="uk-margin">
+            <p>Countries: </p>
+            <textarea class="uk-textarea" rows="5" th:field="*{visitedCountries}" th:placeholder="${tour.visitedCountries}"></textarea>
+        </div >
+        <p th:if="${#fields.hasErrors('visitedCountries')}" th:errors="*{visitedCountries}" style="color: coral"></p>
 
         <div class="uk-margin">
             <p>Description: </p>

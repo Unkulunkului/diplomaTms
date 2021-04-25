@@ -4,11 +4,8 @@ import by.tms.diploma.entity.*;
 
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
-import by.tms.diploma.service.InMemoryCountryService;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
+import by.tms.diploma.service.WeatherService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,7 +31,7 @@ public class HotelController {
     private ImageService imageService;
 
     @Autowired
-    private InMemoryCountryService countryService;
+    private WeatherService weatherService;
 
 
 
@@ -43,6 +40,13 @@ public class HotelController {
         Optional<Hotel> byId = hotelService.findById(id);
         if (byId.isPresent()) {
             Hotel hotel = byId.get();
+            Weather weather = weatherService.getWeather(hotel.getCountry().getCity());
+            if(weather!=null){
+                modelAndView.addObject("weather", weather);
+            }else {
+                modelAndView.addObject("weatherCityError", "Incorrect city");
+            }
+
             modelAndView.addObject("hotel", hotel);
         }else {
             modelAndView.addObject("incorrectId", "Hotel with id="+id+" doesn't exist!");
@@ -54,7 +58,6 @@ public class HotelController {
     @GetMapping("/add")
     public ModelAndView getHotelAddView(ModelAndView modelAndView){
         modelAndView.addObject("hotelAddForm", new HotelAddModel());
-        modelAndView.addObject("countries", countryService.getCountries());
         modelAndView.setViewName("addHotel");
         return modelAndView;
     }
@@ -67,7 +70,12 @@ public class HotelController {
             if(!hotelService.existsByName(hotelAddModel.getName())){
                 Hotel hotel = new Hotel();
                 hotel.setStars(Integer.parseInt(hotelAddModel.getStars()));
-                hotel.setCountry(hotelAddModel.getCountry());
+                String formCity = hotelAddModel.getCity();
+                String formCountry = hotelAddModel.getCountry();
+                Country country = new Country();
+                country.setCity(formCity);
+                country.setName(formCountry);
+                hotel.setCountry(country);
                 hotel.setName(hotelAddModel.getName());
                 hotel.setDescription(hotelAddModel.getDescription());
                 hotel.setTypeOfFood(hotelAddModel.getTypeOfFood());
@@ -81,15 +89,15 @@ public class HotelController {
                 modelAndView.setViewName("redirect:/hotel/add");
             }else {
                 modelAndView.addObject("doesHotelExist",true);
-                modelAndView.addObject("countries", countryService.getCountries());
                 modelAndView.setViewName("addHotel");
             }
         }else{
             modelAndView.setViewName("addHotel");
-            modelAndView.addObject("countries", countryService.getCountries());
         }
         return modelAndView;
     }
+
+
 
     @GetMapping(path = "/edit")
     public ModelAndView editView(Long id, ModelAndView modelAndView){
@@ -97,7 +105,6 @@ public class HotelController {
             Optional<Hotel> optionalHotel = hotelService.findById(id);
             optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
             modelAndView.addObject("hotelForm", new HotelAddModel());
-            modelAndView.addObject("countries", countryService.getCountries());
         }else {
             modelAndView.addObject("incorrectId", "Input id is incorrect!");
         }
@@ -114,7 +121,12 @@ public class HotelController {
                 Hotel hotel = new Hotel();
                 hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
                 hotel.setDescription(hotelModel.getDescription());
-                hotel.setCountry(hotelModel.getCountry());
+                String formCity = hotelModel.getCity();
+                String formCountry = hotelModel.getCountry();
+                Country country = new Country();
+                country.setCity(formCity);
+                country.setName(formCountry);
+                hotel.setCountry(country);
                 hotel.setStars(Integer.parseInt(hotelModel.getStars()));
                 hotel.setName(hotelModel.getName());
                 hotel.setId(hotelId);

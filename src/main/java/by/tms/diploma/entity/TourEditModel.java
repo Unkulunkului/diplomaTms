@@ -24,7 +24,7 @@ public class TourEditModel {
     private String price;
     private List<MultipartFile> images;
     private String typeOfRest;
-    private List<String> visitedCountries;
+    private String visitedCountries;
     @Pattern(regexp = "(\\d+)", message = "Only numbers")
     private String tourDuration;
     @Pattern(regexp = "(\\d+)", message = "Only numbers")

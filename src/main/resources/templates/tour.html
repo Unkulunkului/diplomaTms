@@ -43,9 +43,7 @@
                     Countries you will visit: </label>
                 <br>
                 <div id="countries">
-                    <span class="uk-text-italic" th:each="country, state: ${tour.visitedCountries}">
-                        <span th:text="${country}"></span>
-                        <span th:if="${!state.last}">,</span>
+                    <span class="uk-text-italic" th:text="${tour.visitedCountries}">
                     </span>
                 </div>
                 <hr>

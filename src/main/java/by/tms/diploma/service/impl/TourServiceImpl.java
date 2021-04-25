@@ -101,4 +101,14 @@ public class TourServiceImpl implements TourService {
             return "Ok";
         }
     }
+
+    @Override
+    public boolean theSameTour(long id, String name){
+        Optional<Tour> byId = tourRepository.findById(id);
+        Optional<Tour> byName = tourRepository.getByName(name);
+        if (byId.isPresent() && byName.isPresent()){
+            return byId.equals(byName);
+        }
+        return false;
+    }
 }

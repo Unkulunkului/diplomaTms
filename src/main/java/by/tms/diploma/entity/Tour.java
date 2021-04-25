@@ -28,8 +28,7 @@ public class Tour {
     private double price;
     @OneToOne(cascade = CascadeType.ALL)
     private Image images;
-    @ElementCollection
-    private List<String> visitedCountries;
+    private String visitedCountries;
     private int tourDuration;
     private int dayAtSea;
 }

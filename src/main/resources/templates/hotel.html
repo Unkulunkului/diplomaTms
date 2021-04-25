@@ -48,7 +48,21 @@
             <hr>
             <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
             <br>
-            <span id="country" th:text="${hotel.country}"></span>
+            <span id="country" th:text="${hotel.country.name}+', '+${hotel.country.city}"></span>
+            <br>
+            <div uk-grid th:if="${weatherCityError==null}">
+                <div class="uk-width-auto@m" th:each="day: ${weather.data}">
+                    <img th:src="@{'/image/weather/icon/'+${day.weather.icon}+'.png'}" width="60" height="60"/>
+                    <span>
+                    <p th:text="'Date: '+${day.valid_date}"></p>
+                    <p th:text="'Temperature: '+${day.temp}+' °C'"></p>
+                    <p th:text="'Wild speed: '+${day.wind_spd}+' m/c'"></p>
+                </span>
+                </div>
+            </div>
+            <div sec:authorize="hasAnyAuthority('MODERATOR', 'ADMIN')" th:unless="${weatherCityError==null}">
+                <span style="color: coral" th:text="${weatherCityError}"></span>
+            </div>
             <hr>
             <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
                 Line from the sea: </label>

@@ -4,7 +4,7 @@ package by.tms.diploma.controller;
 import by.tms.diploma.entity.*;
 import by.tms.diploma.service.HotelService;
 import by.tms.diploma.service.ImageService;
-import by.tms.diploma.service.InMemoryCountryService;
+
 import by.tms.diploma.service.TourService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,7 @@ public class TourController {
     @Autowired
     private HotelService hotelService;
 
-    @Autowired
-    private InMemoryCountryService countryService;
+
 
     @Autowired
     private ImageService imageService;
@@ -83,7 +82,6 @@ public class TourController {
 
     @GetMapping(path = "/add")
     public ModelAndView getAddView(ModelAndView modelAndView){
-        modelAndView.addObject("countries", countryService.getCountries());
         modelAndView.addObject("hotels", hotelService.findAll());
         modelAndView.addObject("tourAddForm", new TourAddModel());
         modelAndView.setViewName("addTour");
@@ -132,7 +130,6 @@ public class TourController {
             modelAndView.setViewName("addTour");
         }
         if(modelAndView.getViewName().equals("addTour")){
-            modelAndView.addObject("countries", countryService.getCountries());
             modelAndView.addObject("hotels", hotelService.findAll());
         }
         return modelAndView;
@@ -154,7 +151,6 @@ public class TourController {
             optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
             modelAndView.addObject("tourForm", new TourEditModel());
             modelAndView.addObject("hotels", hotelService.findAll());
-            modelAndView.addObject("countries", countryService.getCountries());
         }else {
             modelAndView.addObject("incorrectId", "Input id is incorrect!");
         }
@@ -167,7 +163,7 @@ public class TourController {
     public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourEditModel tourModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
         if(!bindingResult.hasErrors()){
-            if(!tourService.existsByName(tourModel.getName())){
+            if(tourService.theSameTour(tourId, tourModel.getName()) || !tourService.existsByName(tourModel.getName())){
                 int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
                 int tourDuration = Integer.parseInt(tourModel.getTourDuration());
                 String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
@@ -203,7 +199,6 @@ public class TourController {
         }
         if(modelAndView.getViewName().equals("editTour")){
             modelAndView.addObject("hotels", hotelService.findAll());
-            modelAndView.addObject("countries", countryService.getCountries());
             Optional<Tour> optionalTour = tourService.findById(tourId);
             optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
         }
