@@ -142,6 +142,15 @@
         </div >
         <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
 
+        <br>
+        <div class="uk-margin">
+            <div uk-form-custom>
+                <input type="file" multiple th:field="*{images}">
+                <button class="uk-button uk-button-default" type="button" tabindex="-1">Select images</button>
+            </div>
+        </div>
+
+
         <button class="uk-button uk-button-default">Update</button>
     </form>
 </div>

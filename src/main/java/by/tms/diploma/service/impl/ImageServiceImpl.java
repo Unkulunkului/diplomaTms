@@ -29,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
 //            Map public_id = cloudinary.uploader().upload("data:"+file.getContentType()+";base64," +base64,
 //                    ObjectUtils.asMap(
 //                            "folder", entityName,
-//                                   "public_id", entityName+"_"+entityId));
+//                                   "public_id", entityName+"_"+entityId+"_"+file.getOriginalFilename()));
 //            urls.add((String)public_id.get("url"));
             urls.add("https://clck.ru/UM7kv");
         }

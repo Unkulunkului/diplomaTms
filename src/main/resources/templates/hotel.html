@@ -18,10 +18,12 @@
                     <ul class="uk-slider-items uk-grid">
                         <li class="uk-width-auto" th:each="url: ${hotel.images.urls}">
                             <div class="uk-panel">
-                                <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
-                                    <img th:src="@{${url}}" width="500" height="400" alt="" uk-cover>
-                                    <canvas width="500" height="400"></canvas>
-                                </a>
+                                <div class="uk-card-media-left uk-cover-container">
+                                    <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
+                                        <img th:src="@{${url}}" width="500" height="400" alt="" uk-cover>
+                                        <canvas width="500" height="400"></canvas>
+                                    </a>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -32,15 +34,31 @@
             </div>
         </div>
         <div class="uk-position-relative-center">
+            <label for="countries" class="uk-text-large uk-text-itali" style="color: teal">
+                Available tours: </label>
             <br>
+            <div id="countries">
+                    <span th:if="${!hotel.tours.isEmpty()}" class="uk-text-italic" th:each="tour, state: ${hotel.tours}">
+                         <a class="uk-text-italic" style="color: darkolivegreen"
+                            th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a>
+                        <span th:if="${!state.last}">,</span>
+                    </span>
+                <span th:unless="${!hotel.tours.isEmpty()}">No tours</span>
+            </div>
+            <hr>
             <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
             <br>
-            <span style="color: darkgray" id="country" th:text="${hotel.country}"></span>
+            <span id="country" th:text="${hotel.country}"></span>
             <hr>
             <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
                 Line from the sea: </label>
             <br>
             <span id="lineFromTheSea" th:text="${hotel.lineFromTheSea}"></span>
+            <hr>
+            <label for="typeOfFood" class="uk-text-italic uk-text-large" style="color: teal">
+                Type of food: </label>
+            <br>
+            <span id="typeOfFood" th:text="${hotel.typeOfFood}"></span>
             <hr>
             <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                 <input type="hidden" name="id" th:value="${hotel.id}">

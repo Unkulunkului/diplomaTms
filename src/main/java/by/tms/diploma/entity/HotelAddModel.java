@@ -31,4 +31,5 @@ public class HotelAddModel {
     private List<MultipartFile> images;
     @Pattern(regexp = "[1-3]", message = "Min - 1, max -3")
     private String lineFromTheSea;
+    private HotelFoodEnum typeOfFood;
 }

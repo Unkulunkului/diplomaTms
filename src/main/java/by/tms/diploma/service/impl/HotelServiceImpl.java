@@ -68,16 +68,21 @@ public class HotelServiceImpl implements HotelService {
     public void update(Hotel hotel){
         long id = hotel.getId();
         Hotel hotelFromBD = hotelRepository.getById(id);
+        log.info(hotel.toString());
+        log.info(hotelFromBD.toString());
         if(hotel.getImages() != null){
+            log.info("!=null");
             Image hotelFromBDImages = hotelFromBD.getImages();
             List<String> imageBDHotelUrls = hotelFromBDImages.getUrls();
             String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
             imageBDHotelUrls.remove(defaultImage);
             List<String> formImageUrls = hotel.getImages().getUrls();
+            log.info(formImageUrls.toString());
             imageBDHotelUrls.addAll(formImageUrls);
         }else{
             hotel.setImages(hotelFromBD.getImages());
         }
-        hotelRepository.save(hotel);
+        Hotel save = hotelRepository.save(hotel);
+        log.info(save.toString());
     }
 }

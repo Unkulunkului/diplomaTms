@@ -1,23 +1,26 @@
 package by.tms.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = "hotel")
+@EqualsAndHashCode(exclude = "hotel")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Tours")
 public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private Hotel hotel;
     private TypeOfRest typeOfRest;
     @Column(length = 3000)

@@ -70,6 +70,7 @@ public class HotelController {
                 hotel.setCountry(hotelAddModel.getCountry());
                 hotel.setName(hotelAddModel.getName());
                 hotel.setDescription(hotelAddModel.getDescription());
+                hotel.setTypeOfFood(hotelAddModel.getTypeOfFood());
                 hotel.setLineFromTheSea(Integer.parseInt(hotelAddModel.getLineFromTheSea()));
                 Image image = new Image();
                 image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
