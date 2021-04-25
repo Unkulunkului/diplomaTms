@@ -67,6 +67,9 @@
                     <a href="/tour/all">Tours</a>
                 </li>
                 <li>
+                    <a href="/hotel/all">Hotels</a>
+                </li>
+                <li>
                     <a sec:authorize="isAuthenticated()" class="uk-navbar-item uk-margin-left uk-logo" href="/wishes">
                         <span style="color: coral" class="uk-icon-link" uk-icon="icon: heart; ratio:1.2"></span>
                         <span style="color: teal;" th:text="${session.wishes.size()}"></span>

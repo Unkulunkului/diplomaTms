@@ -55,6 +55,19 @@ public class HotelController {
         return modelAndView;
     }
 
+    @GetMapping("/all")
+    public ModelAndView getAllToursView(ModelAndView modelAndView){
+        List<Hotel> allHotels = hotelService.findAll();
+        if (!allHotels.isEmpty()) {
+            modelAndView.addObject("hotels", allHotels);
+//            modelAndView.addObject("tourFilterModel", new TourFilterModel());
+        }else{
+            modelAndView.addObject("emptyList", "Hotel list is empty");
+        }
+        modelAndView.setViewName("allHotels");
+        return modelAndView;
+    }
+
     @GetMapping("/add")
     public ModelAndView getHotelAddView(ModelAndView modelAndView){
         modelAndView.addObject("hotelAddForm", new HotelAddModel());
