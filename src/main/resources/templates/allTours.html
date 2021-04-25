@@ -25,10 +25,10 @@
             </div>
         </div>
     </div>
-    <div th:unless="${emptyList==null}" class="uk-width-3-4">
+    <div th:unless="${emptyList==null}" class="uk-position-large uk-position-center-left">
         <p class="uk-text-large uk-text-italic" style="color: teal" th:text="${emptyList}"></p>
     </div>
-    <div class="uk-width-1-4">
+    <div th:if="${emptyList==null}" class="uk-width-1-4">
         <div class="uk-card uk-card-default uk-card-body">
             <form th:action="@{filter}" th:object="${tourFilterModel}" method="post">
                 <fieldset class="uk-fieldset">

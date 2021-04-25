@@ -11,6 +11,8 @@ public class HomeController {
 
     @GetMapping
     public ModelAndView getHomeView(ModelAndView modelAndView){
+        String text = "Just buy our tours";
+        modelAndView.addObject("text", text);
         modelAndView.setViewName("home");
         return modelAndView;
     }
