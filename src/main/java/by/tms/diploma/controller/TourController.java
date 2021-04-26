@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -108,7 +107,7 @@ public class TourController {
                     tour.setTourDuration(tourDuration);
                     tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
                     tour.setVisitedCountries(tourAddModel.getVisitedCountries());
-                    tour.setTypeOfRest(TypeOfRest.getName(tourAddModel.getTypeOfRest()));
+                    tour.setTypeOfRest(TypeOfRest.getEnumName(tourAddModel.getTypeOfRest()));
                     Image image = new Image();
                     image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
                     tour.setImages(image);
@@ -139,67 +138,159 @@ public class TourController {
         return modelAndView;
     }
 
+
     @GetMapping(path = "/edit")
-    public ModelAndView editView(Long id, ModelAndView modelAndView){
-        log.info(id+"");
+    public ModelAndView editView(String nameOfEditableField, Long id, ModelAndView modelAndView){
         if(id != null && tourService.existsById(id)){
-            Optional<Tour> optionalTour = tourService.findById(id);
-            optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
-            modelAndView.addObject("tourForm", new TourEditModel());
-            modelAndView.addObject("hotels", hotelService.findAll());
-        }else {
+            if(nameOfEditableField!= null){
+                Optional<Tour> optionalTour = tourService.findById(id);
+                optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
+                modelAndView.addObject("tourForm", new TourEditModel());
+                modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+                modelAndView.addObject("hotels", hotelService.findAll());
+            }else {
+                modelAndView.addObject("incorrectField", "Input field is incorrect!");
+            }
+        }else{
             modelAndView.addObject("incorrectId", "Input id is incorrect!");
         }
         modelAndView.setViewName("editTour");
         return modelAndView;
     }
 
-
     @PostMapping(path = "/edit")
-    public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourEditModel tourModel,
-                                  BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+    public ModelAndView editTour (Long id, String nameOfEditableField, @Valid @ModelAttribute("tourForm")
+            TourEditModel tourModel, BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+        log.info(id+"-"+nameOfEditableField);
+        log.info(tourModel.toString());
         if(!bindingResult.hasErrors()){
-            if(tourService.theSameTour(tourId, tourModel.getName()) || !tourService.existsByName(tourModel.getName())){
-                int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
-                int tourDuration = Integer.parseInt(tourModel.getTourDuration());
-                String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
-                if(result.equals("Ok")){
-                    Tour tour = new Tour();
-                    tour.setId(tourId);
-                    tour.setName(tourModel.getName());
-                    Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
-                    tour.setHotel(hotelByName);
-                    tour.setDescription(tourModel.getDescription());
-                    tour.setDayAtSea(dayAtSea);
-                    tour.setTourDuration(tourDuration);
-                    tour.setVisitedCountries(tourModel.getVisitedCountries());
-                    tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
-                    tour.setPrice(Double.parseDouble(tourModel.getPrice()));
-                    List<MultipartFile> images = tourModel.getImages();
-                    if(images != null){
-                        Image image = imageService.upload(images, "tour", tour.getId());
-                        tour.setImages(image);
+            log.info("binding no err");
+            if(id != null){
+                log.info("id != null");
+                Optional<Tour> byId = tourService.findById(id);
+                if(byId.isPresent()){
+                    log.info("Tour by id exist");
+                    Tour tourFromBD = byId.get();
+                    String result = "Ok";
+
+                    if(nameOfEditableField.equals("tourDuration")){
+                        log.info("tour dur try change");
+                        int dayAtSea;
+                        int tourDuration;
+                        String formTourDuration = tourModel.getTourDuration();
+                        if(!formTourDuration.isEmpty()){
+                            tourDuration = Integer.parseInt(formTourDuration);
+                        }else {
+                            tourDuration = tourFromBD.getTourDuration();
+                        }
+                        String formDayAtSea = tourModel.getDayAtSea();
+                        if(!formDayAtSea.isEmpty()){
+                            dayAtSea = Integer.parseInt(formDayAtSea);
+                        }else {
+                            dayAtSea = tourFromBD.getDayAtSea();
+                        }
+                        result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
                     }
-                    tourService.update(tour);
-                    modelAndView.setViewName("redirect:/tour/"+tourId);
+
+                    if(result.equals("Ok")){
+                        log.info("valid tour success");
+                        String name = tourModel.getName();
+                        if(nameOfEditableField.equals("name") && tourService.existsByName(name)){
+                            log.info("name ex");
+                            modelAndView.addObject("doesTourNameExist", true);
+                            modelAndView.setViewName("editTour");
+                        }else {
+                            tourService.updateFieldById(id, nameOfEditableField, tourModel);
+                            log.info("update");
+                            modelAndView.setViewName("redirect:/tour/"+ id);
+                        }
+                    }else {
+                        modelAndView.addObject("tourDurationAndDayAtSeaError", result);
+                        modelAndView.setViewName("editTour");
+                    }
                 }else {
-                    modelAndView.addObject("tourDurationAndDayAtSeaError", result);
-                    modelAndView.setViewName("editTour");
+                    modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+                    modelAndView.setViewName("redirect:/tour/edit");
                 }
             }else {
-                modelAndView.addObject("doesTourNameExist", true);
-                modelAndView.setViewName("editTour");
+                modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+                modelAndView.setViewName("redirect:/tour/edit");
             }
         }else{
+            log.info("binding");
             modelAndView.setViewName("editTour");
         }
         if(modelAndView.getViewName().equals("editTour")){
-            modelAndView.addObject("hotels", hotelService.findAll());
-            Optional<Tour> optionalTour = tourService.findById(tourId);
+            Optional<Tour> optionalTour = tourService.findById(id);
             optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
+            modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+            modelAndView.addObject("hotels", hotelService.findAll());
+            modelAndView.addObject("id", id);//???????
         }
         return modelAndView;
     }
+
+//    @GetMapping(path = "/edit")
+//    public ModelAndView editView(Long id, ModelAndView modelAndView){
+//        log.info(id+"");
+//        if(id != null && tourService.existsById(id)){
+//            Optional<Tour> optionalTour = tourService.findById(id);
+//            optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
+//            modelAndView.addObject("tourForm", new TourEditModel());
+//            modelAndView.addObject("hotels", hotelService.findAll());
+//        }else {
+//            modelAndView.addObject("incorrectId", "Input id is incorrect!");
+//        }
+//        modelAndView.setViewName("editTour");
+//        return modelAndView;
+//    }
+//
+//
+//    @PostMapping(path = "/edit")
+//    public ModelAndView editTour (long tourId, @Valid @ModelAttribute("tourForm") TourEditModel tourModel,
+//                                  BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+//        if(!bindingResult.hasErrors()){
+//            if(tourService.theSameTour(tourId, tourModel.getName()) || !tourService.existsByName(tourModel.getName())){
+//                int dayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+//                int tourDuration = Integer.parseInt(tourModel.getTourDuration());
+//                String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
+//                if(result.equals("Ok")){
+//                    Tour tour = new Tour();
+//                    tour.setId(tourId);
+//                    tour.setName(tourModel.getName());
+//                    Hotel hotelByName = hotelService.findByName(tourModel.getHotelName());
+//                    tour.setHotel(hotelByName);
+//                    tour.setDescription(tourModel.getDescription());
+//                    tour.setDayAtSea(dayAtSea);
+//                    tour.setTourDuration(tourDuration);
+//                    tour.setVisitedCountries(tourModel.getVisitedCountries());
+//                    tour.setTypeOfRest(TypeOfRest.getName(tourModel.getTypeOfRest()));
+//                    tour.setPrice(Double.parseDouble(tourModel.getPrice()));
+//                    List<MultipartFile> images = tourModel.getImages();
+//                    if(images != null){
+//                        Image image = imageService.upload(images, "tour", tour.getId());
+//                        tour.setImages(image);
+//                    }
+//                    tourService.update(tour);
+//                    modelAndView.setViewName("redirect:/tour/"+tourId);
+//                }else {
+//                    modelAndView.addObject("tourDurationAndDayAtSeaError", result);
+//                    modelAndView.setViewName("editTour");
+//                }
+//            }else {
+//                modelAndView.addObject("doesTourNameExist", true);
+//                modelAndView.setViewName("editTour");
+//            }
+//        }else{
+//            modelAndView.setViewName("editTour");
+//        }
+//        if(modelAndView.getViewName().equals("editTour")){
+//            modelAndView.addObject("hotels", hotelService.findAll());
+//            Optional<Tour> optionalTour = tourService.findById(tourId);
+//            optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
+//        }
+//        return modelAndView;
+//    }
 
     @PostMapping(path = "/filter")
     public ModelAndView filterTour(@Valid @ModelAttribute("tourFilterModel") TourFilterModel tourModel,
@@ -233,7 +324,7 @@ public class TourController {
             if(!tourModel.getDayAtSea().isEmpty()){
                 startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
             }
-            TypeOfRest type = TypeOfRest.getName(tourModel.getTypeOfRest());
+            TypeOfRest type = TypeOfRest.getEnumName(tourModel.getTypeOfRest());
             List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(startPrice, finishPrice,
                     startTourDuration, startDayAtSea, type, startId, finishId);
             if(!tours.isEmpty()){

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -104,8 +105,67 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void updateFieldById(long id, String fieldName, TourEditModel hotelModel) throws IOException {
+    public void updateFieldById(long id, String fieldName, TourEditModel tourModel) throws IOException {
+        Tour tour = tourRepository.getById(id);
+        switch (fieldName) {
+            case "name":
+                String formName = tourModel.getName();
+                if(!formName.isEmpty()){
+                    tour.setName(formName);
+                }
+                break;
 
+            case "hotelName":
+                String formHotelName = tourModel.getHotelName();
+                if(!formHotelName.isEmpty() && hotelService.existsByName(formHotelName)){
+                    Hotel byName = hotelService.findByName(formHotelName);
+                    tour.setHotel(byName);
+                }
+                break;
+            case "visitedCountries":
+                String formCountries = tourModel.getVisitedCountries();
+                if(!formCountries.isEmpty()){
+                    tour.setVisitedCountries(formCountries);
+                }
+                break;
+            case "tourDuration":
+                String formTourDuration = tourModel.getTourDuration();
+                if(!formTourDuration.isEmpty()){
+                    tour.setTourDuration(Integer.parseInt(formTourDuration));
+                }
+                String formDayAtSea = tourModel.getDayAtSea();
+                if(!formDayAtSea.isEmpty()){
+                    tour.setDayAtSea(Integer.parseInt(formDayAtSea));
+                }
+                break;
+            case "description":
+                tour.setDescription(tourModel.getDescription());
+                break;
+
+            case "typeOfRest":
+                tour.setTypeOfRest(tourModel.getTypeOfRest());
+                break;
+
+            case "price":
+                String formPrice = tourModel.getPrice();
+                if(!formPrice.isEmpty()){
+                    tour.setPrice(Double.parseDouble(formPrice));
+                }
+                break;
+
+            case "images":
+                List<MultipartFile> formImages = tourModel.getImages();
+                if (formImages != null) {
+                    Image uploadedHotelImage = imageService.upload(formImages, "hotel", id);
+                    String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
+                    Image hotelImages = tour.getImages();
+                    List<String> imagesUrls = hotelImages.getUrls();
+                    imagesUrls.remove(defaultImage);
+                    imagesUrls.addAll(uploadedHotelImage.getUrls());
+                }
+                break;
+        }
+        tourRepository.save(tour);
     }
 
     @Override

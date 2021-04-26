@@ -125,11 +125,8 @@ public class HotelController {
     }
 
     @PostMapping(path = "/edit")
-    public ModelAndView editTour (long id, String nameOfEditableField, @Valid @ModelAttribute("hotelForm") HotelEditModel hotelModel,
+    public ModelAndView editHotel (long id, String nameOfEditableField, @Valid @ModelAttribute("hotelForm") HotelEditModel hotelModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
-        log.info(id+"");
-        log.info(hotelModel.toString());
-        log.info(nameOfEditableField);
         if(!bindingResult.hasErrors()){
             String name = hotelModel.getName();
             if(nameOfEditableField.equals("name") && hotelService.existsByName(name)){

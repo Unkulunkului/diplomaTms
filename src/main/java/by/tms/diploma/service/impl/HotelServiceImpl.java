@@ -84,10 +84,10 @@ public class HotelServiceImpl implements HotelService {
                 }
                 break;
             case "lineFromTheSea":
-                String lineFromTheSea = hotelModel.getLineFromTheSea();
-                log.info(lineFromTheSea);
-                if(!lineFromTheSea.isEmpty()){
-                    hotel.setLineFromTheSea(Integer.parseInt(lineFromTheSea));
+                String formLineFromTheSea = hotelModel.getLineFromTheSea();
+                log.info(formLineFromTheSea);
+                if(!formLineFromTheSea.isEmpty()){
+                    hotel.setLineFromTheSea(Integer.parseInt(formLineFromTheSea));
                 }
                 break;
             case "typeOfFood":

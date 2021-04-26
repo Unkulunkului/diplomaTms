@@ -67,27 +67,35 @@
 <h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit tour</h1>
 <div th:if="${incorrectId == null}" style="margin-left: 50%; margin-top: 3%; margin-right: 3%; margin-bottom: 3%">
     <form th:action="@{edit}" enctype="multipart/form-data" th:object="${tourForm}" method="post">
-        <input type="hidden" name="tourId" th:value="${tour.id}"/>
+        <input type="hidden" name="id" th:value="${tour.id}"/>
+        <input type="hidden" name="nameOfEditableField" th:value="${nameOfEditableField}"/>
         <div class="uk-margin">
-            <div class="uk-inline">
+            <p style="color: coral">Leave the field blank if you don't want to change it</p>
+            <div th:if="${nameOfEditableField.equals('name')}" class="uk-inline">
                 <label> Name : <input class="uk-input" type="text" th:field="*{name}" th:value="${tour.name}" th:placeholder="${tour.name}"/></label>
+            </div>
+            <div th:unless="${nameOfEditableField.equals('name')}">
+                <p th:text="'Name: '+${tour.name}"></p>
             </div>
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
         </div>
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('typeOfRest')}" class="uk-inline">
                 <label> Type of rest:
                     <select th:field="*{typeOfRest}" class="uk-select">
-                        <option th:value="'Excursion tour'">Excursion tour</option>
-                        <option th:value="'Rest at sea'">Rest at sea</option>
-                        <option th:value="'Extreme tour'">Extreme tour</option>
+                        <option th:value="'EXCURSION_TOUR'">Excursion tour</option>
+                        <option th:value="'REST_AT_SEA'">Rest at sea</option>
+                        <option th:value="'EXTREME_TOUR'">Extreme tour</option>
                     </select>
                 </label>
             </div>
+            <div th:unless="${nameOfEditableField.equals('typeOfRest')}">
+                <p th:text="'Type of rest: '+${tour.typeOfRest}"></p>
+            </div>
         </div >
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('hotelName')}" class="uk-inline">
                 <label> Hotel name
                     <select th:field="*{hotelName}" class="uk-select">
                         <option th:if="${hotels != null}" th:each="hotel: ${hotels}" th:value="${hotel.name}">
@@ -97,19 +105,25 @@
                     </select>
                 </label>
             </div>
+            <div th:unless="${nameOfEditableField.equals('hotelName')}">
+                <p th:text="'Hotel name: '+${tour.hotel.name}"></p>
+            </div>
         </div >
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('tourDuration')}" class="uk-inline">
                 <label> Tour duration: <input class="uk-input" type="text" th:field="*{tourDuration}" th:placeholder="${tour.tourDuration}"/></label>
             </div>
-            <p th:if="${#fields.hasErrors('tourDuration')}" th:errors="*{tourDuration}" style="color: coral">
+            <p th:if="${#fields.hasErrors('tourDuration')}" th:errors="*{tourDuration}" style="color: coral"></p>
+            <div th:unless="${nameOfEditableField.equals('tourDuration')}">
+                <p th:text="'Tour duration (day at sea): '+${tour.tourDuration}+'('+${tour.dayAtSea}+')'"></p>
+            </div>
         </div>
         <div th:if="${tourDurationAndDayAtSeaError!=null}"><span style="color: coral" th:text=
                 "${tourDurationAndDayAtSeaError}"></span></div>
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('tourDuration')}" class="uk-inline">
                 <label> Day at sea: <input class="uk-input" type="text" th:field="*{dayAtSea}"
                                            th:placeholder="${tour.dayAtSea}"/></label>
             </div>
@@ -117,26 +131,35 @@
         </div>
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('price')}" class="uk-inline">
                 <label> Price: <input class="uk-input" type="text" th:field="*{price}" th:placeholder="${tour.price}"/></label>
+            </div>
+            <div th:unless="${nameOfEditableField.equals('price')}">
+                <p th:text="'Price: '+${tour.price}+'$'"></p>
             </div>
             <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral">
         </div>
 
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('visitedCountries')}" class="uk-margin">
             <p>Countries: </p>
             <textarea class="uk-textarea" rows="5" th:field="*{visitedCountries}" th:placeholder="${tour.visitedCountries}"></textarea>
         </div >
+        <div th:unless="${nameOfEditableField.equals('visitedCountries')}">
+            <p th:text="'Countries: '+${tour.visitedCountries}"></p>
+        </div>
         <p th:if="${#fields.hasErrors('visitedCountries')}" th:errors="*{visitedCountries}" style="color: coral"></p>
 
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('description')}" class="uk-margin">
             <p>Description: </p>
             <textarea class="uk-textarea" rows="5" th:field="*{description}" th:placeholder="${tour.description}"></textarea>
         </div >
+        <div th:unless="${nameOfEditableField.equals('description')}">
+            <p th:text="'Description: '+${tour.description}"></p>
+        </div>
         <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
 
         <br>
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('images')}" class="uk-margin">
             <div uk-form-custom>
                 <input type="file" multiple th:field="*{images}">
                 <button class="uk-button uk-button-default" type="button" tabindex="-1">Select images</button>

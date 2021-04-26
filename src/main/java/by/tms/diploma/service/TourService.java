@@ -22,5 +22,5 @@ public interface TourService {
     List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice, int startTourDuration,
                                                                       int startDayAtSea, TypeOfRest typeOfRest, long startId, long finishId);
     String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea);
-    void updateFieldById(long id, String fieldName, TourEditModel hotelModel) throws IOException;
+    void updateFieldById(long id, String fieldName, TourEditModel tourModel) throws IOException;
 }

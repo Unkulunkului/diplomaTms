@@ -3,7 +3,7 @@ package by.tms.diploma.entity;
 public enum TypeOfRest {
     EXCURSION_TOUR, REST_AT_SEA, EXTREME_TOUR;
 
-    public static TypeOfRest getName(String name){
+    public static TypeOfRest getEnumName(String name){
         switch (name.toLowerCase()){
             case "excursion tour":
                 return EXCURSION_TOUR;
