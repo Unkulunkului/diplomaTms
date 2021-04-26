@@ -20,7 +20,7 @@ public class Tour {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     private Hotel hotel;
     private TypeOfRest typeOfRest;
     @Column(length = 3000)
