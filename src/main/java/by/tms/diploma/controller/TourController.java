@@ -209,6 +209,18 @@ public class TourController {
             double finishPrice = 999999.99d;
             int startTourDuration = 0;
             int startDayAtSea = 0;
+            long startId = 0;
+            long finishId = 0;
+            String hotelName = tourModel.getHotelName();
+            if(!hotelName.isEmpty()){
+                if (hotelService.existsByName(hotelName)) {
+                    Hotel byName = hotelService.findByName(hotelName);
+                    startId = byName.getId();
+                    finishId = byName.getId();
+                }
+            }else {
+                finishId = Long.MAX_VALUE;
+            }
             if(!tourModel.getStartPrice().isEmpty()){
                 startPrice = Double.parseDouble(tourModel.getStartPrice());
             }
@@ -222,8 +234,8 @@ public class TourController {
                 startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
             }
             TypeOfRest type = TypeOfRest.getName(tourModel.getTypeOfRest());
-            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRest(startPrice, finishPrice,
-                    startTourDuration, startDayAtSea, type);
+            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(startPrice, finishPrice,
+                    startTourDuration, startDayAtSea, type, startId, finishId);
             if(!tours.isEmpty()){
                 modelAndView.addObject("tours", tours);
             }else {

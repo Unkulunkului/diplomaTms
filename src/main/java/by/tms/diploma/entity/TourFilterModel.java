@@ -15,4 +15,5 @@ public class TourFilterModel {
     private String tourDuration;
     private String dayAtSea;
     private String typeOfRest;
+    private String hotelName;
 }

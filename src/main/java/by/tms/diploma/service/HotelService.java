@@ -15,6 +15,5 @@ public interface HotelService {
     Hotel getById(long id);
     Optional<Hotel> findById(long id);
     List<Hotel> findAll();
-    void update(Hotel hotel);
-    boolean theSameHotel(long id, String name);
+    void updateFieldById(long id, String fieldName, HotelEditModel hotelModel) throws IOException;
 }

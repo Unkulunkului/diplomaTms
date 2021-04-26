@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface TourRepository extends JpaRepository<Tour, Long> {
     boolean existsByName(String name);
     Tour getById(long id);
-    List<Tour> getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEquals(
-            double startPrice, double finishPrice, int startTourDuration, int startDayAtSea, TypeOfRest typeOfRest);
+    List<Tour> getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
+            double startPrice, double finishPrice, int startTourDuration, int startDayAtSea, TypeOfRest typeOfRest,
+            long startId, long finishId);
     Optional<Tour> getByName(String name);
 }

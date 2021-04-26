@@ -6,62 +6,134 @@
     <title>Edit hotel</title>
 </head>
 <body>
+<html th:include="_header"/>
+
+
+<!--<h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit hotel</h1>-->
+<!--<div style="margin-left: 50%; margin-top: 3%; margin-right: 3%; margin-bottom: 3%">-->
+<!--    <form th:if="${incorrectId == null}" th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">-->
+<!--        <input type="hidden" name="hotelId" th:value="${hotel.id}"/>-->
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> Name : <input class="uk-input" type="text" th:field="*{name}" th:placeholder="${hotel.name}"/></label>-->
+<!--            </div>-->
+<!--            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">-->
+<!--        </div>-->
+
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> Country : <input class="uk-input" type="text" th:field="*{country}" th:placeholder="${hotel.country.name}"/></label>-->
+<!--            </div>-->
+<!--            <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral">-->
+<!--        </div>-->
+
+
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> City : <input class="uk-input" type="text" th:field="*{city}" th:placeholder="${hotel.country.city}"/></label>-->
+<!--            </div>-->
+<!--            <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: coral">-->
+<!--        </div>-->
+
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> Stars:-->
+<!--                    <select th:field="*{stars}" class="uk-select">-->
+<!--                        <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}">-->
+<!--                            <span th:if="${hotel.stars==i}">+ </span>-->
+<!--                            <span th:text="${i+'*'}"></span>-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
+<!--            </div>-->
+<!--        </div >-->
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> Line from the sea:-->
+<!--                    <select th:field="*{lineFromTheSea}" class="uk-select">-->
+<!--                        <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" >-->
+<!--                            <span th:if="${hotel.lineFromTheSea==i}">+ </span>-->
+<!--                            <span th:text="${i+'*'}"></span>-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
+<!--            </div>-->
+<!--        </div >-->
+
+<!--        <div class="uk-margin">-->
+<!--            <div class="uk-inline">-->
+<!--                <label> Type of food:-->
+<!--                    <select th:field="*{typeOfFood}" class="uk-select" th:selected="${hotel.typeOfFood}">-->
+<!--                        <option th:value="AI">AI</option>-->
+<!--                        <option th:value="HB">HB</option>-->
+<!--                        <option th:value="BB">BB</option>-->
+<!--                        <option th:value="FB">HB</option>-->
+<!--                    </select>-->
+<!--                </label>-->
+<!--            </div>-->
+<!--        </div >-->
+
+<!--        <div class="uk-margin">-->
+<!--            <p>Description: </p>-->
+<!--            <textarea class="uk-textarea" rows="5" th:field="*{description}" th:placeholder="${hotel.description}"></textarea>-->
+<!--        </div >-->
+<!--        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>-->
+
+<!--        <br>-->
+<!--        <div class="uk-margin">-->
+<!--            <div uk-form-custom>-->
+<!--                <input type="file" multiple th:field="*{images}">-->
+<!--                <button class="uk-button uk-button-default" type="button" tabindex="-1">Select images</button>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <button class="uk-button uk-button-default">Update</button>-->
+<!--    </form>-->
+<!--</div>-->
+
 <!--<div th:if="${incorrectId!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center"-->
 <!--     uk-alert>-->
 <!--    <a class="uk-alert-close" uk-close></a>-->
 <!--    <span th:text="${incorrectId}"></span>-->
 <!--</div>-->
-<!--<h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit hotel</h1>-->
-<!--<form th:if="${incorrectId == null}" th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">-->
-<!--    <input type="hidden" name="hotelId" th:value="${hotel.id}"/>-->
-<!--    <div><label> Name : <input type="text" th:field="*{name}"/></label></div>-->
-<!--    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">-->
-<!--    <div th:if="${doesHotelNameExist}"><span>Hotel with the same name already exists</span></div>-->
-<!--    <div><label> Country : <input type="text" th:field="*{country}"/></label></div>-->
-<!--    <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral"></p>-->
-<!--    <label>Stars :-->
-<!--        <select th:field="*{stars}">-->
-<!--            <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i+'*'}">-->
-<!--            </option>-->
-<!--        </select>-->
-<!--    </label>-->
-<!--    <label>Description: <textarea name="description" cols="60" rows="11"></textarea></label>-->
-<!--    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>-->
-<!--    <label>Line from the sea :-->
-<!--        <select th:field="*{lineFromTheSea}">-->
-<!--            <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" th:text="${i}">-->
-<!--            </option>-->
-<!--        </select></label>-->
-<!--    <input type="file" multiple th:field="*{images}"/>-->
-<!--    <br>-->
-<!--    <button>Add</button>-->
-<!--</form>-->
+
+<!--<div th:if="${doesHotelNameExist}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-left"-->
+<!--     uk-alert>-->
+<!--    <a class="uk-alert-close" uk-close></a>-->
+<!--    <span>Hotel with the same name already exists</span>-->
+<!--</div>-->
 
 
 
-
-
-<html th:include="_header"/>
 <h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit hotel</h1>
 <div style="margin-left: 50%; margin-top: 3%; margin-right: 3%; margin-bottom: 3%">
-    <form th:if="${incorrectId == null}" th:action="@{edit}" th:object="${hotelForm}" enctype="multipart/form-data" method="post">
-        <input type="hidden" name="hotelId" th:value="${hotel.id}"/>
+    <form th:if="${incorrectId == null && incorrectField==null}" th:action="@{edit}" th:object="${hotelForm}"
+          enctype="multipart/form-data" method="post">
+        <input type="hidden" name="id" th:value="${hotel.id}"/>
+        <input type="hidden" name="nameOfEditableField" th:value="${nameOfEditableField}"/>
         <div class="uk-margin">
-            <div class="uk-inline">
+            <p style="color: coral">Leave the field blank if you don't want to change it</p>
+            <div th:if="${nameOfEditableField.equals('name')}"  class="uk-inline">
                 <label> Name : <input class="uk-input" type="text" th:field="*{name}" th:placeholder="${hotel.name}"/></label>
+            </div>
+            <div th:unless="${nameOfEditableField.equals('name')}">
+                <p th:text="'Name: '+${hotel.name}"></p>
             </div>
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral">
         </div>
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('country')}" class="uk-inline">
                 <label> Country : <input class="uk-input" type="text" th:field="*{country}" th:placeholder="${hotel.country.name}"/></label>
+            </div>
+            <div th:unless="${nameOfEditableField.equals('country')}">
+                <p th:text="'Country: '+${hotel.country.name}+'('+${hotel.country.city}+')'"></p>
             </div>
             <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: coral">
         </div>
 
 
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('country')}"  class="uk-margin">
             <div class="uk-inline">
                 <label> City : <input class="uk-input" type="text" th:field="*{city}" th:placeholder="${hotel.country.city}"/></label>
             </div>
@@ -69,11 +141,10 @@
         </div>
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('name')}" class="uk-inline">
                 <label> Stars:
                     <select th:field="*{stars}" class="uk-select">
                         <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}">
-                            <span th:if="${hotel.stars==i}">+ </span>
                             <span th:text="${i+'*'}"></span>
                         </option>
                     </select>
@@ -81,45 +152,53 @@
             </div>
         </div >
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('lineFromTheSea')}" class="uk-inline">
                 <label> Line from the sea:
                     <select th:field="*{lineFromTheSea}" class="uk-select">
                         <option th:each="i : ${#numbers.sequence(1, 3)}" th:value="${i}" >
-                            <span th:if="${hotel.lineFromTheSea==i}">+ </span>
                             <span th:text="${i+'*'}"></span>
                         </option>
                     </select>
                 </label>
+            </div>
+            <div th:unless="${nameOfEditableField.equals('lineFromTheSea')}">
+                <p th:text="'Line from the sea: '+${hotel.lineFromTheSea}"></p>
             </div>
         </div >
 
         <div class="uk-margin">
-            <div class="uk-inline">
+            <div th:if="${nameOfEditableField.equals('typeOfFood')}" class="uk-inline">
                 <label> Type of food:
                     <select th:field="*{typeOfFood}" class="uk-select" th:selected="${hotel.typeOfFood}">
                         <option th:value="AI">AI</option>
                         <option th:value="HB">HB</option>
                         <option th:value="BB">BB</option>
-                        <option th:value="FB">HB</option>
+                        <option th:value="FB">FB</option>
                     </select>
                 </label>
             </div>
+
+            <div th:unless="${nameOfEditableField.equals('typeOfFood')}">
+                <p th:text="'Type of food: '+${hotel.typeOfFood}"></p>
+            </div>
         </div >
 
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('description')}" class="uk-margin">
             <p>Description: </p>
             <textarea class="uk-textarea" rows="5" th:field="*{description}" th:placeholder="${hotel.description}"></textarea>
         </div >
         <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>
+        <div th:unless="${nameOfEditableField.equals('description')}">
+            <p th:text="'Description: '+${hotel.description}"></p>
+        </div>
 
         <br>
-        <div class="uk-margin">
+        <div th:if="${nameOfEditableField.equals('images')}" class="uk-margin">
             <div uk-form-custom>
                 <input type="file" multiple th:field="*{images}">
                 <button class="uk-button uk-button-default" type="button" tabindex="-1">Select images</button>
             </div>
         </div>
-
         <button class="uk-button uk-button-default">Update</button>
     </form>
 </div>

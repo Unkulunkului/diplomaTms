@@ -60,34 +60,55 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void update(Hotel hotel){
-        long id = hotel.getId();
-        Hotel hotelFromBD = hotelRepository.getById(id);
-        log.info(hotel.toString());
-        log.info(hotelFromBD.toString());
-        if(hotel.getImages() != null){
-            log.info("!=null");
-            Image hotelFromBDImages = hotelFromBD.getImages();
-            List<String> imageBDHotelUrls = hotelFromBDImages.getUrls();
-            String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-            imageBDHotelUrls.remove(defaultImage);
-            List<String> formImageUrls = hotel.getImages().getUrls();
-            log.info(formImageUrls.toString());
-            imageBDHotelUrls.addAll(formImageUrls);
-        }else{
-            hotel.setImages(hotelFromBD.getImages());
+    public void updateFieldById(long id, String fieldName, HotelEditModel hotelModel) throws IOException {
+        Hotel hotel = hotelRepository.getById(id);
+        switch (fieldName) {
+            case "name":
+                String formName = hotelModel.getName();
+                if(!formName.isEmpty()){
+                    hotel.setName(formName);
+                }
+                String stars = hotelModel.getStars();
+                if(!stars.isEmpty()) {
+                    hotel.setStars(Integer.parseInt(stars));
+                }
+                break;
+            case "country":
+                String formCity = hotelModel.getCity();
+                String formCountry = hotelModel.getCountry();
+                if(!formCity.isEmpty() && !formCountry.isEmpty()){
+                    Country country = new Country();
+                    country.setCity(formCity);
+                    country.setName(formCountry);
+                    hotel.setCountry(country);
+                }
+                break;
+            case "lineFromTheSea":
+                String lineFromTheSea = hotelModel.getLineFromTheSea();
+                log.info(lineFromTheSea);
+                if(!lineFromTheSea.isEmpty()){
+                    hotel.setLineFromTheSea(Integer.parseInt(lineFromTheSea));
+                }
+                break;
+            case "typeOfFood":
+                log.info(hotelModel.getTypeOfFood().name());
+                hotel.setTypeOfFood(hotelModel.getTypeOfFood());
+                break;
+            case "description":
+                hotel.setDescription(hotelModel.getDescription());
+                break;
+            case "images":
+                List<MultipartFile> formImages = hotelModel.getImages();
+                if (formImages != null) {
+                    Image uploadedHotelImage = imageService.upload(formImages, "hotel", id);
+                    String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
+                    Image hotelImages = hotel.getImages();
+                    List<String> imagesUrls = hotelImages.getUrls();
+                    imagesUrls.remove(defaultImage);
+                    imagesUrls.addAll(uploadedHotelImage.getUrls());
+                }
+                break;
         }
-        Hotel save = hotelRepository.save(hotel);
-        log.info(save.toString());
-    }
-
-    @Override
-    public boolean theSameHotel(long id, String name){
-        Optional<Hotel> byId = hotelRepository.findById(id);
-        Optional<Hotel> byName = hotelRepository.getByName(name);
-        if (byId.isPresent() && byName.isPresent()){
-            return byId.equals(byName);
-        }
-        return false;
+        hotelRepository.save(hotel);
     }
 }

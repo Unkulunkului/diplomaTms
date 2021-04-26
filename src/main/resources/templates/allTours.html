@@ -25,15 +25,17 @@
             </div>
         </div>
     </div>
-    <div th:unless="${emptyList==null}" class="uk-position-large uk-position-center-left">
+    <div th:unless="${emptyList==null}" class="uk-width-3-4">
         <p class="uk-text-large uk-text-italic" style="color: teal" th:text="${emptyList}"></p>
     </div>
-    <div th:if="${emptyList==null}" class="uk-width-1-4">
+    <div class="uk-width-1-4">
         <div class="uk-card uk-card-default uk-card-body">
             <form th:action="@{filter}" th:object="${tourFilterModel}" method="post">
                 <fieldset class="uk-fieldset">
                     <legend class="uk-legend">Filter</legend>
                     <div class="uk-margin">
+                        <span style="color: teal">Hotel name: </span>
+                        <div><input class="uk-input uk-width-2-4@s" type="text" name ="hotelName"/></div>
                         <span style="color: teal">Price: </span>
                         <div><input class="uk-input uk-width-1-4@s" type="text" name ="startPrice"/><span>-</span>
                             <input class="uk-input uk-width-1-4@s" type="text" name = "finishPrice"/><span> $</span></div>

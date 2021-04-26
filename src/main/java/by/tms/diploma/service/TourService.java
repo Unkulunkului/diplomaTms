@@ -1,9 +1,6 @@
 package by.tms.diploma.service;
 
-import by.tms.diploma.entity.Tour;
-
-import by.tms.diploma.entity.TourAddModel;
-import by.tms.diploma.entity.TypeOfRest;
+import by.tms.diploma.entity.*;
 
 
 import java.io.IOException;
@@ -22,7 +19,8 @@ public interface TourService {
     void update(Tour tour);
     boolean theSameTour(long id, String name);
     Tour getById(long id);
-    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice, int startTourDuration,
-                                                           int startDayAtSea, TypeOfRest typeOfRest);
+    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice, int startTourDuration,
+                                                                      int startDayAtSea, TypeOfRest typeOfRest, long startId, long finishId);
     String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea);
+    void updateFieldById(long id, String fieldName, TourEditModel hotelModel) throws IOException;
 }

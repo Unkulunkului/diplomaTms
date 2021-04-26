@@ -12,8 +12,18 @@
     <div class="uk-child-width-expand@s uk-margin-left uk-margin-top uk-margin-right" uk-grid>
         <div class="uk-grid-item-match">
             <div class="uk-card uk-card-default uk-card-body">
-                <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue" th:text="${hotel.name}
+                <div class="uk-inline">
+                    <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue" th:text="${hotel.name}
                 +' '+${hotel.stars}+'*'"></h1>
+<!--                    sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+                    <form th:action="@{edit}" method="get">
+                        <input type="hidden" name="id" th:value="${hotel.id}">
+                        <input type="hidden" name="nameOfEditableField" th:value="'name'">
+                        <button class="uk-button uk-button-text">
+                            <span uk-icon="icon: pencil"></span>
+                        </button>
+                    </form>
+                </div>
                 <div class="uk-visible-toggle uk-light" tabindex="-1" uk-slider="center: true">
                     <ul class="uk-slider-items uk-grid">
                         <li class="uk-width-auto" th:each="url: ${hotel.images.urls}">
@@ -29,15 +39,22 @@
                     </ul>
                 </div>
                 <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
-<!--                    -->
+<!--                                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+                    <form  th:action="@{edit}" method="get">
+                        <input type="hidden" name="id" th:value="${hotel.id}">
+                        <input type="hidden" name="nameOfEditableField" th:value="'images'">
+                        <button class="uk-button uk-button-text">
+                            <span uk-icon="icon: pencil"></span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="uk-position-relative-center">
-            <label for="countries" class="uk-text-large uk-text-itali" style="color: teal">
+            <label for="tours" class="uk-text-large uk-text-itali" style="color: teal">
                 Available tours: </label>
             <br>
-            <div id="countries">
+            <div id="tours">
                     <span th:if="${!hotel.tours.isEmpty()}" class="uk-text-italic" th:each="tour, state: ${hotel.tours}">
                          <a class="uk-text-italic" style="color: darkolivegreen"
                             th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a>
@@ -46,7 +63,17 @@
                 <span th:unless="${!hotel.tours.isEmpty()}">No tours</span>
             </div>
             <hr>
-            <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
+            <div class="uk-inline">
+                <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
+<!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+                <form  th:action="@{edit}" method="get">
+                    <input type="hidden" name="id" th:value="${hotel.id}">
+                    <input type="hidden" name="nameOfEditableField" th:value="'country'">
+                    <button class="uk-button uk-button-text">
+                        <span uk-icon="icon: pencil"></span>
+                    </button>
+                </form>
+            </div>
             <br>
             <span id="country" th:text="${hotel.country.name}+', '+${hotel.country.city}"></span>
             <br>
@@ -63,13 +90,33 @@
                 <span style="color: coral" th:text="${weatherCityError}"></span>
             </div>
             <hr>
-            <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
-                Line from the sea: </label>
+            <div class="uk-inline">
+                <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
+                    Line from the sea: </label>
+                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+                <form  th:action="@{edit}" method="get">
+                    <input type="hidden" name="id" th:value="${hotel.id}">
+                    <input type="hidden" name="nameOfEditableField" th:value="'lineFromTheSea'">
+                    <button class="uk-button uk-button-text">
+                        <span uk-icon="icon: pencil"></span>
+                    </button>
+                </form>
+            </div>
             <br>
             <span id="lineFromTheSea" th:text="${hotel.lineFromTheSea}"></span>
             <hr>
-            <label for="typeOfFood" class="uk-text-italic uk-text-large" style="color: teal">
-                Type of food: </label>
+            <div class="uk-inline">
+                <label for="typeOfFood" class="uk-text-italic uk-text-large" style="color: teal">
+                    Type of food: </label>
+                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+                <form  th:action="@{edit}" method="get">
+                    <input type="hidden" name="id" th:value="${hotel.id}">
+                    <input type="hidden" name="nameOfEditableField" th:value="typeOfFood">
+                    <button class="uk-button uk-button-text">
+                        <span uk-icon="icon: pencil"></span>
+                    </button>
+                </form>
+            </div>
             <br>
             <span id="typeOfFood" th:text="${hotel.typeOfFood}"></span>
             <hr>
@@ -81,6 +128,14 @@
     </div>
 </div>
 <div  th:if="${incorrectId==null}" style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
+    <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
+    <form  th:action="@{edit}" method="get">
+        <input type="hidden" name="id" th:value="${hotel.id}">
+        <input type="hidden" name="nameOfEditableField" th:value="'description'">
+        <button class="uk-button uk-button-text">
+            <span uk-icon="icon: pencil"></span>
+        </button>
+    </form>
     <uk uk-accordion>
         <li>
             <a class="uk-accordion-title uk-text-large uk-text-italic uk-text-uppercase"

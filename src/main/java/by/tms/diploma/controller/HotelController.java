@@ -3,14 +3,12 @@ package by.tms.diploma.controller;
 import by.tms.diploma.entity.*;
 
 import by.tms.diploma.service.HotelService;
-import by.tms.diploma.service.ImageService;
 import by.tms.diploma.service.WeatherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,9 +26,6 @@ public class HotelController {
     private HotelService hotelService;
 
     @Autowired
-    private ImageService imageService;
-
-    @Autowired
     private WeatherService weatherService;
 
 
@@ -40,6 +35,7 @@ public class HotelController {
         Optional<Hotel> byId = hotelService.findById(id);
         if (byId.isPresent()) {
             Hotel hotel = byId.get();
+            log.info(hotel.toString());
             Weather weather = weatherService.getWeather(hotel.getCountry().getCity());
             if(weather!=null){
                 modelAndView.addObject("weather", weather);
@@ -60,7 +56,6 @@ public class HotelController {
         List<Hotel> allHotels = hotelService.findAll();
         if (!allHotels.isEmpty()) {
             modelAndView.addObject("hotels", allHotels);
-//            modelAndView.addObject("tourFilterModel", new TourFilterModel());
         }else{
             modelAndView.addObject("emptyList", "Hotel list is empty");
         }
@@ -111,55 +106,50 @@ public class HotelController {
     }
 
 
-
     @GetMapping(path = "/edit")
-    public ModelAndView editView(Long id, ModelAndView modelAndView){
-        if(id != null && hotelService.existsById(id)){
-            Optional<Hotel> optionalHotel = hotelService.findById(id);
-            optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
-            modelAndView.addObject("hotelForm", new HotelAddModel());
-        }else {
-            modelAndView.addObject("incorrectId", "Input id is incorrect!");
+    public ModelAndView editView(String nameOfEditableField, Long id, ModelAndView modelAndView){
+        if(nameOfEditableField!= null){
+            if(id != null && hotelService.existsById(id)){
+                Optional<Hotel> optionalHotel = hotelService.findById(id);
+                optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
+                modelAndView.addObject("hotelForm", new HotelEditModel());
+                modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+            }else {
+                modelAndView.addObject("incorrectId", "Input id is incorrect!");
+            }
+        }else{
+            modelAndView.addObject("incorrectField", "Input field is incorrect!");
         }
         modelAndView.setViewName("editHotel");
         return modelAndView;
     }
 
-
     @PostMapping(path = "/edit")
-    public ModelAndView editTour (long hotelId, @Valid @ModelAttribute("hotelForm") HotelAddModel hotelModel,
+    public ModelAndView editTour (long id, String nameOfEditableField, @Valid @ModelAttribute("hotelForm") HotelEditModel hotelModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+        log.info(id+"");
+        log.info(hotelModel.toString());
+        log.info(nameOfEditableField);
         if(!bindingResult.hasErrors()){
-            if(hotelService.theSameHotel(hotelId, hotelModel.getName()) || !hotelService.existsByName(hotelModel.getName())){
-                Hotel hotel = new Hotel();
-                hotel.setLineFromTheSea(Integer.parseInt(hotelModel.getLineFromTheSea()));
-                hotel.setDescription(hotelModel.getDescription());
-                String formCity = hotelModel.getCity();
-                String formCountry = hotelModel.getCountry();
-                Country country = new Country();
-                country.setCity(formCity);
-                country.setName(formCountry);
-                hotel.setCountry(country);
-                hotel.setStars(Integer.parseInt(hotelModel.getStars()));
-                hotel.setName(hotelModel.getName());
-                hotel.setId(hotelId);
-                List<MultipartFile> images = hotelModel.getImages();
-                if(images !=null){
-                    Image hotelImage = imageService.upload(images, "hotel", hotelId);
-                    hotel.setImages(hotelImage);
-                }
-                hotelService.update(hotel);
-                modelAndView.setViewName("redirect:/hotel/"+hotelId);
-            }else {
+            String name = hotelModel.getName();
+            if(nameOfEditableField.equals("name") && hotelService.existsByName(name)){
+                log.info("name ex");
                 modelAndView.addObject("doesHotelNameExist", true);
                 modelAndView.setViewName("editHotel");
+            }else {
+                hotelService.updateFieldById(id, nameOfEditableField, hotelModel);
+                log.info("update");
+                modelAndView.setViewName("redirect:/hotel/"+ id);
             }
         }else{
+            log.info("binding");
             modelAndView.setViewName("editHotel");
         }
         if(modelAndView.getViewName().equals("editHotel")){
-            Optional<Hotel> optionalHotel = hotelService.findById(hotelId);
+            Optional<Hotel> optionalHotel = hotelService.findById(id);
             optionalHotel.ifPresent(hotel -> modelAndView.addObject("hotel", hotel));
+            modelAndView.addObject("nameOfEditableField", nameOfEditableField);
+            modelAndView.addObject("id", id);
         }
         return modelAndView;
     }

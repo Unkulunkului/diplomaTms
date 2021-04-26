@@ -12,6 +12,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,11 +83,11 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRest(double startPrice, double finishPrice,
-                                                                  int startTourDuration, int startDayAtSea,
-                                                                  TypeOfRest typeOfRest) {
-        return tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEquals(
-                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest);
+    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice,
+                                                                             int startTourDuration, int startDayAtSea,
+                                                                             TypeOfRest typeOfRest, long startId, long finishId) {
+        return tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
+                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest, startId, finishId);
     }
 
     @Override
@@ -100,6 +101,11 @@ public class TourServiceImpl implements TourService {
         }else{
             return "Ok";
         }
+    }
+
+    @Override
+    public void updateFieldById(long id, String fieldName, TourEditModel hotelModel) throws IOException {
+
     }
 
     @Override
