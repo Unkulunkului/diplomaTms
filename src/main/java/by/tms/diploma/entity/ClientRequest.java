@@ -21,7 +21,7 @@ public class ClientRequest {
     private String name;
     @Pattern(regexp = "(\\+)?\\d{7,15}")
     private String number;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Tour> tours;
     private ClientRequestStatusEnum requestStatus;
     private long curatorId;

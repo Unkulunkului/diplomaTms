@@ -21,5 +21,6 @@ public class SessionListener implements HttpSessionListener{
     public void sessionCreated(HttpSessionEvent se) {
         HttpSession session = se.getSession();
         session.setAttribute("wishes", new ArrayList<Tour>());
+        log.info("Wishes was created");
     }
 }

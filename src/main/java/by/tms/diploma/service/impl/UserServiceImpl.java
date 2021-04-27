@@ -26,45 +26,51 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        log.info("Save user "+user.getUsername());
         String encode = passwordEncoder.encode(user.getPassword());
         user.setPassword(encode);
         List<UserRole> rolesRoles = new ArrayList<>();
         rolesRoles.add(UserRole.USER);
-        rolesRoles.add(UserRole.MODERATOR);
+        rolesRoles.add(UserRole.MODERATOR);//////////////////////!!!!!!!!!!!!
         user.setRoles(rolesRoles);
         User save = userRepository.save(user);
-        log.info("User "+user.getUsername()+" was saved"); //mark as service
-        log.info(save.toString()); //delete
+        log.info("User "+user.getUsername()+" was saved");
         return save;
     }
 
     @Override
     public boolean isEmailAlreadyExists(String email) {
+        log.info("Exist user by email(email = "+email+")");
         return userRepository.existsByEmail(email);
     }
 
     @Override
     public boolean isUsernameAlreadyExists(String username) {
+        log.info("Exist user by username(username = "+username+")");
         return userRepository.existsByUsername(username);
     }
 
     @Override
     public Optional<User> getByUsername(String username) {
+        log.info("Find user by username(username = "+username+")");
         return userRepository.findByUsername(username);
     }
 
     @Override
     public Optional<User> getById(long id) {
+        log.info("Exist user by id(id = "+id+")");
         return userRepository.findById(id);
     }
 
     @Override
     public List<User> getUsersByRole(UserRole role) {
+        log.info("Find users by role(role = "+role+")");
         return userRepository.findAllByRolesContains(role);
     }
 
     @Override
     public void updateRoleById(long id, UserRole role) {
+        log.info("Update user role by id(id = "+id+") with user role = "+role);
         Optional<User> byId = userRepository.findById(id);
         if (byId.isPresent()) {
             User user = byId.get();
@@ -72,8 +78,10 @@ public class UserServiceImpl implements UserService {
             if (!roles.contains(UserRole.ADMIN)) {
                 if(roles.contains(role)){
                     roles.remove(role);
+                    log.info("role was removed");
                 }else {
                     roles.add(role);
+                    log.info("role was added");
                 }
                 userRepository.save(user);
             }

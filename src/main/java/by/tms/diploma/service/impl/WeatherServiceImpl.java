@@ -18,6 +18,7 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Override
     public Weather getWeather(String city){
+        log.info("Get weather from api weatherbit.io. City="+city);
         String url = "http://api.weatherbit.io/v2.0/forecast/daily?key=6152203e44da4d0d8f0ac2ff00f5d159&lang=eng&" +
                 "city="+city+"&days=3";
         ResponseEntity<Weather> forEntity = restTemplate.getForEntity(url, Weather.class);
