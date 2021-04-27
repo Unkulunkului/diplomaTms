@@ -3,6 +3,8 @@ package by.tms.diploma.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,13 +18,14 @@ import java.util.List;
 public class ClientRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "client_request_id")
     private long id;
     @NotBlank(message = "Enter something...")
     private String name;
     @Pattern(regexp = "(\\+)?\\d{7,15}")
     private String number;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Tour> tours;
+    @ElementCollection
+    private List<String> tourName;
     private ClientRequestStatusEnum requestStatus;
     private long curatorId;
 }

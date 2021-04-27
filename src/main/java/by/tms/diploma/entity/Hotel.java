@@ -19,6 +19,7 @@ import java.util.Set;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hotel_id")
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
     private Country country;

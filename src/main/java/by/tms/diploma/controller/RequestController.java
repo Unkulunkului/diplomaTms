@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,11 @@ public class RequestController {
         if(!bindingResult.hasErrors()){
             log.info("No binding result errors");
             List<Tour> wishes = (List<Tour>) httpSession.getAttribute("wishes");
-            clientRequest.setTours(wishes);
+            List<String> tourNames = new ArrayList<>();
+            for (Tour tour : wishes) {
+                tourNames.add(tour.getName());
+            }
+            clientRequest.setTourName(tourNames);
             clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
             requestService.save(clientRequest);
             wishes.clear();

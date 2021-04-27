@@ -27,12 +27,12 @@
             <td th:text="${request.number}"></td>
             <td>
                 <button class="uk-button uk-button-text">Tours</button>
-                <div uk-dropdown th:if="${!request.tours.isEmpty()}">
-                    <ul class="uk-nav uk-dropdown-nav" th:each="tour : ${request.tours}" style="position:relative; z-index:1000;">
-                        <li class="uk-active"><a th:href="@{'/tour/'+${tour.id}}" th:text="${tour.name}"></a></li>
+                <div uk-dropdown th:if="${!request.tourName.isEmpty()}">
+                    <ul class="uk-nav uk-dropdown-nav" th:each="tour : ${request.tourName}" style="position:relative; z-index:1000;">
+                        <li class="uk-active"><p th:text="${tour}"></p></li>
                     </ul>
                 </div>
-                <div uk-dropdown th:unless="${!request.tours.isEmpty()}">
+                <div uk-dropdown th:unless="${!request.tourName.isEmpty()}">
                     <p>No tours</p>
                 </div>
             </td>

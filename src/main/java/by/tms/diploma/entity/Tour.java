@@ -18,9 +18,11 @@ import java.util.Objects;
 public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tour_id")
     private long id;
     private String name;
     @ManyToOne
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
     private TypeOfRest typeOfRest;
     @Column(length = 3000)
