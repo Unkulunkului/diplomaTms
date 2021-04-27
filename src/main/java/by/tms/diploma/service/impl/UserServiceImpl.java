@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         String encode = passwordEncoder.encode(user.getPassword());
         user.setPassword(encode);
         List<UserRole> rolesRoles = new ArrayList<>();
@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
         User save = userRepository.save(user);
         log.info("User "+user.getUsername()+" was saved"); //mark as service
         log.info(save.toString()); //delete
+        return save;
     }
 
     @Override

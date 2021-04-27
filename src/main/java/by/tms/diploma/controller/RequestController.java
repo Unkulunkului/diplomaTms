@@ -35,15 +35,18 @@ public class RequestController {
 
 
     @GetMapping(path = "/fromClients")
-    public ModelAndView getClientRequestsView(ModelAndView modelAndView){
-        modelAndView.addObject("list", requestService.getAllRequest());
+    public ModelAndView getListClientRequestsView(ModelAndView modelAndView){
+        log.info("Try to get list with client requests");
+        List<ClientRequest> allRequest = requestService.getAllRequest();
+        modelAndView.addObject("list", allRequest);
+        log.info("Number of requests: "+allRequest.size());
         modelAndView.setViewName("clientRequests");
         return modelAndView;
     }
 
     @GetMapping
     public ModelAndView getRequestView(ModelAndView modelAndView){
-        log.info("get");
+        log.info("Try to open page with a request form");
         modelAndView.addObject("clientRequest", new ClientRequest());
         modelAndView.setViewName("request");
         return modelAndView;
@@ -53,8 +56,9 @@ public class RequestController {
     public ModelAndView postRequestView(@Valid @ModelAttribute("clientRequest") ClientRequest clientRequest,
                                         BindingResult bindingResult, ModelAndView modelAndView, HttpSession httpSession,
                                         RedirectAttributes redirectAttributes){
-        log.info(clientRequest.toString());
+        log.info("Client request: "+clientRequest.toString());
         if(!bindingResult.hasErrors()){
+            log.info("No binding result errors");
             List<Tour> wishes = (List<Tour>) httpSession.getAttribute("wishes");
             clientRequest.setTours(wishes);
             clientRequest.setRequestStatus(ClientRequestStatusEnum.WAITING);
@@ -64,6 +68,7 @@ public class RequestController {
             redirectAttributes.addFlashAttribute("result", "Your request has been sent. Wait for our call :)");
             modelAndView.setViewName("redirect:/tour/all");
         }else {
+            log.info("Binding result has errors");
             modelAndView.setViewName("request");
         }
         return modelAndView;
@@ -73,6 +78,8 @@ public class RequestController {
     @PostMapping("/fromClients/setStatus")
     public ModelAndView postSetStatus(ClientRequestModel clientRequestModel, ModelAndView modelAndView,
                                       HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
+        log.info("Set request status");
+        log.info("Client request model: "+ clientRequestModel.toString());
         long requestId = clientRequestModel.getId();
         Optional<ClientRequest> requestById = requestService.findById(requestId);
         Principal userPrincipal = httpServletRequest.getUserPrincipal();
@@ -84,6 +91,7 @@ public class RequestController {
                 if(requestById.isPresent()){
                     ClientRequest clientRequest = requestById.get();
                     if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
+                        log.info("Check client status fro completeness");
                         ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
                         switch (status){
                             case IN_PROGRESS:

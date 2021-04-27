@@ -9,7 +9,7 @@
 <body>
 <html th:include="_header"/>
 <div th:if="${alreadyAdded!=null}" class="uk-alert-primary uk-container-xsmall uk-position-large
-    uk-position-bottom-center" uk-alert>
+    uk-position-bottom-right" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${alreadyAdded}"></p>
 </div>
@@ -138,7 +138,7 @@
                     </form>
                     <hr>
                 </div>
-                <form th:action="@{addToWishes}" method="post">
+                <form th:action="@{/wishes/add}" method="post">
                     <input type="hidden" name="tourId" th:value="${tour.id}">
                     <button class="uk-button uk-button-default">Add to wishes</button>
                 </form>

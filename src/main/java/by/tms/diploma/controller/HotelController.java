@@ -83,7 +83,7 @@ public class HotelController {
     public ModelAndView postHotelAddView(@Valid @ModelAttribute("hotelAddForm") HotelAddModel hotelAddModel,
                                          BindingResult bindingResult, ModelAndView modelAndView,
                                          RedirectAttributes redirectAttributes) {
-        log.info("Request to add hotel");
+        log.info("Try to add hotel");
         log.info("Add model: "+hotelAddModel.toString());
         if(!bindingResult.hasErrors()){
             log.info("No binding result errors");
@@ -108,7 +108,8 @@ public class HotelController {
                 hotel.setImages(images);
                 redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
                         "' was created!");
-                hotelService.add(hotel);
+                Hotel save = hotelService.save(hotel);
+                log.info("Hotel "+save+" was saved");
                 modelAndView.setViewName("redirect:/hotel/add");
             }else {
                 log.info("Hotel with name '"+hotelAddModel.getName()+" already exists");
@@ -150,7 +151,7 @@ public class HotelController {
     @PostMapping(path = "/edit")
     public ModelAndView editHotel (long id, String nameOfEditableField, @Valid @ModelAttribute("hotelForm") HotelEditModel hotelModel,
                                   BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
-        log.info("Request to edit hotel");
+        log.info("Try to edit hotel");
         log.info("Edit parameters: name of editable field = "+nameOfEditableField+", id = "+id);
         log.info("Edit model: "+hotelModel);
         if(!bindingResult.hasErrors()){

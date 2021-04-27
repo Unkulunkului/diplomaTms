@@ -15,6 +15,7 @@
             <th>TOUR NAME</th>
             <th>Type of rest</th>
             <th>PRICE</th>
+            <th>REMOVE</th>
         </tr>
         </thead>
         <tbody>
@@ -22,9 +23,20 @@
             <td th:text="${tour.name}"></td>
             <td th:text="${tour.typeOfRest.getStringName(tour.typeOfRest)}"></td>
             <td th:text="${tour.price}"></td>
+            <td>
+                <form th:action="@{'/wishes/remove/tour/'+${tour.id}}" method="post">
+                    <button class="uk-button uk-button-text">
+                        <span uk-icon="icon: minus-circle"></span>
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
+</div>
+<div th:if="${remove != null}" class="uk-alert-success uk-container-xsmall uk-position-bottom-right" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${remove}"></p>
 </div>
 </body>
 </html>
