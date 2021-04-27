@@ -2,14 +2,7 @@ package by.tms.diploma.listener;
 
 
 import by.tms.diploma.entity.Tour;
-import by.tms.diploma.entity.User;
-import by.tms.diploma.entity.UserRole;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;

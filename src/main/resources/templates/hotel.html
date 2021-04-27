@@ -15,8 +15,7 @@
                 <div class="uk-inline">
                     <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue" th:text="${hotel.name}
                 +' '+${hotel.stars}+'*'"></h1>
-<!--                    sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                    <form th:action="@{edit}" method="get">
+                    <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                         <input type="hidden" name="id" th:value="${hotel.id}">
                         <input type="hidden" name="nameOfEditableField" th:value="'name'">
                         <button class="uk-button uk-button-text">
@@ -39,8 +38,7 @@
                     </ul>
                 </div>
                 <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
-<!--                                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                    <form  th:action="@{edit}" method="get">
+                    <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                         <input type="hidden" name="id" th:value="${hotel.id}">
                         <input type="hidden" name="nameOfEditableField" th:value="'images'">
                         <button class="uk-button uk-button-text">
@@ -65,8 +63,7 @@
             <hr>
             <div class="uk-inline">
                 <label for="country" class="uk-text-large uk-text-italic" style="color: teal">Country: </label>
-<!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${hotel.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'country'">
                     <button class="uk-button uk-button-text">
@@ -93,8 +90,7 @@
             <div class="uk-inline">
                 <label for="lineFromTheSea" class="uk-text-italic uk-text-large" style="color: teal">
                     Line from the sea: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${hotel.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'lineFromTheSea'">
                     <button class="uk-button uk-button-text">
@@ -108,8 +104,7 @@
             <div class="uk-inline">
                 <label for="typeOfFood" class="uk-text-italic uk-text-large" style="color: teal">
                     Type of food: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"  th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${hotel.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="typeOfFood">
                     <button class="uk-button uk-button-text">

@@ -35,7 +35,7 @@
                                 <span sec:authentication="name"></span>
                             </li>
                             <br>
-                            <li>
+                            <li sec:authorize="hasAnyAuthority('ADMIN')">
                                 <a href="#">Admin panel</a>
                                 <div uk-dropdown="pos: right-center">
                                     <ul class="uk-nav uk-navbar-dropdown-nav">
@@ -43,7 +43,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li>
+                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
                                 <a href="#">Moderator panel</a>
                                 <div uk-dropdown="pos: right-center">
                                     <ul class="uk-nav uk-navbar-dropdown-nav">

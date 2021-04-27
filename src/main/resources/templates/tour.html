@@ -18,8 +18,7 @@
             <div class="uk-grid-item-match">
             <div class="uk-card uk-card-default uk-card-body">
             <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue" th:text="${tour.name}"></h1>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'name'">
                     <button class="uk-button uk-button-text">
@@ -41,8 +40,7 @@
                     </ul>
                 </div>
                 <div class="uk-margin-left uk-margin-top uk-margin-bottom uk-margin-right">
-                    <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                    <form  th:action="@{edit}" method="get">
+                    <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                         <input type="hidden" name="id" th:value="${tour.id}">
                         <input type="hidden" name="nameOfEditableField" th:value="'images'">
                         <button class="uk-button uk-button-text">
@@ -56,8 +54,7 @@
                 <br>
                 <label for="countries" class="uk-text-large uk-text-itali" style="color: teal">
                     Countries you will visit: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'visitedCountries'">
                     <button class="uk-button uk-button-text">
@@ -72,8 +69,7 @@
                 <hr>
                 <label for="typeOfRest" class="uk-text-large uk-text-italic" style="color: teal">
                     Type of rest: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'typeOfRest'">
                     <button class="uk-button uk-button-text">
@@ -85,8 +81,7 @@
                 <hr>
                 <label for="tourDuration" class="uk-text-large uk-text-italic" style="color: teal">
                     Tour duration: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'tourDuration'">
                     <button class="uk-button uk-button-text">
@@ -99,8 +94,7 @@
                 <hr>
                 <label for="restHotel" class="uk-text-large uk-text-italic" style="color: teal">
                     Hotel where you will relax by the sea: </label>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'hotelName'">
                     <button class="uk-button uk-button-text">
@@ -118,8 +112,7 @@
                 <hr>
                 <label class="uk-text-large uk-text-italic" style="color: teal">Price: </label>
                 <span class="uk-text-large uk-text-italic uk-text-uppercase" style="color: coral" th:text="${tour.price}+' $'"></span>
-                <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-                <form  th:action="@{edit}" method="get">
+                <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
                     <input type="hidden" name="id" th:value="${tour.id}">
                     <input type="hidden" name="nameOfEditableField" th:value="'price'">
                     <button class="uk-button uk-button-text">
@@ -128,26 +121,25 @@
                 </form>
                 <hr>
                 <div sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
-<!--                    <form th:action="@{edit}" method="get">-->
-<!--                        <input type="hidden" name="id" th:value="${tour.id}">-->
-<!--                        <button class="uk-button uk-button-default">Edit</button>-->
-<!--                    </form>-->
                     <form th:action="@{delete}" method="post">
                         <input type="hidden" name="id" th:value="${tour.id}">
                         <button class="uk-button uk-button-default">Delete</button>
                     </form>
                     <hr>
                 </div>
-                <form th:action="@{/wishes/add}" method="post">
+                <form sec:authorize="isAuthenticated()" th:action="@{/wishes/add}" method="post">
                     <input type="hidden" name="tourId" th:value="${tour.id}">
                     <button class="uk-button uk-button-default">Add to wishes</button>
+                </form>
+                <form sec:authorize="isAnonymous()" th:action="@{/wishes/add}" method="post">
+                    <input type="hidden" name="tourId" th:value="${tour.id}">
+                    <button class="uk-button uk-button-default" disabled>Sing in to add</button>
                 </form>
             </div>
         </div>
 </div>
 <div  th:if="${incorrectId==null}" style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
-    <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-    <form  th:action="@{edit}" method="get">
+    <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')" th:action="@{edit}" method="get">
         <input type="hidden" name="id" th:value="${tour.id}">
         <input type="hidden" name="nameOfEditableField" th:value="'description'">
         <button class="uk-button uk-button-text">
