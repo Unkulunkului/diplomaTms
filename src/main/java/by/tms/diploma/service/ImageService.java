@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ImageService {
-    Image upload(List<MultipartFile> files, String entityName, long entityId) throws IOException;
+    Image upload(MultipartFile file, String entityName, long entityId) throws IOException;
 }

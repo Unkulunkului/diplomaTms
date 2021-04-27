@@ -26,11 +26,11 @@
                 </div>
                 <div class="uk-visible-toggle uk-light" tabindex="-1" uk-slider="center: true">
                     <ul class="uk-slider-items uk-grid">
-                        <li class="uk-width-auto" th:each="url: ${hotel.images.urls}">
+                        <li class="uk-width-auto" th:each="image: ${hotel.images}">
                             <div class="uk-panel">
                                 <div class="uk-card-media-left uk-cover-container">
-                                    <a class="uk-inline" th:href="${url}" data-caption="Caption 1">
-                                        <img th:src="@{${url}}" width="500" height="400" alt="" uk-cover>
+                                    <a class="uk-inline" th:href="${image.url}" data-caption="Caption 1">
+                                        <img th:src="@{${image.url}}" width="500" height="400" alt="" uk-cover>
                                         <canvas width="500" height="400"></canvas>
                                     </a>
                                 </div>

@@ -60,23 +60,23 @@ public class TourServiceImpl implements TourService {
         tourRepository.deleteById(id);
     }
 
-    @Override
-    public void update(Tour tour) {
-        long id = tour.getId();
-        Tour tourFromBD = tourRepository.getById(id);
-        log.info(tour.toString());
-        if(tour.getImages()!= null){
-            Image tourFromBDImages = tourFromBD.getImages();
-            List<String> tourFromBDImageUrls = tourFromBDImages.getUrls();
-            String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-            tourFromBDImageUrls.remove(defaultImage);
-            List<String> formImageUrls = tour.getImages().getUrls();
-            tourFromBDImageUrls.addAll(formImageUrls);
-        }else{
-            tour.setImages(tourFromBD.getImages());
-        }
-        tourRepository.save(tour);
-    }
+//    @Override
+//    public void update(Tour tour) {
+//        long id = tour.getId();
+//        Tour tourFromBD = tourRepository.getById(id);
+//        log.info(tour.toString());
+//        if(tour.getImages()!= null){
+//            Image tourFromBDImages = tourFromBD.getImages();
+//            List<String> tourFromBDImageUrls = tourFromBDImages.getUrls();
+//            String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
+//            tourFromBDImageUrls.remove(defaultImage);
+//            List<String> formImageUrls = tour.getImages().getUrls();
+//            tourFromBDImageUrls.addAll(formImageUrls);
+//        }else{
+//            tour.setImages(tourFromBD.getImages());
+//        }
+//        tourRepository.save(tour);
+//    }
 
     @Override
     public Tour getById(long id) {
@@ -156,25 +156,26 @@ public class TourServiceImpl implements TourService {
             case "images":
                 List<MultipartFile> formImages = tourModel.getImages();
                 if (formImages != null) {
-                    Image uploadedHotelImage = imageService.upload(formImages, "hotel", id);
+                    List<Image> images = tour.getImages();
                     String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-                    Image hotelImages = tour.getImages();
-                    List<String> imagesUrls = hotelImages.getUrls();
-                    imagesUrls.remove(defaultImage);
-                    imagesUrls.addAll(uploadedHotelImage.getUrls());
+                    images.removeIf(image -> image.getUrl().equals(defaultImage));
+                    for (MultipartFile formImage : formImages) {
+                        Image uploadedHotelImage = imageService.upload(formImage, "tour", id);
+                        images.add(uploadedHotelImage);
+                    }
                 }
                 break;
         }
         tourRepository.save(tour);
     }
 
-    @Override
-    public boolean theSameTour(long id, String name){
-        Optional<Tour> byId = tourRepository.findById(id);
-        Optional<Tour> byName = tourRepository.getByName(name);
-        if (byId.isPresent() && byName.isPresent()){
-            return byId.equals(byName);
-        }
-        return false;
-    }
+//    @Override
+//    public boolean theSameTour(long id, String name){
+//        Optional<Tour> byId = tourRepository.findById(id);
+//        Optional<Tour> byName = tourRepository.getByName(name);
+//        if (byId.isPresent() && byName.isPresent()){
+//            return byId.equals(byName);
+//        }
+//        return false;
+//    }
 }

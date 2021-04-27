@@ -26,8 +26,8 @@ public class Tour {
     @Column(length = 3000)
     private String description;
     private double price;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Image images;
+    @OneToMany(cascade = CascadeType.ALL)
+    List<Image> images;
     private String visitedCountries;
     private int tourDuration;
     private int dayAtSea;

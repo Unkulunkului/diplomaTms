@@ -88,9 +88,11 @@ public class HotelController {
                 hotel.setDescription(hotelAddModel.getDescription());
                 hotel.setTypeOfFood(hotelAddModel.getTypeOfFood());
                 hotel.setLineFromTheSea(Integer.parseInt(hotelAddModel.getLineFromTheSea()));
+                List<Image> images = new ArrayList<>();
                 Image image = new Image();
-                image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
-                hotel.setImages(image);
+                images.add(image);
+                image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+                hotel.setImages(images);
                 redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
                         "' was created!");
                 hotelService.add(hotel);

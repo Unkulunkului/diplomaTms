@@ -24,8 +24,8 @@ public class Hotel {
     private Country country;
     @Column(length = 1500)
     private String description;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Image images;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Image> images;
     private String name;
     private int stars;
     private int lineFromTheSea;

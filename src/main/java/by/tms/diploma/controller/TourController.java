@@ -31,11 +31,6 @@ public class TourController {
     private HotelService hotelService;
 
 
-
-    @Autowired
-    private ImageService imageService;
-
-
     @GetMapping("/{id}")
     public ModelAndView getTourView(@PathVariable("id") long id, ModelAndView modelAndView){
         Optional<Tour> byId = tourService.findById(id);
@@ -109,8 +104,10 @@ public class TourController {
                     tour.setVisitedCountries(tourAddModel.getVisitedCountries());
                     tour.setTypeOfRest(TypeOfRest.getEnumName(tourAddModel.getTypeOfRest()));
                     Image image = new Image();
-                    image.getUrls().add("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
-                    tour.setImages(image);
+                    image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+                    List<Image> images = new ArrayList<>();
+                    images.add(image);
+                    tour.setImages(images);
                     Tour savedTour = tourService.save(tour);
                     modelAndView.setViewName("redirect:/tour/"+savedTour.getId());
                 }else {

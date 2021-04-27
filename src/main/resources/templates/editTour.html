@@ -106,7 +106,12 @@
                 </label>
             </div>
             <div th:unless="${nameOfEditableField.equals('hotelName')}">
-                <p th:text="'Hotel name: '+${tour.hotel.name}"></p>
+                <div th:if="${tour.hotel != null}">
+                    <p th:text="'Hotel name: '+${tour.hotel.name}"></p>
+                </div>
+                <div th:unless="${tour.hotel != null}">
+                    <p>Hotel name: no hotel</p>
+                </div>
             </div>
         </div >
 

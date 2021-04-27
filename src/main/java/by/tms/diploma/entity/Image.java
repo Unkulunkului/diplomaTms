@@ -16,7 +16,6 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ElementCollection
-    private List<String> urls = new ArrayList<>();
+    private String url;
 
 }

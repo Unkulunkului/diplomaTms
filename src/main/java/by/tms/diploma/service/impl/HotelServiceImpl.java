@@ -100,12 +100,13 @@ public class HotelServiceImpl implements HotelService {
             case "images":
                 List<MultipartFile> formImages = hotelModel.getImages();
                 if (formImages != null) {
-                    Image uploadedHotelImage = imageService.upload(formImages, "hotel", id);
+                    List<Image> images = hotel.getImages();
                     String defaultImage = "https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg";
-                    Image hotelImages = hotel.getImages();
-                    List<String> imagesUrls = hotelImages.getUrls();
-                    imagesUrls.remove(defaultImage);
-                    imagesUrls.addAll(uploadedHotelImage.getUrls());
+                    images.removeIf(image -> image.getUrl().equals(defaultImage));
+                    for (MultipartFile formImage : formImages) {
+                        Image uploadedHotelImage = imageService.upload(formImage, "hotel", id);
+                        images.add(uploadedHotelImage);
+                    }
                 }
                 break;
         }

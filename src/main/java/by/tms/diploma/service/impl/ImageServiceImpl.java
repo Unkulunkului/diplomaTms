@@ -20,20 +20,18 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public Image upload(List<MultipartFile> files, String entityName, long entityId) throws IOException {
+
+    @Override
+    public Image upload(MultipartFile file, String entityName, long entityId) throws IOException {
         Image image = new Image();
-        List<String> urls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            byte[] bytes = file.getBytes();
-            String base64 = Base64.getEncoder().encodeToString(bytes);
-//            Map public_id = cloudinary.uploader().upload("data:"+file.getContentType()+";base64," +base64,
-//                    ObjectUtils.asMap(
+        byte[] bytes = file.getBytes();
+        String base64 = Base64.getEncoder().encodeToString(bytes);
+//        Map public_id = cloudinary.uploader().upload("data:"+file.getContentType()+";base64," +base64,
+//                ObjectUtils.asMap(
 //                            "folder", entityName,
 //                                   "public_id", entityName+"_"+entityId+"_"+file.getOriginalFilename()));
-//            urls.add((String)public_id.get("url"));
-            urls.add("https://clck.ru/UM7kv");
-        }
-        image.setUrls(urls);
+//        image.setUrl((String)public_id.get("url"));
+        image.setUrl("https://clck.ru/UM7kv");
         return image;
     }
 }
