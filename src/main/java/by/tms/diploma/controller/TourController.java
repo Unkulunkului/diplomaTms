@@ -53,7 +53,7 @@ public class TourController {
             modelAndView.addObject("tours", allTours);
             modelAndView.addObject("tourFilterModel", new TourFilterModel());
         }else{
-            log.info("List with hotels is empty");
+            log.info("List with tours is empty");
             modelAndView.addObject("emptyList", "Tour list is empty");
         }
         modelAndView.setViewName("allTours");
