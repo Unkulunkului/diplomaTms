@@ -64,6 +64,8 @@ public class UserController {
                         userRegistrationModel.getUsername()+"' is already exist!");
                 modelAndView.setViewName("registration");
             }
+        }else {
+            modelAndView.setViewName("registration");
         }
         return modelAndView;
     }

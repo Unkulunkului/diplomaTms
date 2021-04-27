@@ -123,8 +123,7 @@
     </div>
 </div>
 <div  th:if="${incorrectId==null}" style="margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom: 5%">
-    <!--                sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"-->
-    <form  th:action="@{edit}" method="get">
+    <form sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')"  th:action="@{edit}" method="get">
         <input type="hidden" name="id" th:value="${hotel.id}">
         <input type="hidden" name="nameOfEditableField" th:value="'description'">
         <button class="uk-button uk-button-text">

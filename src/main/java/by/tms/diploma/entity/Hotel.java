@@ -6,10 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
-@ToString(exclude = "tours")
-@EqualsAndHashCode(exclude = "tours")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,6 +25,8 @@ public class Hotel {
     private String name;
     private int stars;
     private int lineFromTheSea;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy="hotel")
     private Set<Tour> tours;
     private HotelFoodEnum typeOfFood;

@@ -6,10 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 
-@Getter
-@Setter
-@ToString(exclude = "hotel")
-@EqualsAndHashCode(exclude = "hotel")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,6 +18,8 @@ public class Tour {
     private long id;
     private String name;
     @ManyToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
     private TypeOfRest typeOfRest;
