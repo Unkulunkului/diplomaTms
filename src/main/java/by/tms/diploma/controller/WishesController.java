@@ -65,8 +65,8 @@ public class WishesController {
         List<Tour> wishes = (List<Tour>) session.getAttribute("wishes");
         boolean result = wishes.removeIf(tour -> tour.getId() == id);
         if(result){
-            log.info("Tour with id="+id+" was removed from wishes");
-            redirectAttributes.addFlashAttribute("remove", "Tour was removed from your wishes");
+            log.info("Tour with id="+id+" has been removed from wishes");
+            redirectAttributes.addFlashAttribute("remove", "Tour has been removed from your wishes");
         }
         modelAndView.setViewName("redirect:/wishes");
         return modelAndView;

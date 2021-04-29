@@ -1,111 +1,115 @@
 package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.Hotel;
+import by.tms.diploma.entity.HotelEditModel;
 import by.tms.diploma.repository.HotelRepository;
+import by.tms.diploma.service.HotelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
 class HotelServiceImplTest {
 
     @Autowired
-    private HotelRepository repository;
+    private HotelService hotelService = new HotelServiceImpl();
 
-    private Hotel hotel;
-    private final String HOTEL_NAME = "Hotel";
+    @MockBean
+    private HotelRepository hotelRepository;
+
+
+    private Hotel firstHotel;
+    private Hotel secondHotel;
+    private final String FIRST_HOTEL_NAME = "First hotel name";
+    private final long FIRST_HOTEL_ID = 1L;
+    private final String SECOND_HOTEL_NAME = "Secont hotel name";
+    private final long SECOND_HOTEL_ID = 1L;
 
 
     @BeforeEach
     void setUp() {
-        hotel = new Hotel();
-        hotel.setName(HOTEL_NAME);
-//        hotel.setDescription("Description");
-//        hotel.setStars(4);
-//        hotel.s
+        firstHotel = new Hotel();
+        firstHotel.setId(FIRST_HOTEL_ID);
+        firstHotel.setName(FIRST_HOTEL_NAME);
+
+        secondHotel = new Hotel();
+        secondHotel.setId(SECOND_HOTEL_ID);
+        secondHotel.setName(SECOND_HOTEL_NAME);
     }
 
     @Test
     void existsByName() {
-        repository.save(hotel);
-        boolean actual = repository.existsByName(HOTEL_NAME);
+        Mockito.when(hotelRepository.existsByName(firstHotel.getName())).thenReturn(true);
+        boolean actual = hotelService.existsByName(FIRST_HOTEL_NAME);
         assertTrue(actual);
     }
 
     @Test
     void save() {
-        Hotel expected = hotel;
-        Hotel actual = repository.save(expected);
-        assertEquals(expected, actual);
+        Mockito.when(hotelRepository.save(Mockito.any(Hotel.class))).thenReturn(firstHotel);
+        Hotel actual = hotelService.save(firstHotel);
+        assertEquals(firstHotel, actual);
     }
 
     @Test
     void findByName() {
-        Hotel expected = hotel;
-        repository.save(expected);
-        Hotel actual = repository.findByName(HOTEL_NAME);
-        assertEquals(expected, actual);
+        Mockito.when(hotelRepository.findByName(firstHotel.getName())).thenReturn(firstHotel);
+        Hotel actual = hotelRepository.findByName(FIRST_HOTEL_NAME);
+        assertEquals(firstHotel, actual);
     }
 
     @Test
     void getById() {
-        Hotel expected = hotel;
-        Hotel save = repository.save(expected);
-        Hotel actual = repository.getById(save.getId());
-        assertEquals(expected, actual);
+        Mockito.when(hotelRepository.getById(FIRST_HOTEL_ID)).thenReturn(firstHotel);
+        Hotel actual = hotelService.getById(FIRST_HOTEL_ID);
+        assertEquals(firstHotel, actual);
     }
 
     @Test
     void existsById() {
-        Hotel save = repository.save(hotel);
-        long id = save.getId();
-        boolean actual = repository.existsById(id);
+        Mockito.when(hotelRepository.existsById(FIRST_HOTEL_ID)).thenReturn(true);
+        boolean actual = hotelRepository.existsById(FIRST_HOTEL_ID);
         assertTrue(actual);
     }
 
     @Test
     void findById() {
-        Hotel expected = hotel;
-        Hotel save = repository.save(expected);
-        long id = save.getId();
-        Optional<Hotel> hotel = repository.findById(id);
+        Mockito.when(hotelRepository.findById(FIRST_HOTEL_ID)).thenReturn(Optional.of(firstHotel));
+        Optional<Hotel> fromRepository = hotelService.findById(FIRST_HOTEL_ID);
         Hotel actual = new Hotel();
-        if (hotel.isPresent()) {
-            actual = hotel.get();
+        if (fromRepository.isPresent()) {
+            actual = fromRepository.get();
         }
-        assertEquals(expected, actual);
+        assertEquals(firstHotel, actual);
     }
 
     @Test
     void findAll() {
-        Hotel secondHotel = new Hotel();
-        Hotel thirdHotel = new Hotel();
-        Hotel [] expected = new Hotel[3];
-        expected[0] = (hotel);
-        expected[1] = (secondHotel);
-        expected[2] = (thirdHotel);
-        List<Hotel> hotels = repository.saveAll(Arrays.asList(expected));
-        Hotel[] actual = hotels.toArray(new Hotel[0]);
-        assertArrayEquals(expected, actual);
+        Mockito.when(hotelRepository.findAll()).thenReturn(Arrays.asList(firstHotel, secondHotel));
+        List<Hotel> listFromRepository = hotelService.findAll();
+        assertEquals(2, listFromRepository.size());
 
     }
 
-    @Test
-    void updateFieldById() {
-        Hotel save = repository.save(hotel);
-        long id = save.getId();
-        Hotel hotel = repository.getById(id);
-        String expected = "New hotel";
-        hotel.setName(expected);
-        repository.save(hotel);
-        hotel = repository.getById(id);
-        String actual = hotel.getName();
-        assertEquals(expected, actual);
-    }
+//    @Test
+//    void updateFieldById(){
+//        Hotel expected = new Hotel();
+//        expected.setId(1L);
+//        expected.setName("New name");
+//        Mockito.when(hotelRepository.getById(FIRST_HOTEL_ID)).thenReturn(firstHotel);
+//        Mockito.when(hotelRepository.save(Mockito.any(Hotel.class))).thenReturn(expected);
+//        HotelEditModel editModel = new HotelEditModel();
+//        editModel.setName("New name");
+//        assertDoesNotThrow(hotelService.updateFieldById(1L, "name", editModel));
+//    }
 }

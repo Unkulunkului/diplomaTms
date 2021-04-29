@@ -109,7 +109,7 @@ public class HotelController {
                 redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
                         "' was created!");
                 Hotel save = hotelService.save(hotel);
-                log.info("Hotel "+save+" was saved");
+                log.info("Hotel "+save+" has been saved");
                 modelAndView.setViewName("redirect:/hotel/add");
             }else {
                 log.info("Hotel with name '"+hotelAddModel.getName()+" already exists");

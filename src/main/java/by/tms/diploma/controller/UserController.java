@@ -49,7 +49,7 @@ public class UserController {
                     user.setPassword(userRegistrationModel.getPassword());
                     user.setEmail(userRegistrationModel.getEmail());
                     userService.save(user);
-                    log.info("User '"+user.getUsername()+"' was registered");
+                    log.info("User '"+user.getUsername()+"' has been registered");
                     redirectAttributes.addFlashAttribute("success", true);
                     modelAndView.setViewName("redirect:/user/authentication");
                 }else {

@@ -96,7 +96,7 @@ public class RequestController {
                 if(requestById.isPresent()){
                     ClientRequest clientRequest = requestById.get();
                     if(!clientRequest.getRequestStatus().equals(ClientRequestStatusEnum.DONE)){
-                        log.info("Check client status fro completeness");
+                        log.info("Check client status");
                         ClientRequestStatusEnum status = ClientRequestStatusEnum.valueOf(clientRequestModel.getRequestStatus());
                         switch (status){
                             case IN_PROGRESS:

@@ -102,7 +102,7 @@ public class TourController {
                     images.add(image);
                     tour.setImages(images);
                     Tour savedTour = tourService.save(tour);
-                    log.info("Tour "+savedTour+" was saved");
+                    log.info("Tour "+savedTour+" has been saved");
                     modelAndView.setViewName("redirect:/tour/"+savedTour.getId());
                 }else {
                     log.info("Value tour duration and day at sea isn't correct");
@@ -202,7 +202,7 @@ public class TourController {
                             modelAndView.setViewName("editTour");
                         }else {
                             tourService.updateFieldById(id, nameOfEditableField, tourModel);
-                            log.info("Tour was update");
+                            log.info("Tour has been updated");
                             modelAndView.setViewName("redirect:/tour/"+ id);
                         }
                     }else {

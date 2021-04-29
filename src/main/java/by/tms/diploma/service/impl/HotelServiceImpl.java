@@ -64,7 +64,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<Hotel> findAll() {
         log.info("Find all hotels");
-        return hotelRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return hotelRepository.findAll();
     }
 
     @Override
