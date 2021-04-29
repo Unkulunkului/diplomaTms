@@ -90,7 +90,7 @@ public class RequestController {
         Principal userPrincipal = httpServletRequest.getUserPrincipal();
         if (userPrincipal != null) {
             String curatorUsername = userPrincipal.getName();
-            Optional<User> curatorByUsername = userService.getByUsername(curatorUsername);
+            Optional<User> curatorByUsername = userService.findByUsername(curatorUsername);
             if(curatorByUsername.isPresent()){
                 long curatorId = curatorByUsername.get().getId();
                 if(requestById.isPresent()){

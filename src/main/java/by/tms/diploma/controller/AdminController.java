@@ -30,20 +30,19 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/findUserByUsername")
+    @PostMapping("/findByUsername")
     public ModelAndView postSetModerator(String username, ModelAndView modelAndView){
         log.info("Find user by username");
-        Optional<User> byUsername = userService.getByUsername(username);
         log.info("Check exist by username");
-        if(byUsername.isPresent()){
+        if(userService.isUsernameExist(username)){
             log.info("User with username "+username+" exists!");
-            User user = byUsername.get();
-            if(!user.getRoles().contains(UserRole.MODERATOR)){
-                log.info("User isn't a moderator");
-                modelAndView.addObject("userByUsername", user);
-            }else {
+            if(userService.hasRoleByUsername(username, UserRole.MODERATOR)){
                 log.info("User is already a moderator");
                 modelAndView.addObject("alreadyModerator", "Already moderator!");
+            }else {
+                log.info("User isn't a moderator");
+                User user = userService.getByUsername(username);
+                modelAndView.addObject("userByUsername", user);
             }
         }else {
             log.info("User with username "+username+" doesn't exist!");
@@ -54,13 +53,24 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/moderators/updateRole")
+    @PostMapping("/moderators/removeRole")
     public ModelAndView postRemoveModerator(long id, ModelAndView modelAndView){
-        log.info("Change user role");
-        userService.updateRoleById(id, UserRole.MODERATOR);
+        log.info("Remove user role");
+        if(userService.hasRoleById(id, UserRole.MODERATOR)){
+            userService.removeRoleById(id, UserRole.MODERATOR);
+        }
         modelAndView.setViewName("redirect:/admin/moderators");
         return modelAndView;
     }
 
+    @PostMapping("/moderators/addRole")
+    public ModelAndView postAddModerator(long id, ModelAndView modelAndView){
+        log.info("Add user role");
+        if(!userService.hasRoleById(id, UserRole.MODERATOR)){
+            userService.addRoleById(id, UserRole.MODERATOR);
+        }
+        modelAndView.setViewName("redirect:/admin/moderators");
+        return modelAndView;
+    }
 
 }

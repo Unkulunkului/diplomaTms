@@ -39,25 +39,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isEmailAlreadyExists(String email) {
+    public boolean isEmailExist(String email) {
         log.info("Exist user by email(email = "+email+")");
         return userRepository.existsByEmail(email);
     }
 
     @Override
-    public boolean isUsernameAlreadyExists(String username) {
+    public boolean isUsernameExist(String username) {
         log.info("Exist user by username(username = "+username+")");
         return userRepository.existsByUsername(username);
     }
 
     @Override
-    public Optional<User> getByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         log.info("Find user by username(username = "+username+")");
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> getById(long id) {
+    public User getByUsername(String username) {
+        return userRepository.getByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findById(long id) {
         log.info("Exist user by id(id = "+id+")");
         return userRepository.findById(id);
     }
@@ -69,24 +74,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateRoleById(long id, UserRole role) {
-        log.info("Update user role by id(id = "+id+") with user role = "+role);
-        Optional<User> byId = userRepository.findById(id);
-        if (byId.isPresent()) {
-            User user = byId.get();
-            List<UserRole> roles = user.getRoles();
-            if (!roles.contains(UserRole.ADMIN)) {
-                if(roles.contains(role)){
-                    roles.remove(role);
-                    log.info("role was removed");
-                }else {
-                    roles.add(role);
-                    log.info("role was added");
-                }
-                userRepository.save(user);
-            }
-        }
+    public boolean hasRoleById(long id, UserRole role){
+        log.info("Checking if user role '"+role+"' exists by id(id = "+id+")");
+        User user = userRepository.getById(id);
+        List<UserRole> roles = user.getRoles();
+        return roles.contains(role);
     }
+
+    @Override
+    public boolean hasRoleByUsername(String username, UserRole role){
+        log.info("Checking if user role '"+role+"' exists by username(username = "+username+") with user role = ");
+        User user = userRepository.getByUsername(username);
+        List<UserRole> roles = user.getRoles();
+        return roles.contains(role);
+    }
+
+    @Override
+    public boolean addRoleById(long id, UserRole role){
+        log.info("Add user role "+role+"  by id(id = "+id+")");
+        User user = userRepository.getById(id);
+        List<UserRole> roles = user.getRoles();
+        boolean add = roles.add(role);
+        userRepository.save(user);
+        return add;
+    }
+    @Override
+    public boolean removeRoleById(long id, UserRole role){
+        log.info("Remove user role "+role+"  by id(id = "+id+")");
+        User user = userRepository.getById(id);
+        List<UserRole> roles = user.getRoles();
+        boolean remove = roles.remove(role);
+        userRepository.save(user);
+        return remove;
+    }
+
 
 
 }

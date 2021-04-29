@@ -9,7 +9,7 @@
 <html th:include="_header"/>
 <div style="margin-left: 5%; margin-top: 5%; margin-right: 5%; margin-bottom: 5%">
     <h1 class="uk-heading-bullet uk-margin-top uk-margin-left" style="color: lightblue">Moderators:</h1>
-    <form th:action="@{/admin/findUserByUsername}" method="post">
+    <form th:action="@{findByUsername}" method="post">
         <input class="uk-input uk-form-width-medium" type="text" name="username">
         <button class="uk-button uk-button-default">Find</button>
     </form>
@@ -31,7 +31,7 @@
         <td th:text="${userByUsername.email}"></td>
 
         <td>
-            <form th:if="${alreadyModerator==null}" th:action="@{moderators/updateRole}" method="post">
+            <form th:if="${alreadyModerator==null}" th:action="@{moderators/addRole}" method="post">
                 <input type="hidden" name="id" th:value="${userByUsername.id}">
                 <button class="uk-button uk-button-default">Make a moderator</button>
             </form>
@@ -50,7 +50,7 @@
             <td th:text="${moderator.email}"></td>
 
             <td>
-                <form th:action="@{moderators/updateRole}" method="post">
+                <form th:action="@{moderators/removeRole}" method="post">
                     <input type="hidden" name="id" th:value="${moderator.id}">
                     <button class="uk-button uk-button-default">Remove</button>
                 </form>

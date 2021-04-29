@@ -42,8 +42,8 @@ public class UserController {
         log.info("User '"+userRegistrationModel.getUsername()+"' try to registration");
         if(!bindingResult.hasErrors()){
             log.info("No binding result errors");
-            if(!userService.isUsernameAlreadyExists(userRegistrationModel.getUsername())){
-                if(!userService.isEmailAlreadyExists(userRegistrationModel.getEmail())){
+            if(!userService.isUsernameExist(userRegistrationModel.getUsername())){
+                if(!userService.isEmailExist(userRegistrationModel.getEmail())){
                     User user = new User();
                     user.setUsername(userRegistrationModel.getUsername());
                     user.setPassword(userRegistrationModel.getPassword());

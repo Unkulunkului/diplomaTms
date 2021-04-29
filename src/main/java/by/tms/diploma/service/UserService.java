@@ -9,11 +9,14 @@ import java.util.Optional;
 
 public interface UserService {
     User save(User user);
-    boolean isEmailAlreadyExists(String email);
-    boolean isUsernameAlreadyExists(String email);
-    Optional<User> getByUsername(String username);
-    Optional<User> getById(long id);
+    boolean isEmailExist(String email);
+    boolean isUsernameExist(String username);
+    Optional<User> findByUsername(String username);
+    User getByUsername(String username);
+    Optional<User> findById(long id);
     List<User> getUsersByRole(UserRole role);
-    void updateRoleById(long id, UserRole userRole);
-
+    boolean hasRoleById(long id, UserRole role);
+    boolean addRoleById(long id, UserRole role);
+    boolean removeRoleById(long id, UserRole role);
+    boolean hasRoleByUsername(String username, UserRole role);
 }

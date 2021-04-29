@@ -26,6 +26,9 @@ class HotelServiceImplTest {
     void setUp() {
         hotel = new Hotel();
         hotel.setName(HOTEL_NAME);
+//        hotel.setDescription("Description");
+//        hotel.setStars(4);
+//        hotel.s
     }
 
     @Test
@@ -90,6 +93,7 @@ class HotelServiceImplTest {
         List<Hotel> hotels = repository.saveAll(Arrays.asList(expected));
         Hotel[] actual = hotels.toArray(new Hotel[0]);
         assertArrayEquals(expected, actual);
+
     }
 
     @Test
