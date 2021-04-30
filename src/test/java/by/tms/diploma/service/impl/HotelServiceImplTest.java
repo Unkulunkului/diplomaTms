@@ -3,7 +3,7 @@ package by.tms.diploma.service.impl;
 import by.tms.diploma.entity.Hotel;
 import by.tms.diploma.entity.HotelEditModel;
 import by.tms.diploma.repository.HotelRepository;
-import by.tms.diploma.service.HotelService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HotelServiceImplTest {
 
     @Autowired
-    private HotelService hotelService = new HotelServiceImpl();
+    private HotelServiceImpl hotelService;
 
     @MockBean
     private HotelRepository hotelRepository;
@@ -35,6 +34,9 @@ class HotelServiceImplTest {
     private final String SECOND_HOTEL_NAME = "Secont hotel name";
     private final long SECOND_HOTEL_ID = 1L;
 
+    private final String NAME_OF_EDITABLE_FIELD = "name";
+    private final String NEW_NAME_VALUE = "New name";
+    private final String NEW_STARS_VALUE = "4";
 
     @BeforeEach
     void setUp() {
@@ -98,18 +100,22 @@ class HotelServiceImplTest {
         Mockito.when(hotelRepository.findAll()).thenReturn(Arrays.asList(firstHotel, secondHotel));
         List<Hotel> listFromRepository = hotelService.findAll();
         assertEquals(2, listFromRepository.size());
-
     }
 
-//    @Test
-//    void updateFieldById(){
-//        Hotel expected = new Hotel();
-//        expected.setId(1L);
-//        expected.setName("New name");
-//        Mockito.when(hotelRepository.getById(FIRST_HOTEL_ID)).thenReturn(firstHotel);
-//        Mockito.when(hotelRepository.save(Mockito.any(Hotel.class))).thenReturn(expected);
-//        HotelEditModel editModel = new HotelEditModel();
-//        editModel.setName("New name");
-//        assertDoesNotThrow(hotelService.updateFieldById(1L, "name", editModel));
-//    }
+    @Test
+    @SneakyThrows
+    void updateFieldById(){
+        Mockito.when(hotelRepository.getById(FIRST_HOTEL_ID)).thenReturn(firstHotel);
+        Mockito.spy(hotelRepository).save(firstHotel);
+        HotelEditModel editModel = new HotelEditModel();
+        editModel.setName(NEW_NAME_VALUE);
+        editModel.setStars(NEW_STARS_VALUE);
+        hotelService.updateFieldById(FIRST_HOTEL_ID, NAME_OF_EDITABLE_FIELD, editModel);
+        Hotel actual = hotelService.getById(FIRST_HOTEL_ID);
+        Hotel expected = new Hotel();
+        expected.setStars(Integer.parseInt(NEW_STARS_VALUE));
+        expected.setName(NEW_NAME_VALUE);
+        expected.setId(FIRST_HOTEL_ID);
+        assertEquals(expected, actual);
+    }
 }
