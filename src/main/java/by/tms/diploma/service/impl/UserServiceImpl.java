@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encode);
         List<UserRole> rolesRoles = new ArrayList<>();
         rolesRoles.add(UserRole.USER);
-        rolesRoles.add(UserRole.MODERATOR);//////////////////////!!!!!!!!!!!!
         user.setRoles(rolesRoles);
         User save = userRepository.save(user);
         log.info("User "+user.getUsername()+" was saved");

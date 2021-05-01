@@ -24,7 +24,7 @@ public class TourAddModel {
     private String price;
     private String typeOfRest;
     @NotBlank(message = "Enter something...")
-    @Pattern(regexp = "[A-Za-z,\\s]{5,100}", message = "Only upper/lower case, ','.  " +
+    @Pattern(regexp = "[A-Za-z,\\s->]{5,100}", message = "Only upper/lower case, ',' '>' '-' ' '. " +
             "Min length - 5, max - 100!")
     private String visitedCountries;
     @Pattern(regexp = "\\d+", message = "Only numbers")

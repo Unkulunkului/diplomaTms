@@ -6,63 +6,6 @@
     <title>Edit tour</title>
 </head>
 <body>
-<!--<div th:if="${incorrectId!=null}">-->
-<!--    <span th:text="${incorrectId}"></span>-->
-<!--</div>-->
-<!--<div th:if="${incorrectId == null}">-->
-<!--    <form th:action="@{edit}" enctype="multipart/form-data" th:object="${tourForm}" method="post">-->
-<!--        <input type="hidden" name="tourId" th:value="${tour.id}"/>-->
-<!--        <p th:text="'Name: '+${tour.name}" style="color: grey"></p>-->
-<!--        <div><label> Name : <input type="text" th:field="*{name}"/></label></div>-->
-<!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: coral"></p>-->
-<!--        <div th:if="${doesTourNameExist}"><span>Tour with the same name already exists</span></div>-->
-<!--        <p th:text="'Type of rest: '+${tour.typeOfRest}" style="color: grey"></p>-->
-<!--        <label>Type of rest :-->
-<!--            <select th:field="*{typeOfRest}">-->
-<!--                <option th:value="'Excursion tour'">Excursion tour</option>-->
-<!--                <option th:value="'Rest at sea'">Rest at sea</option>-->
-<!--                <option th:value="'Extreme tour'">Extreme tour</option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--        <br>-->
-<!--        <p>Country:-->
-<!--        <p th:each="country: ${tour.visitedCountries}"><span th:text="${country}" style="color: grey"></span></p></p>-->
-<!--        <label>Visited countries :-->
-<!--            <select th:field="*{visitedCountries}" multiple>-->
-<!--                <option th:if="${countries != null}" th:each="country: ${countries}" th:value="${country}" th:text="${country}">-->
-<!--                </option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--        <br>-->
-<!--        <p th:if="${tour.hotel}">Hotel:<a th:href="@{'/hotel/'+${tour.hotel.id}}" th:text="${tour.hotel.name}" style="color: grey"></a></p>-->
-<!--        <label>Hotel :-->
-<!--            <select th:field="*{hotelName}">-->
-<!--                <option th:if="${hotels != null}" th:each="hotel: ${hotels}" th:value="${hotel.name}" th:text="${hotel.name}">-->
-<!--                </option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--        &lt;!&ndash;    <div th:if="${hotels.isEmpty()}">&ndash;&gt;-->
-<!--        &lt;!&ndash;        <span>List with hotel is empty. Click <a th:href="@{/hotel/add}">here</a> to add hotel.</span>&ndash;&gt;-->
-<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
-<!--        <p th:text="'Price: '+${tour.price}" style="color: grey"></p>-->
-<!--        <div><label> Price: <input type="text" th:field="*{price}"/></label></div>-->
-<!--        <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: coral"></p>-->
-<!--        <label>Description: <textarea name="description" cols="60" rows="11"></textarea></label>-->
-<!--        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: coral"></p>-->
-<!--        <p th:text="'Tour duration: '+${tour.tourDuration}+'('+${tour.dayAtSea}+' day at sea)'" style="color: grey"></p>-->
-<!--        <div><label> Tour duration : <input type="text" th:field="*{tourDuration}" size="1"/></label> (-->
-<!--            <label> day at sea : <input type="text" th:field="*{dayAtSea}" size="1"/></label>)-->
-<!--        </div>-->
-<!--        <p th:if="${#fields.hasErrors('tourDuration')}" th:errors="*{tourDuration}" style="color: coral"></p>-->
-<!--        <p th:if="${#fields.hasErrors('dayAtSea')}" th:errors="*{dayAtSea}" style="color: coral"></p>-->
-<!--        <div th:if="${tourDurationAndDayAtSeaError!=null}"><span th:text="${tourDurationAndDayAtSeaError}"></span></div>-->
-
-<!--        <input type="file" multiple th:field="*{images}"/>-->
-<!--        <button>Update</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-
 <html th:include="_header"/>
 <h1 class="uk-text-uppercase uk-text-light uk-margin-left uk-position-center-left" style="color: cadetblue">Edit tour</h1>
 <div th:if="${incorrectId == null}" style="margin-left: 50%; margin-top: 3%; margin-right: 3%; margin-bottom: 3%">

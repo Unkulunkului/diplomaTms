@@ -16,8 +16,6 @@ public interface TourService {
     Optional<Tour> findById(long id);
     List<Tour> getAll();
     void deleteById(long id);
-//    void update(Tour tour);
-//    boolean theSameTour(long id, String name);
     Tour getById(long id);
     List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice, int startTourDuration,
                                                                       int startDayAtSea, TypeOfRest typeOfRest, long startId, long finishId);

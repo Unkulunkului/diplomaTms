@@ -24,6 +24,8 @@ public class TourEditModel {
     private String price;
     private List<MultipartFile> images;
     private TypeOfRest typeOfRest;
+    @Pattern(regexp = "([A-Za-z,\\s->]{5,100})|(^$)", message = "Only upper/lower case ',' '>' '-' ' '. " +
+            "Min length - 5, max - 100!")
     private String visitedCountries;
     @Pattern(regexp = "(\\d+)|(^$)", message = "Only numbers")
     private String tourDuration;

@@ -17,7 +17,7 @@
                     </div>
                     <div class="uk-card-body">
                         <h3 class="uk-card-title" style="color: lightblue" th:text="${tour.name}"></h3>
-<!--                        <p class="uk-panel uk-text-truncate" th:text="${tour.description}"></p>-->
+                        <span  class="uk-panel uk-text-truncate" style="color: teal" th:text="'Tour countries: '+${tour.visitedCountries}"></span>
                         <p class="uk-panel uk-text-truncate" style="color: teal" th:text="'Price: '+${tour.price}+' $'"></p>
                         <a th:href="@{'/tour/'+${tour.id}}" class="uk-button uk-button-default" target="_blank">Check it</a>
                     </div>
