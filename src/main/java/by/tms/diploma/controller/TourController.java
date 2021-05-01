@@ -228,7 +228,7 @@ public class TourController {
             optionalTour.ifPresent(tour -> modelAndView.addObject("tour", tour));
             modelAndView.addObject("nameOfEditableField", nameOfEditableField);
             modelAndView.addObject("hotels", hotelService.findAll());
-            modelAndView.addObject("id", id);//???????
+            modelAndView.addObject("id", id);
         }
         return modelAndView;
     }

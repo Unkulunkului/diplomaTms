@@ -27,12 +27,11 @@ public class ImageServiceImpl implements ImageService {
         Image image = new Image();
         byte[] bytes = file.getBytes();
         String base64 = Base64.getEncoder().encodeToString(bytes);
-//        Map public_id = cloudinary.uploader().upload("data:"+file.getContentType()+";base64," +base64,
-//                ObjectUtils.asMap(
-//                            "folder", entityName,
-//                                   "public_id", entityName+"_"+entityId+"_"+file.getOriginalFilename()));
-//        image.setUrl((String)public_id.get("url"));
-        image.setUrl("https://clck.ru/UM7kv");
+        Map public_id = cloudinary.uploader().upload("data:"+file.getContentType()+";base64," +base64,
+                ObjectUtils.asMap(
+                            "folder", entityName,
+                                   "public_id", entityName+"_"+entityId+"_"+file.getOriginalFilename()));
+        image.setUrl((String)public_id.get("url"));
         log.info("Image: "+image.toString());
         return image;
     }
