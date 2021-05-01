@@ -8,20 +8,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class WeatherServiceImplTest {
-
 
     @Autowired
     private WeatherServiceImpl weatherService;
@@ -30,25 +25,27 @@ class WeatherServiceImplTest {
     private RestTemplate restTemplate;
 
     private final String CITY_NAME = "Minsk";
-    private final String URL = "weather.com/api/getWeather?day=1&city="+CITY_NAME;
-
-    private Weather weather;
+    private final String URL = "http://api.weatherbit.io/v2.0/forecast/daily?key=6152203e44da4d0d8f0ac2ff00f5d159&lang=eng&" +
+            "city="+CITY_NAME+"&days=3";
+    private ResponseEntity responseEntity;
+    private Weather expected;
 
     @BeforeEach
     void setUp() {
-        weather = new Weather();
-        weather.setCity_name(CITY_NAME);
-        DayWeather dayWeather = new DayWeather();
-        dayWeather.setTemp(12);
-        dayWeather.setValid_date(LocalDate.now());
-        weather.setData(Arrays.asList(dayWeather));
+        expected = new Weather();
+        DayWeather firstDayWeather = new DayWeather();
+        firstDayWeather.setTemp(11);
+        DayWeather secondDayWeather = new DayWeather();
+        secondDayWeather.setTemp(16);
+        expected.setData(Arrays.asList(firstDayWeather, secondDayWeather));
+        HttpStatus statusCode = HttpStatus.OK;
+        responseEntity = new ResponseEntity<>(expected, statusCode);
     }
 
     @Test
     void getWeather() {
-        ResponseEntity responseEntity = new ResponseEntity(weather, HttpStatus.OK);
         Mockito.when(restTemplate.getForEntity(URL, Weather.class)).thenReturn(responseEntity);
         Weather actual = weatherService.getWeather(CITY_NAME);
-        assertEquals(weather, actual);
+        assertEquals(expected, actual);
     }
 }
