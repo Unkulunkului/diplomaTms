@@ -5,6 +5,7 @@ import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +45,21 @@ public class UserController {
             log.info("No binding result errors");
             if(!userService.isUsernameExist(userRegistrationModel.getUsername())){
                 if(!userService.isEmailExist(userRegistrationModel.getEmail())){
-                    User user = new User();
-                    user.setUsername(userRegistrationModel.getUsername());
-                    user.setPassword(userRegistrationModel.getPassword());
-                    user.setEmail(userRegistrationModel.getEmail());
-                    userService.save(user);
-                    log.info("User '"+user.getUsername()+"' has been registered");
-                    redirectAttributes.addFlashAttribute("success", true);
-                    modelAndView.setViewName("redirect:/user/authentication");
+                    if(userRegistrationModel.getPassword().equals(userRegistrationModel.getConfirmPassword())){
+                        log.info("Passwords match");
+                        User user = new User();
+                        user.setUsername(userRegistrationModel.getUsername());
+                        user.setPassword(userRegistrationModel.getPassword());
+                        user.setEmail(userRegistrationModel.getEmail());
+                        userService.save(user);
+                        log.info("User '"+user.getUsername()+"' has been registered");
+                        redirectAttributes.addFlashAttribute("success", true);
+                        modelAndView.setViewName("redirect:/user/authentication");
+                    }else{
+                        log.info("Passwords don't match");
+                        modelAndView.addObject("differentPasswords", "Passwords don't match");
+                        modelAndView.setViewName("registration");
+                    }
                 }else {
                     log.info("User with email '"+userRegistrationModel.getEmail()+ "' already exists");
                     modelAndView.addObject("emailExistError", "Email '"+

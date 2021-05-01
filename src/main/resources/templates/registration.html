@@ -32,6 +32,15 @@
 
                 <div class="uk-margin">
                     <div class="uk-inline">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                        <input class="uk-input" type="password" th:field="*{confirmPassword}">
+                    </div>
+                    <p th:if="${differentPasswords != null}" th:text="${differentPasswords}" style="color: coral"></p>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{confirmPassword}" style="color: coral"></p>
+                </div>
+
+                <div class="uk-margin">
+                    <div class="uk-inline">
                         <span class="uk-form-icon" uk-icon="icon: mail"></span>
                         <input class="uk-input" type="text" th:field="*{email}">
                     </div>
