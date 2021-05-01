@@ -3,19 +3,15 @@ package by.tms.diploma.service.impl;
 import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserRole;
 import by.tms.diploma.repository.UserRepository;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +26,20 @@ class UserServiceImplTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder passwordEncoder;
+
     private final long ID = 1L;
     private final String USERNAME = "User";
     private final String PASSWORD = "Password";
     private final String EMAIL = "Email";
+    private final String SECRET_SENTENCE = "Super sentence";
     private final List<UserRole> ROLES = new ArrayList<>();
     private final UserRole NEW_ROLE = UserRole.USER;
     private final UserRole REMOVABLE_ROLE = UserRole.MODERATOR;
+
+    private final String NEW_PASSWORD = "New password";
+    private final String ENCODE_PASSWORD = "JFwfkl12e1AWD22knk";
 
     private User user;
 
@@ -50,6 +53,7 @@ class UserServiceImplTest {
         ROLES.add(UserRole.MODERATOR);
         ROLES.add(UserRole.ADMIN);
         user.setRoles(ROLES);
+        user.setSecretSentence(SECRET_SENTENCE);
     }
 
     @Test
@@ -103,11 +107,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUsersByRole() {
-
-    }
-
-    @Test
     void hasRoleById() {
         Mockito.when(userRepository.getById(ID)).thenReturn(user);
         boolean actual = userService.hasRoleById(ID, UserRole.MODERATOR);
@@ -149,5 +148,27 @@ class UserServiceImplTest {
             userFromRepository = byId.get();
         }
         assertFalse(userFromRepository.getRoles().contains(REMOVABLE_ROLE));
+    }
+
+    @Test
+    void changePassword() {
+        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.encode(NEW_PASSWORD)).thenReturn(ENCODE_PASSWORD);
+        Mockito.spy(userRepository).save(user);
+
+        User newPasswordUser = new User();
+        newPasswordUser.setPassword(NEW_PASSWORD);
+        newPasswordUser.setEmail(EMAIL);
+        newPasswordUser.setUsername(USERNAME);
+        newPasswordUser.setSecretSentence(SECRET_SENTENCE);
+
+        userService.changePassword(newPasswordUser);
+        Optional<User> byUsername = userService.findByUsername(USERNAME);
+        String actual = "";
+        if(byUsername.isPresent()){
+            User userFromRepository = byUsername.get();
+            actual = userFromRepository.getPassword();
+        }
+        assertEquals(ENCODE_PASSWORD, actual);
     }
 }
