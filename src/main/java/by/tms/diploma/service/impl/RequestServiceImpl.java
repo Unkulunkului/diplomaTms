@@ -19,9 +19,9 @@ public class RequestServiceImpl implements RequestService {
     private RequestRepository requestStorage;
 
     @Override
-    public void save(ClientRequest clientRequest) {
+    public ClientRequest save(ClientRequest clientRequest) {
         log.info("Save client request: "+clientRequest);
-        requestStorage.save(clientRequest);
+        return requestStorage.save(clientRequest);
     }
 
     @Override

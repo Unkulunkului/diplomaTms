@@ -21,7 +21,7 @@ public class ClientRequest {
     private String name;
     @Pattern(regexp = "(\\+)?\\d{7,15}")
     private String number;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> tourName;
     private ClientRequestStatusEnum requestStatus;
     private long curatorId;

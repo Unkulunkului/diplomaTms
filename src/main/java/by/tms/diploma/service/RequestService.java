@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RequestService {
 
-    void save(ClientRequest clientRequest);
+    ClientRequest save(ClientRequest clientRequest);
     List<ClientRequest> getAllRequest();
     Optional<ClientRequest> findById(long id);
     void updateStatusById(long id, ClientRequestStatusEnum status);

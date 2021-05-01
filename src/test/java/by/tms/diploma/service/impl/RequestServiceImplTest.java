@@ -90,7 +90,7 @@ class RequestServiceImplTest {
     @Test
     void findById() {
         Mockito.when(repository.findById(FIRST_REQUEST_ID)).thenReturn(Optional.of(clientRequest));
-        Optional<ClientRequest> requestFromRepository = requestService.findById(1L);
+        Optional<ClientRequest> requestFromRepository = requestService.findById(FIRST_REQUEST_ID);
         ClientRequest actual = new ClientRequest();
         if (requestFromRepository.isPresent()) {
             actual = requestFromRepository.get();
