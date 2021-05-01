@@ -46,6 +46,14 @@
                     </div>
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: coral"></p>
                 </div >
+
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: 500px" placeholder="Secret sentence"></span>
+                        <input class="uk-input" type="text" th:field="*{secretSentence}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('secretSentence')}" th:errors="*{secretSentence}" style="color: coral"></p>
+                </div>
                 <button class="uk-button uk-button-default">Confirm</button>
             </form>
         </div>

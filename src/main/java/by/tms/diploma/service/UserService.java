@@ -19,4 +19,5 @@ public interface UserService {
     boolean addRoleById(long id, UserRole role);
     boolean removeRoleById(long id, UserRole role);
     boolean hasRoleByUsername(String username, UserRole role);
+    boolean changePassword(User userForm);
 }

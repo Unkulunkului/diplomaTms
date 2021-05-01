@@ -25,5 +25,6 @@ public class User{
     @LazyCollection(value = LazyCollectionOption.FALSE)
     private List<UserRole> roles;
     private String email;
+    private String secretSentence;
 
 }

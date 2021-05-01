@@ -1,6 +1,7 @@
 package by.tms.diploma.controller;
 
 import by.tms.diploma.entity.User;
+import by.tms.diploma.entity.UserChangePasswordModel;
 import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -51,6 +54,7 @@ public class UserController {
                         user.setUsername(userRegistrationModel.getUsername());
                         user.setPassword(userRegistrationModel.getPassword());
                         user.setEmail(userRegistrationModel.getEmail());
+                        user.setSecretSentence(userRegistrationModel.getSecretSentence());
                         userService.save(user);
                         log.info("User '"+user.getUsername()+"' has been registered");
                         redirectAttributes.addFlashAttribute("success", true);
@@ -74,6 +78,48 @@ public class UserController {
             }
         }else {
             modelAndView.setViewName("registration");
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/changePassword")
+    public ModelAndView getChangePasswordView(ModelAndView modelAndView){
+        log.info("Request change password page");
+        modelAndView.addObject("userForm", new UserChangePasswordModel());
+        modelAndView.setViewName("changePassword");
+        return modelAndView;
+    }
+
+    @PostMapping("/changePassword")
+    public ModelAndView changePassword(@Valid @ModelAttribute("userForm") UserChangePasswordModel userModel,
+                                       BindingResult bindingResult, ModelAndView modelAndView,
+                                       RedirectAttributes redirectAttributes){
+        log.info(userModel.getUsername()+" try to change password");
+        if(!bindingResult.hasErrors()){
+            log.info("No binding result errors");
+            if(userModel.getPassword().equals(userModel.getConfirmPassword())){
+                User user = new User();
+                user.setPassword(userModel.getPassword());
+                user.setUsername(userModel.getUsername());
+                user.setEmail(userModel.getEmail());
+                user.setSecretSentence(userModel.getSecretSentence());
+                if(userService.changePassword(user)){
+                    log.info("Password has been changed");
+                    redirectAttributes.addFlashAttribute("newPassword", "Your password has been changed");
+                    modelAndView.setViewName("redirect:/user/authentication");
+                }else {
+                    log.info("Password hasn't been changed. Incorrect data");
+                    modelAndView.addObject("incorrectData", "Incorrect data");
+                    modelAndView.setViewName("changePassword");
+                }
+            }else {
+                log.info("Passwords don't match");
+                modelAndView.addObject("differentPasswords", "Passwords don't match");
+                modelAndView.setViewName("changePassword");
+            }
+        }else {
+            log.info("Binding result has errors");
+            modelAndView.setViewName("changePassword");
         }
         return modelAndView;
     }

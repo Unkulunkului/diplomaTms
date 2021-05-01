@@ -107,6 +107,27 @@ public class UserServiceImpl implements UserService {
         return remove;
     }
 
+    @Override
+    public boolean changePassword(User userForm){
+        Optional<User> byUsername = userRepository.findByUsername(userForm.getUsername());
+        if(byUsername.isPresent()){
+            User user = byUsername.get();
+            if(user.getSecretSentence().equals(userForm.getSecretSentence())){
+                if(user.getEmail().equals(userForm.getEmail())){
+                    String password = userForm.getPassword();
+                    user.setPassword(passwordEncoder.encode(password));
+                    userRepository.save(user);
+                    return true;
+                }else {
+                    return false;
+                }
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
 
 
 }
