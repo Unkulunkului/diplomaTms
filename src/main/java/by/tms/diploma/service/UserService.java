@@ -1,6 +1,7 @@
 package by.tms.diploma.service;
 
 import by.tms.diploma.entity.User;
+import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.entity.UserRole;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,4 +21,5 @@ public interface UserService {
     boolean removeRoleById(long id, UserRole role);
     boolean hasRoleByUsername(String username, UserRole role);
     boolean changePassword(User userForm);
+    User userRegistrationModelToEntity(UserRegistrationModel userRegistrationModel);
 }

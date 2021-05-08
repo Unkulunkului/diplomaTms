@@ -17,8 +17,8 @@ public interface TourService {
     List<Tour> getAll();
     void deleteById(long id);
     Tour getById(long id);
-    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice, int startTourDuration,
-                                                                      int startDayAtSea, TypeOfRest typeOfRest, long startId, long finishId);
+    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(TourFilterModel tourModel);
     String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea);
     void updateFieldById(long id, String fieldName, TourEditModel tourModel) throws IOException;
+    Tour addModelToEntity(TourAddModel tourAddModel);
 }

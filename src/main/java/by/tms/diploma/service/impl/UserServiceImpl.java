@@ -1,6 +1,7 @@
 package by.tms.diploma.service.impl;
 
 import by.tms.diploma.entity.User;
+import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.entity.UserRole;
 import by.tms.diploma.repository.UserRepository;
 
@@ -135,5 +136,15 @@ public class UserServiceImpl implements UserService {
             log.info("Input username isn't exist");
             return false;
         }
+    }
+
+    @Override
+    public User userRegistrationModelToEntity(UserRegistrationModel userRegistrationModel){
+        User user = new User();
+        user.setUsername(userRegistrationModel.getUsername());
+        user.setPassword(userRegistrationModel.getPassword());
+        user.setEmail(userRegistrationModel.getEmail());
+        user.setSecretSentence(userRegistrationModel.getSecretSentence());
+        return user;
     }
 }

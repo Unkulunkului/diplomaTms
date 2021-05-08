@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,5 +129,27 @@ public class HotelServiceImpl implements HotelService {
                 break;
         }
         hotelRepository.save(hotel);
+    }
+
+    @Override
+    public Hotel addModelToEntity(HotelAddModel hotelAddModel){
+        Hotel hotel = new Hotel();
+        hotel.setStars(Integer.parseInt(hotelAddModel.getStars()));
+        String formCity = hotelAddModel.getCity();
+        String formCountry = hotelAddModel.getCountry();
+        Country country = new Country();
+        country.setCity(formCity);
+        country.setName(formCountry);
+        hotel.setCountry(country);
+        hotel.setName(hotelAddModel.getName());
+        hotel.setDescription(hotelAddModel.getDescription());
+        hotel.setTypeOfFood(hotelAddModel.getTypeOfFood());
+        hotel.setLineFromTheSea(Integer.parseInt(hotelAddModel.getLineFromTheSea()));
+        List<Image> images = new ArrayList<>();
+        Image image = new Image();
+        images.add(image);
+        image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+        hotel.setImages(images);
+        return hotel;
     }
 }

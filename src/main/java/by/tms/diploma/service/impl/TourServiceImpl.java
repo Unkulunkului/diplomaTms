@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,14 +73,72 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(double startPrice, double finishPrice,
-                                                                             int startTourDuration, int startDayAtSea,
-                                                                             TypeOfRest typeOfRest, long startId, long finishId) {
-        log.info("Find tour by start price(+"+startPrice+"), finish price(+"+finishPrice+"), start tour duration(+"
-                +startTourDuration+"), start day at sea(+"+startDayAtSea+"), type of rest(+"+typeOfRest+"), " +
-                "start id(+"+startId+"), finish id(+"+finishId+")");
-        return tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
-                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest, startId, finishId);
+    public Tour addModelToEntity(TourAddModel tourAddModel){
+        String hotelName = tourAddModel.getHotelName();
+        Hotel hotel = hotelService.findByName(hotelName);
+        int dayAtSea = Integer.parseInt(tourAddModel.getDayAtSea());
+        int tourDuration = Integer.parseInt(tourAddModel.getTourDuration());
+        Tour tour = new Tour();
+        tour.setHotel(hotel);
+        tour.setName(tourAddModel.getName());
+        tour.setDescription(tourAddModel.getDescription());
+        tour.setDayAtSea(dayAtSea);
+        tour.setTourDuration(tourDuration);
+        tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
+        tour.setVisitedCountries(tourAddModel.getVisitedCountries());
+        tour.setTypeOfRest(TypeOfRest.getEnumName(tourAddModel.getTypeOfRest()));
+        Image image = new Image();
+        image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
+        List<Image> images = new ArrayList<>();
+        images.add(image);
+        tour.setImages(images);
+        return tour;
+    }
+
+    @Override
+    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(TourFilterModel tourModel) {
+        log.info("Find tour by tour edit model: "+tourModel.toString());
+        double startPrice = 0;
+        double finishPrice = 999999.99d;
+        int startTourDuration = 0;
+        int startDayAtSea = 0;
+        long startId = 0;
+        long finishId = 0;
+        String hotelName = tourModel.getHotelName();
+        if(hotelName != null){
+            log.info("Hotel name isn't empty");
+            if (hotelService.existsByName(hotelName)) {
+                log.info("Hotel with name "+tourModel.getHotelName()+" is exist");
+                Hotel byName = hotelService.findByName(hotelName);
+                log.info("Hotel: "+byName.toString());
+                startId = byName.getId();
+                finishId = byName.getId();
+            }
+        }else {
+            log.info("Hotel name is empty");
+            finishId = Long.MAX_VALUE;
+        }
+        if(tourModel.getStartPrice() != null){
+            log.info("Start price isn't empty");
+            startPrice = Double.parseDouble(tourModel.getStartPrice());
+        }
+        if(tourModel.getFinishPrice() != null){
+            log.info("Finish price isn't empty");
+            finishPrice = Double.parseDouble(tourModel.getFinishPrice());
+        }
+        if(tourModel.getTourDuration() != null){
+            log.info("Tour duration isn't empty");
+            startTourDuration = Integer.parseInt(tourModel.getTourDuration());
+        }
+        if(tourModel.getDayAtSea() != null){
+            log.info("Day at sea isn't empty");
+            startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+        }
+        TypeOfRest type = TypeOfRest.getEnumName(tourModel.getTypeOfRest());
+        List<Tour> tours = tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
+                startPrice, finishPrice, startTourDuration, startDayAtSea, type, startId, finishId);
+
+        return tours;
     }
 
     @Override

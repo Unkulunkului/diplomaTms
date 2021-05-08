@@ -20,7 +20,7 @@ public class UserRegistrationModel {
     @Pattern(regexp = "\\S{3,15}@((gmail.com)|(mail.ru)|(yahoo.com)|(yandex.ru))",
             message = "[length 3-15]@gmail.com, mail.ru, @yahoo.com, @yandex.ru")
     private String email;
-    @Pattern(regexp = "[A-Za-z_0-9-\\s\\.\\,]{5,15}", message = "Only upper and lower case, digits and '-' '_' ',' '.' ' '" +
+    @Pattern(regexp = "[A-Za-z_0-9-\\s.,]{5,15}", message = "Only upper and lower case, digits and '-' '_' ',' '.' ' '" +
             "Min length - 5, max - 15!")
     private String secretSentence;
 }

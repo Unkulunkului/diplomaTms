@@ -77,7 +77,6 @@ public class TourController {
         log.info("Add model: "+tourAddModel.toString());
         if(!bindingResult.hasErrors()){
             log.info("No binding result errors");
-            String hotelName = tourAddModel.getHotelName();
             String name = tourAddModel.getName();
             if(!tourService.existsByName(name)){
                 log.info("Correct tour name");
@@ -86,21 +85,7 @@ public class TourController {
                 String result = tourService.validTourDurationAndDayAtSea(tourDuration, dayAtSea);
                 if(result.equals("Ok")){
                     log.info("Value tour duration and day at sea is correct");
-                    Hotel hotel = hotelService.findByName(hotelName);
-                    Tour tour = new Tour();
-                    tour.setHotel(hotel);
-                    tour.setName(name);
-                    tour.setDescription(tourAddModel.getDescription());
-                    tour.setDayAtSea(dayAtSea);
-                    tour.setTourDuration(tourDuration);
-                    tour.setPrice(Double.parseDouble(tourAddModel.getPrice()));
-                    tour.setVisitedCountries(tourAddModel.getVisitedCountries());
-                    tour.setTypeOfRest(TypeOfRest.getEnumName(tourAddModel.getTypeOfRest()));
-                    Image image = new Image();
-                    image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
-                    List<Image> images = new ArrayList<>();
-                    images.add(image);
-                    tour.setImages(images);
+                    Tour tour = tourService.addModelToEntity(tourAddModel);
                     Tour savedTour = tourService.save(tour);
                     log.info("Tour "+savedTour+" has been saved");
                     modelAndView.setViewName("redirect:/tour/"+savedTour.getId());
@@ -240,46 +225,7 @@ public class TourController {
         log.info("Try to filter tours");
         log.info("Filter model: "+tourModel);
         if(!bindingResult.hasErrors()){
-            log.info("No binding result errors");
-            double startPrice = 0;
-            double finishPrice = 999999.99d;
-            int startTourDuration = 0;
-            int startDayAtSea = 0;
-            long startId = 0;
-            long finishId = 0;
-            String hotelName = tourModel.getHotelName();
-            if(!hotelName.isEmpty()){
-                log.info("Hotel name isn't empty");
-                if (hotelService.existsByName(hotelName)) {
-                    log.info("Hotel with name "+tourModel.getHotelName()+" is exist");
-                    Hotel byName = hotelService.findByName(hotelName);
-                    log.info("Hotel: "+byName.toString());
-                    startId = byName.getId();
-                    finishId = byName.getId();
-                }
-            }else {
-                log.info("Hotel name is empty");
-                finishId = Long.MAX_VALUE;
-            }
-            if(!tourModel.getStartPrice().isEmpty()){
-                log.info("Start price isn't empty");
-                startPrice = Double.parseDouble(tourModel.getStartPrice());
-            }
-            if(!tourModel.getFinishPrice().isEmpty()){
-                log.info("Finish price isn't empty");
-                finishPrice = Double.parseDouble(tourModel.getFinishPrice());
-            }
-            if(!tourModel.getTourDuration().isEmpty()){
-                log.info("Tour duration isn't empty");
-                startTourDuration = Integer.parseInt(tourModel.getTourDuration());
-            }
-            if(!tourModel.getDayAtSea().isEmpty()){
-                log.info("Day at sea isn't empty");
-                startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
-            }
-            TypeOfRest type = TypeOfRest.getEnumName(tourModel.getTypeOfRest());
-            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(startPrice, finishPrice,
-                    startTourDuration, startDayAtSea, type, startId, finishId);
+            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(tourModel);
             if(!tours.isEmpty()){
                 log.info("Filter result: "+tours);
                 modelAndView.addObject("tours", tours);

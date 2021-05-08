@@ -89,26 +89,10 @@ public class HotelController {
             log.info("No binding result errors");
             if(!hotelService.existsByName(hotelAddModel.getName())){
                 log.info("Correct hotel name");
-                Hotel hotel = new Hotel();
-                hotel.setStars(Integer.parseInt(hotelAddModel.getStars()));
-                String formCity = hotelAddModel.getCity();
-                String formCountry = hotelAddModel.getCountry();
-                Country country = new Country();
-                country.setCity(formCity);
-                country.setName(formCountry);
-                hotel.setCountry(country);
-                hotel.setName(hotelAddModel.getName());
-                hotel.setDescription(hotelAddModel.getDescription());
-                hotel.setTypeOfFood(hotelAddModel.getTypeOfFood());
-                hotel.setLineFromTheSea(Integer.parseInt(hotelAddModel.getLineFromTheSea()));
-                List<Image> images = new ArrayList<>();
-                Image image = new Image();
-                images.add(image);
-                image.setUrl("https://timeoutcomputers.com.au/wp-content/uploads/2016/12/noimage.jpg");
-                hotel.setImages(images);
+                Hotel hotel = hotelService.addModelToEntity(hotelAddModel);
+                Hotel save = hotelService.save(hotel);
                 redirectAttributes.addFlashAttribute("createdHotel", "Hotel '"+hotel.getName()+
                         "' was created!");
-                Hotel save = hotelService.save(hotel);
                 log.info("Hotel "+save+" has been saved");
                 modelAndView.setViewName("redirect:/hotel/add");
             }else {

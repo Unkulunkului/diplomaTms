@@ -50,11 +50,7 @@ public class UserController {
                 if(!userService.isEmailExist(userRegistrationModel.getEmail())){
                     if(userRegistrationModel.getPassword().equals(userRegistrationModel.getConfirmPassword())){
                         log.info("Passwords match");
-                        User user = new User();
-                        user.setUsername(userRegistrationModel.getUsername());
-                        user.setPassword(userRegistrationModel.getPassword());
-                        user.setEmail(userRegistrationModel.getEmail());
-                        user.setSecretSentence(userRegistrationModel.getSecretSentence());
+                        User user = userService.userRegistrationModelToEntity(userRegistrationModel);
                         userService.save(user);
                         log.info("User '"+user.getUsername()+"' has been registered");
                         redirectAttributes.addFlashAttribute("success", true);

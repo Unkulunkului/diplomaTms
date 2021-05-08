@@ -16,4 +16,5 @@ public interface HotelService {
     Optional<Hotel> findById(long id);
     List<Hotel> findAll();
     void updateFieldById(long id, String fieldName, HotelEditModel hotelModel) throws IOException;
+    Hotel addModelToEntity(HotelAddModel hotelAddModel);
 }
