@@ -46,8 +46,8 @@ class TourServiceImplTest {
     private final int SECOND_TOUR_DAY_AT_SEA = 4;
     private final int THIRD_TOUR_DAY_AT_SEA = 5;
 
-    private final int TOUR_DAY_AT_SEA = 5;
-    private final int TOUR_DURATION = 11;
+    private final int VALID_TOUR_DAY_AT_SEA = 5;
+    private final int VALID_TOUR_DURATION = 11;
     private final String VALIDATION_RESULT = "Ok";
 
     private final String NAME_OF_EDITABLE_FIELD = "name";
@@ -133,32 +133,33 @@ class TourServiceImplTest {
         secondTour.setTypeOfRest(SECOND_TOUR_TYPE_OF_REST);
         secondTour.setDayAtSea(SECOND_TOUR_DAY_AT_SEA);
 
-        Tour thirdTour = new Tour();
-        thirdTour.setName(THIRD_TOUR_NAME);
-        thirdTour.setId(THIRD_TOUR_ID);
-        thirdTour.setDayAtSea(THIRD_TOUR_DAY_AT_SEA);
-        thirdTour.setTypeOfRest(THIRD_TOUR_TYPE_OF_REST);
         List<Tour> tours = new ArrayList<>();
         tours.add(secondTour);
+        tours.add(tour);
+
         double startPrice = 0;
         double finishPrice = 999999.99d;
         int startTourDuration = 0;
-        int startDayAtSea = 4;
-        long startId = 1;
+        int startDayAtSea = 2;
+        long startId = 0;
         long finishId = Long.MAX_VALUE;
         TypeOfRest typeOfRest = TypeOfRest.EXCURSION_TOUR;
+
         Mockito.when(tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
                 startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest, startId, finishId)
         ).thenReturn(tours);
-        List<Tour> toursFromRepository = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(startPrice, finishPrice, startTourDuration,
-                startDayAtSea, typeOfRest, startId, finishId);
-        assertArrayEquals(tours.toArray(), toursFromRepository.toArray());
 
+        TourFilterModel tourFilterModel = new TourFilterModel();
+        tourFilterModel.setDayAtSea(startDayAtSea+"");
+        tourFilterModel.setTypeOfRest("Excursion tour");
+
+        List<Tour> toursFromRepository = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(tourFilterModel);
+        assertArrayEquals(tours.toArray(), toursFromRepository.toArray());
     }
 
     @Test
     void validTourDurationAndDayAtSea() {
-        String actual = tourService.validTourDurationAndDayAtSea(TOUR_DURATION, TOUR_DAY_AT_SEA);
+        String actual = tourService.validTourDurationAndDayAtSea(VALID_TOUR_DURATION, VALID_TOUR_DAY_AT_SEA);
         assertEquals(VALIDATION_RESULT, actual);
     }
 
