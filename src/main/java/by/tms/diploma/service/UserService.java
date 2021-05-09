@@ -22,4 +22,5 @@ public interface UserService {
     boolean hasRoleByUsername(String username, UserRole role);
     boolean changePassword(User userForm);
     User userRegistrationModelToEntity(UserRegistrationModel userRegistrationModel);
+    boolean isPasswordEquals(String bCryptOldPassword, String newPassword);
 }

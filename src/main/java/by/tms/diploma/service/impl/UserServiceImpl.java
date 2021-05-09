@@ -147,4 +147,12 @@ public class UserServiceImpl implements UserService {
         user.setSecretSentence(userRegistrationModel.getSecretSentence());
         return user;
     }
+
+    @Override
+    public boolean isPasswordEquals(String bCryptOldPassword, String newPassword){
+        log.info("Compare passwords");
+        boolean matches = passwordEncoder.matches(newPassword, bCryptOldPassword);
+        log.info("Result: "+matches);
+        return matches;
+    }
 }

@@ -35,15 +35,15 @@
     </div>
 </div>
 
-<div th:if="${param.error}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+<div th:if="${param.error}" style= "margin-top: 5%" class="uk-alert-danger uk-position-top uk-text-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p>Invalid username and password </p>
 </div>
-<div th:if="${success}" class="uk-alert-success uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+<div th:if="${success}" style= "margin-top: 5%" class="uk-alert-primary uk-position-top uk-text-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p>Success! You can sign in! </p>
 </div>
-<div th:if="${newPassword != null}" class="uk-alert-success uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+<div th:if="${newPassword != null}" style= "margin-top: 5%" class="uk-alert-primary uk-position-top uk-text-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${newPassword}"></p>
 </div>

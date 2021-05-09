@@ -35,6 +35,7 @@
                                 <span sec:authentication="name"></span>
                             </li>
                             <br>
+                            <li><a th:href="'/user/profile/'+${#httpServletRequest.remoteUser}">Profile</a></li>
                             <li sec:authorize="hasAnyAuthority('ADMIN')">
                                 <a href="#">Admin panel</a>
                                 <div uk-dropdown="pos: right-center">

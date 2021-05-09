@@ -59,11 +59,11 @@
         </div>
     </div>
 </div>
-<div th:if="${usernameExistError!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+<div th:if="${usernameExistError!=null}" style= "margin-top: 5%" class="uk-alert-danger uk-position-top uk-text-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${usernameExistError}+' '"></p>
 </div>
-<div th:if="${emailExistError!=null}" class="uk-alert-danger uk-container-xsmall uk-position-large uk-position-bottom-center" uk-alert>
+<div th:if="${emailExistError!=null}" style= "margin-top: 5%" class="uk-alert-danger uk-position-top uk-text-center" uk-alert>
     <a class="uk-alert-close" uk-close></a>
     <p th:text="${emailExistError}+' '"></p>
 </div>
