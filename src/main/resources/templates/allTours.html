@@ -55,14 +55,34 @@
                         </select>
                     </div>
                     </label>
+                    <label style="color: teal">Page :
+                        <div class="uk-margin">
+                            <select class="uk-select" name="pageNumber" >
+                                <option th:each="i : ${#numbers.sequence(1,50)}" th:value="${i}" th:text="${i}"></option>
+                            </select>
+                        </div>
+                    </label>
                     <button class="uk-button uk-button-default">Filter</button>
                 </fieldset>
             </form>
-            <form th:action="@{/tour/all}" method="get">
+            <form th:action="@{/tour/all/1}" method="get">
                 <button class="uk-button uk-button-default">Reset</button>
             </form>
         </div>
     </div>
+</div>
+<div th:if="${!isFilter}">
+    <ul class="uk-pagination uk-flex-center" uk-margin>
+        <li><a href="#"><span uk-pagination-previous></span></a></li>
+        <li><a href="/tour/all/1">1</a></li>
+        <li><a href="/tour/all/2">2</a></li>
+        <li class="uk-disabled"><span>...</span></li>
+        <li><a href="/tour/all/5">5</a></li>
+        <li><a href="#">6</a></li>
+        <li class="uk-active"><span>7</span></li>
+        <li><a href="#">8</a></li>
+        <li><a href="#"><span uk-pagination-next></span></a></li>
+    </ul>
 </div>
 <div th:if="${wasDeleted}" class="uk-alert-success uk-container-xsmall uk-position-bottom-right" uk-alert>
     <a class="uk-alert-close" uk-close></a>

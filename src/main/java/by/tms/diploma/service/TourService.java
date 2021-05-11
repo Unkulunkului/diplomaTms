@@ -14,10 +14,10 @@ public interface TourService {
     boolean existsByName(String name);
     boolean existsById(long id);
     Optional<Tour> findById(long id);
-    List<Tour> getAll();
+    List<Tour> getAll(int pageNumber);
     void deleteById(long id);
     Tour getById(long id);
-    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(TourFilterModel tourModel);
+    List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(int pageNumber, TourFilterModel tourModel);
     String validTourDurationAndDayAtSea(int tourDuration, int dayAtSea);
     void updateFieldById(long id, String fieldName, TourEditModel tourModel) throws IOException;
     Tour addModelToEntity(TourAddModel tourAddModel);

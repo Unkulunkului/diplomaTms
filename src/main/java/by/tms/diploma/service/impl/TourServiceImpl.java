@@ -8,6 +8,9 @@ import by.tms.diploma.service.ImageService;
 import by.tms.diploma.service.TourService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +32,8 @@ public class TourServiceImpl implements TourService {
 
     @Autowired
     private ImageService imageService;
+
+    private final static int NUMBER_ELEMENT_ON_THE_PAGE = 15;
 
     @Override
     public Tour save(Tour tour) {
@@ -55,9 +60,12 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<Tour> getAll() {
+    public List<Tour> getAll(int pageNumber) {
         log.info("Find all tours");
-        return tourRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNumber-1, NUMBER_ELEMENT_ON_THE_PAGE);
+        Page<Tour> page = tourRepository.findAll(pageable);
+        List<Tour> tours = page.getContent();
+        return tours;
     }
 
     @Override
@@ -96,48 +104,61 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(TourFilterModel tourModel) {
-        log.info("Find tour by tour edit model: "+tourModel.toString());
+    public List<Tour> filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(int pageNumber, TourFilterModel tourModel) {
         double startPrice = 0;
         double finishPrice = 999999.99d;
         int startTourDuration = 0;
         int startDayAtSea = 0;
         long startId = 0;
-        long finishId = 0;
+        long finishId = Long.MAX_VALUE;
         String hotelName = tourModel.getHotelName();
         if(hotelName != null){
-            log.info("Hotel name isn't empty");
-            if (hotelService.existsByName(hotelName)) {
-                log.info("Hotel with name "+tourModel.getHotelName()+" is exist");
-                Hotel byName = hotelService.findByName(hotelName);
-                log.info("Hotel: "+byName.toString());
-                startId = byName.getId();
-                finishId = byName.getId();
+            if(!hotelName.isEmpty()){
+                log.info("Hotel name isn't empty");
+                if (hotelService.existsByName(hotelName)) {
+                    log.info("Hotel with name "+tourModel.getHotelName()+" is exist");
+                    Hotel byName = hotelService.findByName(hotelName);
+                    log.info("Hotel: "+byName.toString());
+                    startId = byName.getId();
+                    finishId = byName.getId();
+                }
             }
         }else {
             log.info("Hotel name is empty");
             finishId = Long.MAX_VALUE;
         }
         if(tourModel.getStartPrice() != null){
-            log.info("Start price isn't empty");
-            startPrice = Double.parseDouble(tourModel.getStartPrice());
+            if(!tourModel.getStartPrice().isEmpty()){
+                log.info("Start price isn't empty");
+                startPrice = Double.parseDouble(tourModel.getStartPrice());
+            }
         }
         if(tourModel.getFinishPrice() != null){
-            log.info("Finish price isn't empty");
-            finishPrice = Double.parseDouble(tourModel.getFinishPrice());
+            if(!tourModel.getFinishPrice().isEmpty()){
+                log.info("Finish price isn't empty");
+                finishPrice = Double.parseDouble(tourModel.getFinishPrice());
+            }
         }
         if(tourModel.getTourDuration() != null){
-            log.info("Tour duration isn't empty");
-            startTourDuration = Integer.parseInt(tourModel.getTourDuration());
+            if(!tourModel.getTourDuration().isEmpty()){
+                log.info("Tour duration isn't empty");
+                startTourDuration = Integer.parseInt(tourModel.getTourDuration());
+            }
         }
         if(tourModel.getDayAtSea() != null){
-            log.info("Day at sea isn't empty");
-            startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+            if(!tourModel.getDayAtSea().isEmpty()){
+                log.info("Day at sea isn't empty");
+                startDayAtSea = Integer.parseInt(tourModel.getDayAtSea());
+            }
         }
+        Pageable pageable = PageRequest.of(pageNumber-1, NUMBER_ELEMENT_ON_THE_PAGE);
         TypeOfRest type = TypeOfRest.getEnumName(tourModel.getTypeOfRest());
-        List<Tour> tours = tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
-                startPrice, finishPrice, startTourDuration, startDayAtSea, type, startId, finishId);
-
+        log.info("Find tour by start price="+startPrice+", finish price="+finishPrice+", start tour duration="+
+                startTourDuration+", start day at sea="+startDayAtSea+", type tour="+type+", start id="+startId+
+                ", finish id="+finishId+" pageable="+pageable);
+        Page<Tour> page = tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
+                startPrice, finishPrice, startTourDuration, startDayAtSea, type, startId, finishId, pageable);
+        List<Tour> tours = page.getContent();
         return tours;
     }
 

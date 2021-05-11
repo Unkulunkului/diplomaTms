@@ -44,10 +44,10 @@ public class TourController {
     }
 
 
-    @GetMapping("/all")
-    public ModelAndView getAllToursView(ModelAndView modelAndView){
+    @GetMapping("/all/{pageNumber}")
+    public ModelAndView getAllToursView(@PathVariable("pageNumber") int pageNumber, ModelAndView modelAndView){
         log.info("Request to get all tours");
-        List<Tour> allTours = tourService.getAll();
+        List<Tour> allTours = tourService.getAll(pageNumber);
         if (!allTours.isEmpty()) {
             log.info("List with hotels isn't empty");
             modelAndView.addObject("tours", allTours);
@@ -56,6 +56,7 @@ public class TourController {
             log.info("List with tours is empty");
             modelAndView.addObject("emptyList", "Tour list is empty");
         }
+        modelAndView.addObject("isFilter", false);
         modelAndView.setViewName("allTours");
         return modelAndView;
     }
@@ -219,13 +220,13 @@ public class TourController {
     }
 
 
-    @PostMapping(path = "/filter")
-    public ModelAndView filterTour(@Valid @ModelAttribute("tourFilterModel") TourFilterModel tourModel,
-                                   BindingResult bindingResult, ModelAndView modelAndView){
-        log.info("Try to filter tours");
+    @PostMapping(path = "all/filter")
+    public ModelAndView filterTour(@RequestParam int pageNumber, @Valid @ModelAttribute("tourFilterModel")
+            TourFilterModel tourModel, BindingResult bindingResult, ModelAndView modelAndView){
+        log.info("Try to filter tours. Page - "+pageNumber);
         log.info("Filter model: "+tourModel);
         if(!bindingResult.hasErrors()){
-            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(tourModel);
+            List<Tour> tours = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(pageNumber,tourModel);
             if(!tours.isEmpty()){
                 log.info("Filter result: "+tours);
                 modelAndView.addObject("tours", tours);
@@ -234,6 +235,7 @@ public class TourController {
                 modelAndView.addObject("emptyList", "Tour list is empty");
             }
         }
+        modelAndView.addObject("isFilter", true);
         modelAndView.setViewName("allTours");
         return modelAndView;
     }

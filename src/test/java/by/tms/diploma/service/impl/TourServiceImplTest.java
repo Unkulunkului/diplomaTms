@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ class TourServiceImplTest {
     private TourServiceImpl tourService;
 
     private Tour tour;
+    private Page<Tour> page;
 
     private final long FIRST_TOUR_ID = 1L;
     private final long SECOND_TOUR_ID = 2L;
@@ -52,6 +54,8 @@ class TourServiceImplTest {
 
     private final String NAME_OF_EDITABLE_FIELD = "name";
     private final String NEW_NAME_VALUE = "New name";
+
+    private final Pageable PAGEABLE = PageRequest.of(0, 15);
 
 
     @BeforeEach
@@ -111,10 +115,10 @@ class TourServiceImplTest {
         tours.add(secondTour);
         tours.add(tour);
 
-        Mockito.when(tourRepository.findAll()).thenReturn(tours);
+        page = new PageImpl<>(tours);
 
-        List<Tour> allFromRepository = tourService.getAll();
-
+        Mockito.when(tourRepository.findAll(PAGEABLE)).thenReturn(page);
+        List<Tour> allFromRepository = tourService.getAll(1);
         assertEquals(tours.size(), allFromRepository.size());
     }
 
@@ -144,16 +148,16 @@ class TourServiceImplTest {
         long startId = 0;
         long finishId = Long.MAX_VALUE;
         TypeOfRest typeOfRest = TypeOfRest.EXCURSION_TOUR;
-
+        page = new PageImpl<>(tours);
         Mockito.when(tourRepository.getAllByPriceIsGreaterThanEqualAndPriceLessThanEqualAndTourDurationGreaterThanEqualAndDayAtSeaIsGreaterThanEqualAndTypeOfRestEqualsAndHotel_IdGreaterThanEqualAndHotel_IdLessThanEqual(
-                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest, startId, finishId)
-        ).thenReturn(tours);
+                startPrice, finishPrice, startTourDuration, startDayAtSea, typeOfRest, startId, finishId, PAGEABLE)
+        ).thenReturn(page);
 
         TourFilterModel tourFilterModel = new TourFilterModel();
         tourFilterModel.setDayAtSea(startDayAtSea+"");
         tourFilterModel.setTypeOfRest("Excursion tour");
 
-        List<Tour> toursFromRepository = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id(tourFilterModel);
+        List<Tour> toursFromRepository = tourService.filterByPriceTourDurationDayAtSeaTypeOfRestAndHotel_Id( 1 ,tourFilterModel);
         assertArrayEquals(tours.toArray(), toursFromRepository.toArray());
     }
 
