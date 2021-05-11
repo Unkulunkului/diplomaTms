@@ -51,6 +51,7 @@ public class TourController {
         if (!allTours.isEmpty()) {
             log.info("List with hotels isn't empty");
             modelAndView.addObject("tours", allTours);
+            modelAndView.addObject("pageNumber", pageNumber);
             modelAndView.addObject("tourFilterModel", new TourFilterModel());
         }else{
             log.info("List with tours is empty");

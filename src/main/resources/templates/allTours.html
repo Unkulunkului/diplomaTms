@@ -71,17 +71,10 @@
         </div>
     </div>
 </div>
-<div th:if="${!isFilter}">
+<div th:if="${!isFilter && tours!= null}">
     <ul class="uk-pagination uk-flex-center" uk-margin>
-        <li><a href="#"><span uk-pagination-previous></span></a></li>
-        <li><a href="/tour/all/1">1</a></li>
-        <li><a href="/tour/all/2">2</a></li>
-        <li class="uk-disabled"><span>...</span></li>
-        <li><a href="/tour/all/5">5</a></li>
-        <li><a href="#">6</a></li>
-        <li class="uk-active"><span>7</span></li>
-        <li><a href="#">8</a></li>
-        <li><a href="#"><span uk-pagination-next></span></a></li>
+        <li><a th:if="${pageNumber!=1}" th:href="'/tour/all/'+${pageNumber - 1}"><span uk-pagination-previous></span></a></li>
+        <li><a th:href="'/tour/all/'+${pageNumber + 1}"><span uk-pagination-next></span></a></li>
     </ul>
 </div>
 <div th:if="${wasDeleted}" class="uk-alert-success uk-container-xsmall uk-position-bottom-right" uk-alert>
