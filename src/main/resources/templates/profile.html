@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<html th:include="_header"/>
+<div class="uk-position-center-left uk-margin-left">
+    <h1 class="uk-text-uppercase uk-text-light" style="color: cadetblue">Profile</h1>
+</div>
+<div style= "margin-left: 50%; margin-top: 10%; margin-right: 5%; margin-bottom: 10%">
+    <div th:if="${wrongUsername == null}">
+        <span class="uk-text-lead" style="color: grey">Username: </span>
+        <span class="uk-text-large" style="color: lightblue" th:text="${user.username}"></span>
+        <br>
+        <br>
+        <span class="uk-text-lead" style="color: grey">Email: </span>
+        <span class="uk-text-large" style="color: lightblue" th:text="${user.email}"></span>
+        <br>
+        <br>
+        <span class="uk-text-lead" style="color: grey">Roles: </span>
+        <span th:each="role: ${user.roles}" class="uk-text-large" style="color: lightblue" th:text="${role}+' '"></span>
+        <br>
+        <br>
+        <form th:action="@{changePassword}" method="get">
+            <input class="uk-input" type="hidden" name="userId" th:value="${userId}">
+            <button class="uk-button uk-button-default">Change password</button>
+        </form>
+    </div>
+</div>
+<div th:if="${wrongUsername!=null}" style= "margin-top: 5%" class="uk-alert-primary uk-position-top uk-text-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${wrongUsername}"></p>
+</div>
+<div th:if="${newPassword!=null}" style= "margin-top: 5%" class="uk-alert-primary uk-position-top uk-text-center" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p th:text="${newPassword}"></p>
+</div>
+</body>
+</html>

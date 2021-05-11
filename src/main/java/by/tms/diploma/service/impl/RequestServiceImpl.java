@@ -16,47 +16,47 @@ import java.util.Optional;
 public class RequestServiceImpl implements RequestService {
 
     @Autowired
-    private RequestRepository requestStorage;
+    private RequestRepository requestRepository;
 
     @Override
     public ClientRequest save(ClientRequest clientRequest) {
         log.info("Save client request: "+clientRequest);
-        return requestStorage.save(clientRequest);
+        return requestRepository.save(clientRequest);
     }
 
     @Override
     public List<ClientRequest> getAllRequest() {
         log.info("Find all client requests");
-        return requestStorage.findAll();
+        return requestRepository.findAll();
     }
 
     @Override
     public Optional<ClientRequest> findById(long id) {
         log.info("Find client request by id(id = "+id+")");
-        return requestStorage.findById(id);
+        return requestRepository.findById(id);
     }
 
     @Override
     public void updateStatusById(long id, ClientRequestStatusEnum status) {
         log.info("Update client request status by id(id="+id+") with status"+status);
-        Optional<ClientRequest> clientRequestById = requestStorage.findById(id);
+        Optional<ClientRequest> clientRequestById = requestRepository.findById(id);
         if (clientRequestById.isPresent()) {
             log.info("Client request with id="+id+" exists");
             ClientRequest clientRequest = clientRequestById.get();
             clientRequest.setRequestStatus(status);
-            requestStorage.save(clientRequest);
+            requestRepository.save(clientRequest);
         }
     }
 
     @Override
     public void setCuratorIdById(long id, long curatorId) {
         log.info("Set curator id(id=)"+curatorId+" in request with id="+id);
-        Optional<ClientRequest> clientRequestById = requestStorage.findById(id);
+        Optional<ClientRequest> clientRequestById = requestRepository.findById(id);
         if (clientRequestById.isPresent()) {
             log.info("Client request with id="+id+" exists");
             ClientRequest clientRequest = clientRequestById.get();
             clientRequest.setCuratorId(curatorId);
-            requestStorage.save(clientRequest);
+            requestRepository.save(clientRequest);
         }
     }
 }

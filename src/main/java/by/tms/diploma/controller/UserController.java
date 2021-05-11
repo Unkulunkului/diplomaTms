@@ -5,18 +5,13 @@ import by.tms.diploma.entity.User;
 import by.tms.diploma.entity.UserChangePasswordModel;
 import by.tms.diploma.entity.UserRegistrationModel;
 import by.tms.diploma.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;

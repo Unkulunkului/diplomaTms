@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+
 @Controller
 @RequestMapping(path = "/admin")
 @Slf4j
@@ -29,7 +30,7 @@ public class AdminController {
     }
 
     @PostMapping("/findByUsername")
-    public ModelAndView postSetModerator(String username, ModelAndView modelAndView){
+    public ModelAndView setModerator(String username, ModelAndView modelAndView){
         log.info("Find user by username");
         log.info("Check exist by username");
         if(userService.isUsernameExist(username)){
@@ -52,7 +53,7 @@ public class AdminController {
     }
 
     @PostMapping("/moderators/removeRole")
-    public ModelAndView postRemoveModerator(long id, ModelAndView modelAndView){
+    public ModelAndView removeModerator(long id, ModelAndView modelAndView){
         log.info("Remove user role");
         if(userService.hasRoleById(id, UserRole.MODERATOR)){
             userService.removeRoleById(id, UserRole.MODERATOR);
@@ -62,7 +63,7 @@ public class AdminController {
     }
 
     @PostMapping("/moderators/addRole")
-    public ModelAndView postAddModerator(long id, ModelAndView modelAndView){
+    public ModelAndView addModerator(long id, ModelAndView modelAndView){
         log.info("Add user role");
         if(!userService.hasRoleById(id, UserRole.MODERATOR)){
             userService.addRoleById(id, UserRole.MODERATOR);
@@ -70,5 +71,4 @@ public class AdminController {
         modelAndView.setViewName("redirect:/admin/moderators");
         return modelAndView;
     }
-
 }
